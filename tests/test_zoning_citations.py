@@ -3,8 +3,6 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-import pytest
-
 from housing_review.agents.zoning import run_zoning_analyst
 from housing_review.data.corpus import citation_contract_for_district
 from housing_review.data.parcels import parcel_from_geojson
@@ -163,11 +161,48 @@ def test_ai_claims_field_is_rejected_then_retried() -> None:
     assert results[0].claims[0].source == "§911.02 Use Table"
 
 
-def test_second_judgment_failure_raises() -> None:
+def test_second_judgment_failure_falls_back_to_cannot_determine() -> None:
     context = _context_for_district("R2-L")
 
     def always_bad(system: str, user: str) -> str:
         return json.dumps({"verdict": "best"})
 
-    with pytest.raises(ValueError, match="judgment output failed"):
-        run_zoning_analyst(context, typologies=[Typology.duplex], completer=always_bad)
+    results = run_zoning_analyst(context, typologies=[Typology.duplex], completer=always_bad)
+    assert len(results) == 1
+    item = results[0]
+    assert item.score == 0
+    assert item.typology is Typology.duplex
+    assert any("failed to produce valid" in note for note in item.cannot_determine)
+    assert item.claims[0].source == "§911.02 Use Table"
+    assert item.claims[1].source == "§914.02.A Parking Schedule A"
+
+
+def test_second_failure_salvages_valid_typologies() -> None:
+    context = _context_for_district("R2-L")
+    calls = {"n": 0}
+
+    def mixed(system: str, user: str) -> str:
+        calls["n"] += 1
+        if calls["n"] == 1:
+            return json.dumps({"verdict": "best"})
+        return json.dumps(
+            {
+                "judgments": [
+                    _judgment("duplex", 8),
+                    {"typology": "townhome", "score": "not-a-score"},
+                ]
+            }
+        )
+
+    results = run_zoning_analyst(
+        context,
+        typologies=[Typology.duplex, Typology.townhome],
+        completer=mixed,
+    )
+    assert calls["n"] == 2
+    by_typ = {item.typology: item for item in results}
+    assert by_typ[Typology.duplex].score == 8
+    assert "Comparative note" in by_typ[Typology.duplex].summary
+    assert by_typ[Typology.townhome].score == 0
+    assert any("failed to produce valid" in note for note in by_typ[Typology.townhome].cannot_determine)
+    assert by_typ[Typology.townhome].claims[0].source == "§911.02 Use Table"

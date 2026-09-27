@@ -27,6 +27,11 @@ from housing_review.schemas.parse import parse_analyst_assessment
 PROMPT_PATH = Path(__file__).resolve().parent.parent / "prompts" / "zoning_analyst_round1.txt"
 CANDIDATE_TYPOLOGIES = list(Typology)
 MAX_SCHEMA_RETRIES = 1
+JUDGMENT_FAILURE_NOTE = (
+    "Zoning Analyst model failed to produce valid score/summary JSON twice; "
+    "numeric score is a withheld placeholder (0), not a comparative ranking. "
+    "Use-table, parking, and dimensional claims were still attached from code."
+)
 
 
 class ZoningJudgment(BaseModel):
@@ -88,7 +93,6 @@ def run_zoning_analyst(
     generate = completer or complete_json
     system = _system_prompt()
     user = _user_prompt(context, typologies, demo_record)
-    last_error: Exception | None = None
     raw = ""
     for _ in range(MAX_SCHEMA_RETRIES + 1):
         raw = generate(system, user)
@@ -106,9 +110,11 @@ def run_zoning_analyst(
             )
             continue
         return [_merge(context, item) for item in judgments]
-    raise ValueError(
-        f"Zoning Analyst judgment output failed schema validation: {last_error}\nRaw: {raw[:1000]}"
-    )
+    salvaged = _salvage_judgments(raw, typologies)
+    return [
+        _merge(context, salvaged.get(typology) or _fallback_judgment(typology))
+        for typology in typologies
+    ]
 
 
 def run_zoning_analyst_for_demo(*, include_overlays: bool = True, completer: Completer | None = None) -> list[AnalystAssessment]:
@@ -136,6 +142,37 @@ def _parse_judgment(item: object) -> ZoningJudgment:
     if not isinstance(item, dict):
         raise TypeError("each judgment must be an object")
     return ZoningJudgment.model_validate(item)
+
+
+def _salvage_judgments(raw: str, typologies: list[Typology]) -> dict[Typology, ZoningJudgment]:
+    """Keep any well-formed judgments after a second schema failure; skip the rest."""
+    wanted = set(typologies)
+    found: dict[Typology, ZoningJudgment] = {}
+    try:
+        items = _parse_judgments(raw)
+    except (json.JSONDecodeError, ValueError, TypeError):
+        return found
+    for item in items:
+        try:
+            judgment = _parse_judgment(item)
+        except (ValidationError, TypeError, ValueError):
+            continue
+        if judgment.typology in wanted and judgment.typology not in found:
+            found[judgment.typology] = judgment
+    return found
+
+
+def _fallback_judgment(typology: Typology) -> ZoningJudgment:
+    return ZoningJudgment(
+        typology=typology,
+        score=0,
+        basis=ConfidenceBasis.estimated,
+        summary=(
+            "Score and narrative judgment could not be determined: the model "
+            "failed to produce valid output twice."
+        ),
+        cannot_determine=[JUDGMENT_FAILURE_NOTE],
+    )
 
 
 def _assert_judgments(judgments: list[ZoningJudgment], typologies: list[Typology]) -> None:

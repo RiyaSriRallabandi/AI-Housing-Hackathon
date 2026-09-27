@@ -178,8 +178,8 @@ the decision is made, not reconstructed later.
 
 ## [Component 3 / 2026-09-27] Zoning deterministic facts; one comparative LLM call
 
-- **Decision:** Use-table, Schedule A parking, and Chapter 903 dimensions are built as `Claim`s in code (`zoning_facts.py`) with citations. The Zoning LLM returns only `judgments` (score, basis, summary, cannot_determine). All six typologies are scored in **one** Groq call (~2.8K input tokens, under Free 8K TPM). Other Analysts still batch 3+3. Retry once on judgment-schema failure; second failure raises. No citation-validator retry path for Zoning facts.
-- **Open questions:** Live Groq comparative scores on 170 Aidan Ct (pending review).
+- **Decision:** Use-table, Schedule A parking, and Chapter 903 dimensions are built as `Claim`s in code (`zoning_facts.py`) with citations. The Zoning LLM returns only `judgments` (score, basis, summary, cannot_determine). All six typologies are scored in **one** Groq call (~2.8K input tokens, under Free 8K TPM). Other Analysts still batch 3+3. Retry once on judgment-schema failure. A second failure no longer aborts Round 1: valid typologies are salvaged; the rest get score placeholder 0, an explanatory summary, and `cannot_determine` noting two invalid model outputs. Deterministic claims still attach. No citation-validator retry path for Zoning facts.
+- **Open questions:** Whether Demographic / Pro Forma / Equity / Sustainability should get the same fallback (audit only as of this note).
 
 
 
