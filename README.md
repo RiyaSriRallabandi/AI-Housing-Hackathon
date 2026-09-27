@@ -10,7 +10,7 @@ Five independent Analyst agents (zoning, demographics, financial feasibility, eq
 
 ## Current status
 
-Component 1 (shared contract), Component 2 Zoning + Demographic + Pro Forma + Equity + Sustainability data, and Round 1 for those five Analysts are in place. Shared LLM is Groq `openai/gpt-oss-120b`. Working example site: **170 Aidan Ct, Brookline**, Census tract **42003191800**.
+Component 1 (shared contract), Component 2–3 for all five Analysts, and Component 4 **Round 1** orchestration (independent, sequential) are in place. Shared LLM is Groq `openai/gpt-oss-120b`. Working example site: **170 Aidan Ct, Brookline**, Census tract **42003191800**. Round 2 cross-examination and the Chair are not wired yet.
 
 ## Shared output contract
 

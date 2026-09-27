@@ -36,6 +36,8 @@ YOU MUST NOT:
   tract's actual income/cost-burden data.
 - Cite ACS B25070/B25091 as CHAS. This payload is CHAS Table 8 fields from
   the ArcGIS tract layer, not an ACS stand-in.
+- Leave displacement out of cannot_determine. Always list that CHAS does not
+  measure who would move because of this project.
 
 Every claim must cite CHAS 2013-2017 (ArcGIS ACS_5YR_ESTIMATES_CHAS_TRACT)
 and the field used (e.g. T8_CB_PCT).

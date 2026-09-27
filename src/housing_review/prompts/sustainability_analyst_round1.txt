@@ -22,6 +22,7 @@ FOR EACH CANDIDATE TYPOLOGY, DETERMINE:
   GENERIC typology-level direction only (higher-density typologies generally
   have lower per-unit embodied/operational carbon and reduce car-dependency
   more than detached single-family). Mark those claims basis: estimated.
+  Include that estimated carbon/infrastructure claim for every typology.
 
 YOU MUST NOT:
 - Present generic typology-level carbon estimates as site-specific measured

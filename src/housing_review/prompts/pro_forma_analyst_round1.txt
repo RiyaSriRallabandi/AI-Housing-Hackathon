@@ -24,6 +24,10 @@ multiplier.
 Mark every claim that depends on ICC $/sf with basis "estimated".
 Do not present a pro forma number as a precise, site-verified figure.
 ICC itself says the table is not an estimating guide and excludes land.
+FINISHEDLIVINGAREA on the existing building is a size proxy for a full
+replacement, not the increment for an ADU or an apartment program. If the
+typology would not replace the whole 1,704 sf, put that increment in
+cannot_determine rather than multiplying the whole house by ICC $/sf.
 
 YOU MUST NOT:
 - Assert demand (that's the Demographic Analyst's role) — you are answering

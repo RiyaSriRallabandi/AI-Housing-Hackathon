@@ -28,7 +28,14 @@ YOU MUST NOT:
 - Treat R2-L or any other district as a default. Use the mapped district on
   this site and the matching §911.02 column in site_context.
 - Treat ADU Overlay status as a stored property of a demo site. Use the live
-  adu_overlay query result in site_context.
+  adu_overlay query result in site_context. If adu_overlay is null, put overlay
+  membership in cannot_determine — do not treat null as a measured "no overlay."
+- Read a blank / missing §911.02 cell as a Chapter 913 special or conditional
+  exception. Legend: P permitted, A administrator exception, S special
+  exception, C conditional. Blank means not permitted in that column. Chapter
+  913 is not a substitute for the Use Table.
+- Invent a parking count (including "none required"). Cite Schedule A only
+  when the excerpt states a number for that use; otherwise cannot_determine.
 
 YOU MUST: In claims, cite Title 9 use names (Single-Unit Attached Residential,
 Two-Unit Residential, Multi-Unit Residential, Single-Unit Detached Residential).

@@ -161,3 +161,13 @@ the decision is made, not reconstructed later.
 - **Assumptions made:** Unique `stop_id` + haversine from parcel centroid is the right access metric for Round 1. Slope screening uses the official-map 25%+ layer already wired for Zoning.
 - **Open questions:** Live Groq schema-validity; whether to parse a full GTFS zip for headways beyond `trips_wd`.
 
+## [Component 4 / 2026-09-27] Round 1 debate is independent and sequential
+
+- **Decision:** Component 4 Round 1 calls all five Analysts with only their own site context. No peer assessments are passed. Calls are sequential (zoning → demographic → pro forma → equity → sustainability), not parallel.
+- **Options considered:** Parallel threads (rejected on Groq Free 8K TPM / shared rate budget); a single mega-prompt (rejected — would break independence).
+- **Rationale:** Roadmap: Round 1 has no visibility into each other's output. Sequential still satisfies independence. Fixture-backed `load_demo_round1_contexts()` keeps tests offline.
+- **Assumptions made:** Existing per-agent batching of 3 typologies stays inside each Analyst; the orchestrator does not re-batch. Fixture Round 1 copies steep-slope / FEMA flags and the last live ADU-overlay miss onto Zoning so it is not overlay-blind.
+- **Live Groq (2026-09-27, `openai/gpt-oss-120b`):** First pass (10 calls) validated 30 assessments but Zoning read a blank Use Table cell as Chapter 913 and invented parking; ADU treated a null overlay as a fact. Prompts tightened; overlay screen attached. Second pass (11 calls, one schema retry) kept the same directional scores: duplex/townhome/detached high zoning certainty, apartment/ADU low; Pro Forma low/marginal (ICC estimated); Equity CHAS 2013–2017 with displacement in `cannot_determine`; Sustainability McNeilly ~637 m, Zone X, carbon `estimated`. Remaining slip: townhome Zoning *summary* still said “no off-street parking” while claims cited Schedule A without a zero. Transcript is gitignored at `data/cache/round1_live.json`.
+- **Open questions:** Round 2 / Chair.
+
+
