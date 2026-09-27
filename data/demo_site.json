@@ -21,12 +21,11 @@
   "lot_acreage": 0.11,
   "why_this_site": "In-city residential lot with an address match, R2-L (two-unit low density) so duplex vs single-family vs ADU is a real code question, and a steep-slope overlay flag so the demo can show a limitation instead of hiding it.",
   "placeholders": {
-    "census_tract_geoid": null,
-    "note": "Tract GEOID is not asserted from the neighborhood layer (that layer's tract fields are not the parcel's census geography). Wire TIGER/ACS in the Demographic data layer."
+    "census_tract_geoid": "42003191800",
+    "note": "GEOID from Census Geocoder (TIGER Current) at the parcel centroid on 2026-09-26. Neighborhood-layer tract fields were not used."
   },
   "known_limitations": [
     "Decision support only — not legal, financial, or zoning advice.",
-    "§911.02 Use Table and Chapter 912 accessory/ADU rules are not in the structured extract.",
     "Official map 25%+ slope layer intersected this parcel (screening only, not a geotechnical determination).",
     "City_Limits FeatureServer point queries in WGS84 returned no hit; municipality is taken from the address layer (PITTSBURGH)."
   ]

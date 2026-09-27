@@ -150,10 +150,10 @@ def profile_residential_district(district_code: str) -> ResidentialDistrictProfi
     if not use:
         return None
     notes = [
-        f"Primary uses are governed by the Use Table in §911.02 (not retrieved as a table; see {CHAPTER_911_02_URL}).",
-        "Accessory uses: Chapter 912 (text not retrieved).",
+        "Primary uses: look up this district's column in the §911.02 Use Table corpus.",
+        "Accessory uses including ADU Overlay rules: Chapter 912 corpus; overlay membership is a live map query.",
         "Contextual setbacks/heights may apply per §925.06 and §925.07.",
-        f"Transcribed from Chapter 903; code vintage: {CODE_VINTAGE}. Decision support only.",
+        f"Dimensional tables transcribed from Chapter 903 corpus; code vintage: {CODE_VINTAGE}. Decision support only.",
     ]
     if use == "RM":
         notes.append("RM construction of 4+ units requires Site Plan Review per §903.02.E.2 / §922.04.")

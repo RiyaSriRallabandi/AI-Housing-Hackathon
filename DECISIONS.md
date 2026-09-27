@@ -59,3 +59,56 @@ the decision is made, not reconstructed later.
 - **Rationale:** Typical residential lot with a matched city address, two-unit zoning so typology trade-offs are real, and a steep-slope overlay so the demo can show a limitation instead of a clean-but-fake site. Tract ID left null until ACS/TIGER.
 - **Assumptions made:** Address-layer municipality PITTSBURGH is the right jurisdiction (City_Limits WGS84 queries did not return hits). Neighborhood name Brookline is from PGHWebNeighborhoods intersect.
 - **Open questions:** Confirm tract GEOID in Component 2 Demographic slice. ADU/senior scoring still needs §911.02 / Ch. 912.
+
+## [Component 3 / 2026-09-26] Gemini 2.5 Flash as shared runtime model
+
+- **Decision:** All six in-app agents use one config (`housing_review.config` + `LLM_MODEL` / `LLM_PROVIDER` / `GEMINI_API_KEY`). Default model string is `gemini-2.5-flash`. Zoning Analyst is the first caller; it never embeds a model id of its own.
+- **Options considered:** Hardcode per agent (rejected); Groq/OpenRouter `:free` fallbacks (kept as later options, not wired yet).
+- **Rationale:** User specified Gemini 2.5 Flash. Official model page (fetched 2026-09-26) lists the API code as `gemini-2.5-flash` and stable alias of the same name. Preview `gemini-2.5-flash-preview-09-2025` is marked shut down on that page.
+- **Verification:**
+  - Model page: https://ai.google.dev/gemini-api/docs/models/gemini-2.5-flash — code `gemini-2.5-flash`; input 1,048,576 tokens; output 65,536; structured outputs supported. Same docs note 2.5 access may be limited to accounts that already used 2.5; new projects are pointed at 3.5 Flash-Lite or 3.8 Flash. Swap via `LLM_MODEL` if this project cannot call 2.5.
+  - Rate limits page: https://ai.google.dev/gemini-api/docs/rate-limits (updated 2026-09-02) — limits are RPM, input TPM, and RPD (RPD resets midnight Pacific). Free tier has no spend cap. **Numeric Free-tier RPM/TPM/RPD are not published as a universal table**; docs say view them in AI Studio and that specified limits are not guaranteed.
+  - AI Studio console: `https://aistudio.google.com/rate-limit` redirected to Google sign-in from this environment (2026-09-26). Project-specific quota numbers were **not** readable without an account login. Do not invent RPM/RPD figures.
+  - User-reported AI Studio quotas for `gemini-2.5-flash` (2026-09-26): **5 RPM**, **250K TPM**, **20 RPD** (usage shown as 0 / those caps).
+- **Assumptions made:** `google-genai` `Client.models.generate_content` with `response_mime_type=application/json` is the runtime path. Calls retry on 429 with 15s backoff. A full five-analyst debate is 11 LLM calls (5+5+1), which fits under 20 RPD if Zoning (and others) batch all typologies in one call each. Do not fire Round 1 agents in parallel (5 RPM).
+- **Open questions:** If `gemini-2.5-flash` is unavailable for a new project, set `LLM_MODEL` to a Flash model the console lists as free (docs currently suggest 3.5 Flash-Lite or 3.8 Flash).
+
+## [Component 3 / 2026-09-26] Swap default model after live 404 on 2.5 Flash
+
+- **Decision:** Set shared `LLM_MODEL` to `gemini-3.8-flash` (env + `housing_review.config`). Still one config for all agents.
+- **Options considered:** Keep calling `gemini-2.5-flash` (failed); switch via central env (chosen); Groq/OpenRouter (not needed yet).
+- **Rationale:** One live `generate_content` on this project's key returned HTTP 404: "This model models/gemini-2.5-flash is no longer available to new users. Please update your code to use models/gemini-3.8-flash". That matches the model-page warning that 2.5 is limited to prior users.
+- **Assumptions made:** Failed 2.5/3.8 calls did not consume RPD (console still 0/20). Retry 503 with backoff.
+- **Open questions:** Whether a single batched Zoning Round-1 call stays under 250K TPM.
+
+## [Component 3 / 2026-09-26] Gemini 3.8 Flash free-tier quotas (AI Studio)
+
+- **Decision:** Treat 3.8 Flash limits as **5 RPM, 250K TPM, 20 RPD** (user console: 0 / those caps). Same shape as 2.5 Flash on this project.
+- **Options considered:** Assume 2.5 numbers apply without checking (rejected).
+- **Rationale:** User read the AI Studio rate-limit panel for Gemini 3.8 Flash Text-out models.
+- **Assumptions made:** RPD resets midnight Pacific. One Zoning Round-1 call should be 1 RPD if it succeeds.
+- **Open questions:** 503 high-demand vs quota; retry when Google capacity recovers.
+
+## [Component 3 / 2026-09-26] Switch shared runtime from Gemini to Groq
+
+- **Decision:** Default `LLM_PROVIDER=groq` and `LLM_MODEL=openai/gpt-oss-120b` for all six agents. Keep Gemini as an env-switch fallback. Zoning Round 1 sends a compact site JSON (no geometry, overlay attributes stripped) because Groq Free TPM is 8K.
+- **Options considered:** Wait out Gemini 3.8 503s (quota unused); OpenRouter `:free`; Groq `openai/gpt-oss-20b` (faster, same 8K TPM); Groq `qwen/qwen3.8-27b`.
+- **Rationale:** User-reported AI Studio still 0 RPM / 0 TPM / 0 RPD after 503s — capacity, not quota. Groq Free docs (fetched 2026-09-26): https://console.groq.com/docs/models and https://console.groq.com/docs/rate-limits — `openai/gpt-oss-120b` (and 20b) on Free: **30 RPM, 1K RPD, 8K TPM, 200K TPD**. Llama on Groq is enterprise/Contact Sales, not this free path. 120b chosen over 20b for schema-faithful JSON on zoning.
+- **Assumptions made:** User will paste a Groq key from console.groq.com (no card). `response_format=json_object` requires a JSON object, so the prompt asks for `{"assessments": [...]}`. Compact context must stay well under 8K tokens including output.
+- **Open questions:** Whether 120b stays under 8K TPM on this compacted Zoning payload; fall back to `openai/gpt-oss-20b` if TPM errors.
+
+## [Component 3 / 2026-09-26] Live Zoning Round 1 on Groq succeeded
+
+- **Decision:** Keep Groq `openai/gpt-oss-120b` as the shared default. Zoning prompt now includes an explicit claim example (`statement` / `basis` / `source`); schema retry asks for `{assessments: [...]}` not a bare array.
+- **Rationale:** First live Groq call returned valid JSON object but claims used `text`/`citation` (rejected by extra=forbid). Second call after prompt tightening validated 6 typologies for PIN `0139F00077000000`. Scores stayed low (1–3, `estimated`) because §911.02 / Ch. 912 / Ch. 914 are still `cannot_determine` — that is the intended gap, not a model failure.
+- **Assumptions made:** `include_overlays=False` for this live check to stay under 8K TPM. Cache written to `data/cache/zoning_analyst_live_round1.json` (gitignored).
+- **Open questions:** Overlay-inclusive call; Round 2 / other analysts on the same Groq model.
+
+## [Component 2 / 2026-09-26] Zoning code corpus via browser fetch (all districts)
+
+- **Decision:** Store full text of Title 9 Chapters **903, 911, 912, 913, and 914** in `data/zoning_corpus/` as a general-purpose corpus. The Zoning Analyst looks up the §911.02 column from whatever GIS district the site maps to. ADU Overlay membership is a live `PGHWebZoningOverlays` intersect for ADU / Accessory Dwelling labels, not a stored fact about 170 Aidan Ct.
+- **Options considered:** Keep 911.02/912 as `cannot_determine` after curl Cloudflare blocks (rejected — the pages render in a browser); filter the Use Table to R2-L only (rejected); hardcode Garfield/ADU overlay for the demo parcel (rejected).
+- **Rationale:** The gap was fetch method, not missing law. Naive curl/requests hit Cloudflare; browser-rendering retrieval on 2026-09-26 returned complete chapter text including every Use Table district column and §912.08.
+- **Scope:** This is a **deliberate** residential-relevant subset (903, 911, 912, 913, 914), not a silent hole. Commercial/industrial-only chapters are out of scope for now.
+- **Assumptions made:** GIS codes like `R2-L` join to Use Table column `R2`. Duplicate printed names in the Use Table (second RM/GI) are stored as `RIV-RM` / `RIV-GI` so lookups are unique. The published overlay layer had no ADU-named polygons on retrieval; live queries can still return hits if the layer is updated.
+- **Open questions:** Whether a dedicated ADU Overlay FeatureServer exists under another name; user review of live Round 1 scores against the code.

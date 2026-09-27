@@ -17,9 +17,15 @@ Retrieval date for this pass: **2026-09-26**.
 
 - **Catalog URL (brief):** https://pittsburghpa.gov/dcp/zoning-code — **404** on 2026-09-26
 - **Resolved URL:** https://ecode360.com/45474054 (Title 9; user-provided). City Zoning page: https://www.pittsburghpa.gov/Business-Development/City-Planning/Zoning (last updated 2026-05-28 in page footer). Catalog URL 404s.
-- **Retrieved:** 2026-09-26. eCode360 chrome says legislation through **2026-09-16**.
-- **What we actually captured:** Chapter 903 (https://ecode360.com/45474231) — use subdistricts R1D / R1A / R2 / R3 / RM and VL–VH site-development tables. Encoded in `housing_review.data.residential`.
-- **Still missing:** §911.02 Use Table (page did not load reliably in browser); Chapter 912 accessory (ADU); Chapter 914 parking. Those stay `cannot_determine`.
+- **Retrieved:** 2026-09-26 via **browser-rendering fetch** (naive curl/requests is Cloudflare-blocked; the official pages render fully in a real browser).
+- **Corpus files:** `data/zoning_corpus/` — general-purpose, all districts, not filtered to one site.
+  - Ch. 903 https://ecode360.com/45474194 (`ch903.txt`)
+  - Ch. 911 https://ecode360.com/45476524 (`ch911.txt`, `use_table_911_02.json` with every district column)
+  - Ch. 912 https://ecode360.com/45477814 including §912.08 ADU Overlay District (`ch912.txt`)
+  - Ch. 913 https://ecode360.com/45477960 (`ch913.txt`)
+  - Ch. 914 https://ecode360.com/45478031 (`ch914.txt`) — parking schedules rendered usably
+- **Scope decision:** residential-relevant chapters only (903, 911, 912, 913, 914). Commercial/industrial-only chapters are out of scope by design, not a silent gap.
+- **Runtime lookup:** §911.02 column is selected from the mapped GIS district (e.g. R2-L → column R2). ADU Overlay membership is a live intersect of `PGHWebZoningOverlays` for ADU / Accessory Dwelling labels — not a stored fact about 170 Aidan Ct.
 - **Caveat:** Authoritative interpretation belongs to the City.
 
 ## Official Pittsburgh Zoning Map (user-provided)
@@ -44,6 +50,6 @@ Copied to `data/public_data_catalog.csv` (user-provided). Core rows match `06_da
 
 ## Test fixture / demo site
 
-**Working demo parcel:** 170 Aidan Ct, Pittsburgh, PA 15226 (Brookline). PIN `0139F00077000000` / `139-F-77`. GIS district **R2-L**. Address from City `Addresses_GeneralUse` (intersects the parcel polygon). Tract GEOID is a placeholder until the Demographic layer joins TIGER.
+**Working demo parcel:** 170 Aidan Ct, Pittsburgh, PA 15226 (Brookline). PIN `0139F00077000000` / `139-F-77`. GIS district **R2-L**. Address from City `Addresses_GeneralUse` (intersects the parcel polygon). Census tract **42003191800** (Tract 1918) from Census Geocoder 2026-09-26.
 
 See `data/demo_site.json`.

@@ -35,13 +35,11 @@ def citations_for_districts(
                 district_code=hit.district_code,
                 title=f"Pittsburgh Zoning Code (Title 9) — district {hit.district_code}",
                 url=url,
-                retrieval_status="chapter_903_excerpt" if retrieved else "url_only",
+                retrieval_status="retrieved_browser" if retrieved else "url_only",
                 next_step=(
-                    "Confirm §911.02 use permissions and any overlay/variance path with City Planning. "
-                    "Dimensional standards below are from a retrieved Chapter 903 excerpt, not a substitute "
-                    "for the official Zoning Administrator copy."
+                    "Confirm interpretation with City Planning. Corpus includes Chapters 903, 911, 912, 913, and 914."
                     if retrieved
-                    else "Open the cited eCode360 section; automated curl is Cloudflare-blocked."
+                    else "Open the cited eCode360 section."
                 ),
                 body=None,
             )

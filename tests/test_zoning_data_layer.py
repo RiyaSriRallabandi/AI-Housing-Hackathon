@@ -17,7 +17,8 @@ def test_source_log_has_retrieval_dates_and_gaps() -> None:
     assert "Pittsburgh Zoning Code (Title 9)" in names
     assert "Allegheny County Parcel Boundaries" in names
     code = next(r for r in records if "Zoning Code" in r.name)
-    assert "911.02" in code.does_not_cover
+    assert "Cloudflare" in code.notes or "Cloudflare" in code.caveat
+    assert "911.02" in code.notes or "911" in code.notes
     assert "ecode360.com/45474054" in code.notes or "ecode360.com/45474054" in code.resolved_url
     assert all(r.retrieved_on.isoformat() == "2026-09-26" for r in records)
 
@@ -49,8 +50,17 @@ def test_site_context_from_fixtures_does_not_invent_code_text() -> None:
     assert ctx.residential_profile is not None
     assert ctx.residential_profile.use_subdistrict == "R2"
     assert ctx.residential_profile.min_lot_sf == 3000
-    assert ctx.code_citations[0].retrieval_status == "chapter_903_excerpt"
-    assert ctx.code_citations[0].body is None
+    assert ctx.code_citations[0].retrieval_status == "retrieved_browser"
+    assert ctx.code_lookup is not None
+    assert ctx.code_lookup["use_table_column"] == "R2"
+    two = next(
+        row for row in ctx.code_lookup["use_permissions_this_column"] if row["use"].startswith("Two-Unit")
+    )
+    assert two["status"] == "P"
+    multi = next(
+        row for row in ctx.code_lookup["use_permissions_this_column"] if row["use"].startswith("Multi-Unit")
+    )
+    assert "blank" in multi["status"] or multi["status"] == ""
     assert any("not legal" in note.lower() for note in ctx.coverage_notes)
 
 
@@ -72,8 +82,8 @@ def test_demo_site_is_brookline_r2l() -> None:
     assert record["zoning_district"] == "R2-L"
     assert record["address"]["municipality"] == "PITTSBURGH"
     assert "170" in record["address"]["full"]
-    assert record["placeholders"]["census_tract_geoid"] is None
-    assert any("911.02" in item for item in record["known_limitations"])
+    assert record["placeholders"]["census_tract_geoid"] == "42003191800"
+    assert any("not legal" in item.lower() for item in record["known_limitations"])
 
 
 def test_vh_has_no_invented_lot_size() -> None:
@@ -83,3 +93,29 @@ def test_vh_has_no_invented_lot_size() -> None:
     assert profile is not None
     assert profile.min_lot_sf is None
     assert any("minimum lot size" in n.lower() for n in profile.notes)
+
+
+def test_use_table_lookup_is_district_dynamic() -> None:
+    from housing_review.data.corpus import permissions_for_district, use_table_column_key
+
+    assert use_table_column_key("R2-L") == "R2"
+    assert use_table_column_key("RM-H") == "RM"
+    assert use_table_column_key("NDO") == "NDO"
+    r2_two = next(row for row in permissions_for_district("R2-L") if row["use"].startswith("Two-Unit"))
+    r1d_two = next(row for row in permissions_for_district("R1D-L") if row["use"].startswith("Two-Unit"))
+    r2_multi = next(row for row in permissions_for_district("R2-L") if row["use"].startswith("Multi-Unit"))
+    rm_multi = next(row for row in permissions_for_district("RM-H") if row["use"].startswith("Multi-Unit"))
+    assert r2_two["status"] == "P"
+    assert "blank" in r1d_two["status"]
+    assert "blank" in r2_multi["status"]
+    assert rm_multi["status"] == "P"
+
+
+def test_parking_excerpt_is_schedule_a_not_toc() -> None:
+    from housing_review.data.corpus import parking_schedule_residential_excerpt
+
+    excerpt = parking_schedule_residential_excerpt()
+    assert "Single-Unit, Detached" in excerpt
+    assert "1 per unit" in excerpt
+    assert "Two-Unit" in excerpt
+    assert "Off-Street Parking Exemption" not in excerpt

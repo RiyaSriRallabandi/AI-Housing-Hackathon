@@ -10,7 +10,7 @@ Five independent Analyst agents (zoning, demographics, financial feasibility, eq
 
 ## Current status
 
-Component 1 (shared contract) and Component 2 (Zoning data layer for one agent) are in place. Working example site: **170 Aidan Ct, Brookline** (PIN `0139F00077000000`, **R2-L**). No agents or LLM calls yet. §911.02 Use Table is still a labeled gap.
+Component 1 (shared contract), Component 2 Zoning data, and Zoning Analyst Round 1 are in place. Shared LLM is Groq `openai/gpt-oss-120b`. Working example site: **170 Aidan Ct, Brookline** (PIN `0139F00077000000`, **R2-L**).
 
 ## Shared output contract
 
@@ -44,14 +44,16 @@ pip install -e ".[dev]"
 pytest
 ```
 
-Copy `.env.example` to `.env` when runtime API keys are needed. Never commit `.env`.
+Copy `.env.example` to `.env` and set `GROQ_API_KEY` (console.groq.com, no card). All agents read `LLM_MODEL` from `housing_review.config` (default `openai/gpt-oss-120b`). Do not put model names in agent modules.
 
 ## Libraries so far
 
 - Python 3.11+
 - Pydantic v2
 - Shapely 2 (point-in-polygon on zoning GIS)
-- pytest (dev)
+- google-genai (Gemini API client, optional fallback)
+- groq (default runtime: `openai/gpt-oss-120b`)
+- python-dotenv
 
 ## Data sources (Zoning slice)
 
@@ -59,15 +61,14 @@ See `data/SOURCE_LOG.md` for URLs, retrieval date (2026-09-26), and per-source g
 
 - Zoning map: WPRDC City of Pittsburgh zoning GeoJSON (catalog slug `pittsburgh-zoning` now 404s; dataset id is `zoning`).
 - Parcels: Allegheny County Open Data Feature Service (WPRDC full file is huge; PASDA REST was down).
-- Zoning code: Title 9 on eCode360 (https://ecode360.com/45474054). Chapter 903 dimensional/use-subdistrict rules retrieved 2026-09-26. **§911.02 Use Table not retrieved.**
-- Official map: Instant App overlays joined by point (steep slope, historic, IZ, etc.).
+- Zoning code: Title 9 on eCode360 (https://ecode360.com/45474054). Residential-relevant Chapters 903, 911 (full §911.02 Use Table), 912, 913, and 914 retrieved 2026-09-26 via browser (Cloudflare blocks naive curl). Files in `data/zoning_corpus/`.
+- Official map: Instant App overlays joined by point (steep slope, historic, IZ, ADU overlay query, etc.).
 
 ## Limitations (will grow as sources are wired)
 
 - Not legal, financial, or zoning advice.
-- Zoning use permissions from §911.02 and accessory/ADU rules from Ch. 912 are **not** in the structured layer yet.
+- Corpus is a deliberate residential subset (Ch. 903, 911, 912, 913, 914), not the full Title 9.
 - Overlay slope flag at the demo parcel is screening-level only, not a geotechnical determination.
-- Census tract for the demo site is a placeholder until TIGER/ACS is wired.
 - Construction cost is not in the hackathon catalog; that gap is still a checkpoint.
 
 ## License / event

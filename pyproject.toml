@@ -11,6 +11,9 @@ requires-python = ">=3.11"
 dependencies = [
   "pydantic>=2.7,<3",
   "shapely>=2.0,<3",
+  "google-genai>=1.0",
+  "groq>=0.13",
+  "python-dotenv>=1.0",
 ]
 
 [project.optional-dependencies]
@@ -20,6 +23,9 @@ dev = [
 
 [tool.setuptools.packages.find]
 where = ["src"]
+
+[tool.setuptools.package-data]
+housing_review = ["prompts/*.txt"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

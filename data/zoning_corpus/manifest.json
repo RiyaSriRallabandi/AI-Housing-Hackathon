@@ -1,0 +1,13 @@
+{
+  "retrieved_on": "2026-09-26",
+  "host": "https://ecode360.com/45474054",
+  "fetch_method": "browser-rendering (Cloudflare blocks naive curl/requests)",
+  "scope": "Residential-relevant Title 9 chapters only; commercial/industrial-only chapters out of scope by design.",
+  "chapters": {
+    "903": {"url": "https://ecode360.com/45474194", "file": "ch903.txt"},
+    "911": {"url": "https://ecode360.com/45476524", "file": "ch911.txt", "use_table": "use_table_911_02.json"},
+    "912": {"url": "https://ecode360.com/45477814", "file": "ch912.txt"},
+    "913": {"url": "https://ecode360.com/45477960", "file": "ch913.txt"},
+    "914": {"url": "https://ecode360.com/45478031", "file": "ch914.txt"}
+  }
+}

@@ -1,0 +1,78 @@
+CHAPTER 913
+Use Exceptions and Conditions Not Listed in Use Table
+§ 913.01 General.
+The purpose of this chapter is to provide a complete listing and reference to all Administrator Exceptions, Special Exceptions and Conditional Uses which are not found within the Use Table of Chapter 911.
+§ 913.02 Administrator Exceptions.
+[Ord. No. 31-2018, § 11, eff. 8-6-2018]
+The following uses shall be allowed as Administrator Exceptions in accordance with the Review Procedures of Section 922.08.
+A. (Reserved)
+B. Undermined Area Overlay District.
+1. Single-Unit Dwellings (Section 906.05.B.2)
+C. Golden Triangle District.
+1. Limited Enlargement on a Lot not Complying with Urban Open Space Requirements (Section 910.01.E.1)
+2. Open Air Restaurant and Ice-Skating Rinks in Urban Open Space (Section 910.01.E.2)
+D. RIV North Shore District.
+1. Conversion of Existing Buildings to Museum Use (Section 910.02.E.1)
+2. Structures which Penetrate the Inclined Height Plane (Section 910.02.E.2)
+E. Parking Loading and Access Regulations.
+1. Review and Approval Procedure for Small Facilities (Section 914.07.D.1)
+2. Shared Parking (Section 914.07.G.1(a))
+3. Valet Parking (Section 914.07.G.1(b))
+4. Exceptions to Parking and Loading Area Dimensional Standards (Section 914.11.B.1)
+5. Exceptions to Off-Street Loading Schedule (Section 914.11.B.2)
+6. Shared and Off-Site Loading (Section 914.11.B.3)
+7. Exception to Off-Street Parking Requirements for Infill Housing (Section 914.11.B.4)
+F. Other Administrator Exceptions.
+1. Alternative Compliance to Landscaping and Screening Requirements (Section 918.06)
+2. Features Allowed Within Setbacks (Section 925.06.G)
+§ 913.03 Special Exceptions.
+[Ord. 16-2002, § 1, eff. 6-4-2002; Ord. 44-2003, eff. 12-31-2003; Ord. No. 1-2011, § 4, eff. 2-14-2011; Ord. No. 31-2011, § 1, eff. 12-31-2011; Ord. No. 25-2015, § 4, eff. 7-9-2015; Ord. No. 58-2021, § 4, eff. 12-27-2021]
+The following uses shall be allowed as Special Exceptions in accordance with the Review Procedures of Section 922.07.
+A. Urban Neighborhood Commercial District.
+1. Special Exception for Height (Section 904.04.C.4)
+B. Public Realm District.
+1. Height Exception in the Grandview Subdistrict B (Section 908.02.G.2(b))
+2. Height Exception in the Grandview Subdistrict C (Section 908.02.G.3(b))
+3. Special Exceptions in Grandview Public Realm District (Section 908.02.H)
+4. Special Exception for Height in Oakland Subdistrict B/Craig Street (see Section 908.03.D.2(f).
+5. Special Exception for Height in Oakland Subdistrict C/Fifth/Forbes (see Section 908.03.D.3(f).
+6. Special Exception for Density (FAR) in Oakland Subdistrict C/Fifth/Forbes (see Section 908.03.D.3(g)
+7. Special Exception for Height in Oakland Subdistrict D/Boulevard of the Allies (see Section 908.03.D.4.f).
+C. Accessory Uses.
+1. Special Exception for Employees to a Home Occupation (Section 912.05.B.1)
+2. (Reserved)
+D. Parking Loading and Access.
+1. Review and Approval Procedure for Large Facilities (Section 914.07.D.2)
+2. Off-Site Parking (Section 914.07.G.2(a))
+3. Bicycle Parking (Section 914.07.G.2(b))
+4. Transportation Management Plan (Section 914.07.G.2(c))
+5. Transit Stops (Section 914.07.G.2(d))
+6. Exception to Off-Street Parking Schedule (Section 914.11.A.1)
+7. Parking Areas Accessory to Non-Conforming Uses (Section 914.11.A.2)
+E. Special Exceptions.
+1. Special Exception for Waiver of Residential Compatibility Standards (Section 916.09)
+2. Waiver of Operational Performance Standards (Section 917.06)
+F. (Reserved)
+G. SP-6 Palisades Park.
+(a) Use Exceptions in SP-6 Palisades Park, Subdistrict A - Race Track (Section 909.01.K(a)(2))
+(b) Use Exceptions in SP-6 Palisades Park, Subdistrict B - Town Center (Section 909.01.K(b)(2))
+H. Electronic Signs.
+1. Electronic Advertising Signs (Section 919.02.C)
+2. Electronic Non-Advertising Signs (Section 919.03.O)
+3. Major Public Destination Facility Electronic Signs (Section 919.03.P.2(a))
+§ 913.04 Conditional Uses.
+[Ord. No. 31-2011, § 2, eff. 12-31-2011; Ord. No. 31-2018, § 11, eff. 8-6-2018]
+The following uses shall be allowed as Conditional Uses in accordance with the Review Procedures of Section 922.06.
+A. Flood Plain Overlay District.
+1. Uses Classified as Conditional Uses in the Underlying Zoning Districts (Section 906.02.G.2(a))
+2. Development that May Endanger Human Life (Section 906.02.G.2(b))
+3. Special Hazards (Section 906.02.G.2(c))
+B. (Reserved)
+C. Golden Triangle District.
+1. Density and Intensity Transfers (Section 910.01.D.1)
+2. Electronic Sign Messages (Section 910.01.D.2)
+D. RIV North Shore District.
+1. Density and Intensity Transfers (Section 910.02.D.1)
+2. Electronic Sign Messages (Section 910.02.D.2)
+E. Electronic Signs.
+1. Major Public Destination Facility Large Video Displays (Section 919.03.P.2(b))

@@ -49,7 +49,15 @@ OVERLAY_LAYERS: list[tuple[str, str]] = [
         "floodplain_fema_2026",
         "https://services1.arcgis.com/YZCmUqbcsUpOKfj7/arcgis/rest/services/FEMA_2026/FeatureServer/0",
     ),
+    (
+        "zoning_overlays_combined",
+        "https://services1.arcgis.com/YZCmUqbcsUpOKfj7/arcgis/rest/services/PGHWebZoningOverlays/FeatureServer/0",
+    ),
 ]
+
+ADU_OVERLAY_LAYER = (
+    "https://services1.arcgis.com/YZCmUqbcsUpOKfj7/arcgis/rest/services/PGHWebZoningOverlays/FeatureServer/0"
+)
 
 
 class OverlayHit(BaseModel):
@@ -84,3 +92,49 @@ def overlays_at(lon: float, lat: float, *, timeout: int = 30) -> list[OverlayHit
             attrs = feature.get("attributes") or {}
             hits.append(OverlayHit(layer_id=layer_id, source_url=base, attributes=attrs))
     return hits
+
+
+def _query_features(base: str, lon: float, lat: float, *, where: str = "1=1", timeout: int = 30) -> list[dict]:
+    params = {
+        "geometry": f"{lon},{lat}",
+        "geometryType": "esriGeometryPoint",
+        "inSR": "4326",
+        "spatialRel": "esriSpatialRelIntersects",
+        "where": where,
+        "outFields": "*",
+        "returnGeometry": "false",
+        "f": "json",
+        "resultRecordCount": 25,
+    }
+    url = base + "/query?" + urllib.parse.urlencode(params)
+    req = urllib.request.Request(url, headers={"User-Agent": "housing-review/0.1"})
+    with urllib.request.urlopen(req, timeout=timeout) as resp:
+        payload = json.loads(resp.read().decode("utf-8"))
+    if payload.get("error"):
+        return []
+    return [feature.get("attributes") or {} for feature in payload.get("features") or []]
+
+
+def adu_overlay_at(lon: float, lat: float, *, timeout: int = 30) -> dict:
+    """Live point-in-polygon check for an Accessory Dwelling Unit overlay.
+
+    §912.08 defines the ADU Overlay as coincidental with the Zoning District Map.
+    This is a per-query GIS check, not a stored fact about any demo parcel.
+    """
+    where = (
+        "overlay LIKE '%ADU%' OR overlay LIKE '%Accessory Dwelling%' "
+        "OR criteria LIKE '%ADU%' OR criteria LIKE '%Accessory Dwelling%'"
+    )
+    attrs = _query_features(ADU_OVERLAY_LAYER, lon, lat, where=where, timeout=timeout)
+    return {
+        "in_adu_overlay": bool(attrs),
+        "layer_url": ADU_OVERLAY_LAYER,
+        "official_map": OFFICIAL_ZONING_MAP_APP,
+        "query": where,
+        "hits": attrs,
+        "note": (
+            "Live intersect against PGHWebZoningOverlays for ADU / Accessory Dwelling "
+            "labels. A false result means no matching overlay polygon at this point "
+            "in the published layer, not a hardcoded site conclusion."
+        ),
+    }

@@ -56,22 +56,21 @@ def zoning_analyst_sources() -> list[SourceRecord]:
             caveat=(
                 "Authoritative interpretation belongs to the City. Cite specific sections "
                 "and flag ambiguity; never resolve it as a verdict. Catalog URL 404s. "
-                "Official host confirmed by the City Zoning page and by the user: "
-                "https://ecode360.com/45474054 (Title 9, legislation through 2026-09-16)."
+                "Naive curl/requests to eCode360 hit Cloudflare bot detection; a "
+                "browser-rendering fetch on 2026-09-26 retrieved the chapter text."
             ),
             does_not_cover=(
-                "Section 911.02 Use Table and Chapter 912 accessory rules were not captured "
-                "as structured tables (eCode360 section pages are Cloudflare-blocked to curl; "
-                "browser retrieval succeeded for Chapter 903). Parking (Ch. 914) not transcribed. "
-                "§903.03.E Very-High Density table lists no minimum lot size."
+                "Deliberate corpus scope: residential-relevant Chapters 903, 911, 912, 913, "
+                "and 914 only — not the full Title 9. Commercial/industrial-only chapters "
+                "are out of scope. §903.03.E Very-High Density table lists no minimum lot size."
             ),
             notes=(
-                "Chapter 903 (https://ecode360.com/45474231) retrieved 2026-09-26 via the "
-                "official eCode360 page: use subdistricts R1D/R1A/R2/R3/RM and VL/L/M/H/VH "
-                "dimensional tables. City zoning page: "
-                "https://www.pittsburghpa.gov/Business-Development/City-Planning/Zoning. "
-                "Official map app (overlays): "
-                "https://pittsburghpa.maps.arcgis.com/apps/instant/sidebar/index.html?appid=4bb79ea64bf848b3a0560e3856efeccb"
+                "Browser-retrieved 2026-09-26: Ch. 903 https://ecode360.com/45474194 ; "
+                "Ch. 911 (full §911.02 Use Table, every district column) "
+                "https://ecode360.com/45476524 ; Ch. 912 incl. §912.08 "
+                "https://ecode360.com/45477814 ; Ch. 913 https://ecode360.com/45477960 ; "
+                "Ch. 914 https://ecode360.com/45478031 . Files in data/zoning_corpus/. "
+                "Use Table column is looked up from the mapped GIS district at query time."
             ),
         ),
         SourceRecord(
@@ -92,5 +91,67 @@ def zoning_analyst_sources() -> list[SourceRecord]:
                 "MAPBLOCKLOT, MUNICODE, CALCACREAGE)."
             ),
             notes="Query by PIN or point; do not commit county-wide geometry.",
+        ),
+    ]
+
+
+def demographic_analyst_sources() -> list[SourceRecord]:
+    retrieved = date(2026, 9, 26)
+    return [
+        SourceRecord(
+            agent="demographic_analyst",
+            name="American Community Survey 5-Year",
+            catalog_url="https://www.census.gov/data/developers/data-sets/acs-5year.html",
+            resolved_url="https://data.census.gov/api/access/data/table",
+            retrieved_on=retrieved,
+            caveat=(
+                "Estimates have margins of error — avoid false precision for small areas "
+                "(tract-level). api.census.gov returned HTML 'Missing Key' without a Census "
+                "API key on 2026-09-26; tables were retrieved from data.census.gov for "
+                "GEOID 42003191800."
+            ),
+            does_not_cover=(
+                "Does not measure guaranteed demand. Vacancy is not split by units-in-structure "
+                "in the tables retrieved (B25024 is inventory mix). USPS postal vacancy was not "
+                "retrieved (Useful, not Core)."
+            ),
+            notes=(
+                "Vintages: ACS 5-Year 2019-2023 (ACSDT5Y2023 B01003, B25002, B25010, B25024, "
+                "B11001, B01001) and ACS 5-Year 2014-2018 (ACSDT5Y2018 B01003, B25002, B25010, "
+                "B11001). Non-overlapping periods for trajectory."
+            ),
+        ),
+        SourceRecord(
+            agent="demographic_analyst",
+            name="Decennial Census",
+            catalog_url="https://www.census.gov/programs-surveys/decennial-census/data.html",
+            resolved_url="https://data.census.gov/api/access/data/table",
+            retrieved_on=retrieved,
+            caveat=(
+                "Limited socioeconomic detail vs. ACS; geography changes complicate time series. "
+                "2020 PL 94-171 is a count, not an ACS estimate."
+            ),
+            does_not_cover=(
+                "Household size, family type, and units-in-structure are not in the 2020 PL "
+                "tables retrieved (P1, H1 only)."
+            ),
+            notes="DECENNIALPL2020.P1 and DECENNIALPL2020.H1 for tract 42003191800.",
+        ),
+        SourceRecord(
+            agent="demographic_analyst",
+            name="TIGER/Line via Census Geocoder",
+            catalog_url="https://www.census.gov/geographies/mapping-files/time-series/geo/tiger-line-file.html",
+            resolved_url="https://geocoding.geo.census.gov/geocoder/geographies/coordinates",
+            retrieved_on=retrieved,
+            caveat="Boundary vintages must match the statistics being joined.",
+            does_not_cover=(
+                "Geocoder returns Current TIGER geography for the point; it is not a substitute "
+                "for downloading the full TIGER shapefile. Neighborhood-layer tract fields were "
+                "not used."
+            ),
+            notes=(
+                "170 Aidan Ct centroid → Census Tract 1918, GEOID 42003191800, "
+                "benchmark Public_AR_Current, vintage Current_Current."
+            ),
         ),
     ]
