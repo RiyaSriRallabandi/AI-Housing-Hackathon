@@ -218,6 +218,18 @@ the decision is made, not reconstructed later.
 - **Decision:** Identical Equity scores across the six typologies are expected. The Analyst only has tract-level CHAS cost-burden facts, which do not vary by housing type, so it cannot rank one product over another. Future work: HUD Fair Market Rents as a typology-mapped rent benchmark, plus HUD Income Limits so existing residents' ability to pay at that benchmark can be stated. Senior housing would remain unmapped to both sources.
 - **Rationale:** Live Round 1 after the affordability guard produced 5/5/5/5/5/5. That is a data limitation, not a scoring bug.
 
+## [Component 4 / 2026-09-27] Round 2 built, live-tested, and removed
+
+- **Decision:** Do not run a cross-examination round. The pipeline is independent Round 1 → Chair → human weighting sliders. Round 2 was implemented and live-tested (Groq TPD exhausted; finished on `gemini-3.5-flash-lite`), then deleted uncommitted rather than reverted.
+- **Rationale:** The five Analysts measure different, often orthogonal things (legal permission, financial return, distributional fairness, sustainability, demographics). Disagreement is usually the finding, not a misunderstanding. Live Round 2 notes mostly declined to change scores because each agent's objective does not depend on the others' — Pro Forma naming Zoning's apartment use-table barrier without moving its cost score is the honest pattern. Resolving that is the human's job via Component 6 sliders on cached Round 1 scores, not agent-to-agent negotiation.
+- **Open questions:** None for this slice. Weighting sliders are Component 6.
+
+## [Component 5 / 2026-09-27] Chair reads Round 1 only
+
+- **Decision:** The Chair receives all five independent Round 1 assessments. `scores_by_agent` and the limitations panel are compiled in code (no fused ranking, no winner). The LLM only classifies per-typology **factual disputes** (possible data-reading discrepancy; flag for verification) vs **value disputes** (real trade-off between legitimate objectives). Schema retry once, then empty dispute lists with scores still attached. Classification is about statements, not score spread: incompatible claims about the same site attribute (e.g. Use Table permitted vs not) are factual even when the agents also have different missions; a score gap alone is a value dispute.
+- **Adversarial check (not committed):** A copy of Round 1 cache with Sustainability's apartment Use Table claim flipped to "permitted (P)" against Zoning's "blank — not permitted." First Chair run labeled only a value dispute. After the prompt rule above, the same input produced a zoning vs sustainability **factual_dispute** (verify Use Table P vs blank) plus a separate **value_dispute** (permission vs carbon/density). Duplex (uncorrupted) stayed value-only.
+- **Open questions:** Weighting sliders (Component 6) on cached Round 1 scores.
+
 
 
 
