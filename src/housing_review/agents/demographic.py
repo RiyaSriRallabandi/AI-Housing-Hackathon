@@ -3,72 +3,39 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-from pydantic import ValidationError
-
+from housing_review.agents.judgment import collect_judgments, merge_assessment
 from housing_review.data.demo_site import demo_site_record
+from housing_review.data.demographic_facts import (
+    code_side_cannot_determine,
+    deterministic_claims_for_typology,
+    facts_pack_for_llm,
+)
 from housing_review.data.demographics import DemographicSiteContext, load_demographic_site_from_path
-from housing_review.llm import Completer, complete_json, parse_json_list
-from housing_review.schemas import AnalystAssessment, Typology, parse_analyst_assessment
+from housing_review.llm import Completer, complete_json
+from housing_review.schemas import AnalystAssessment, Typology
+from housing_review.schemas.common import AnalystName
 
 PROMPT_PATH = Path(__file__).resolve().parent.parent / "prompts" / "demographic_analyst_round1.txt"
 FIXTURE_PATH = Path(__file__).resolve().parents[3] / "tests" / "fixtures" / "demographic_tract_42003191800.json"
 CANDIDATE_TYPOLOGIES = list(Typology)
-MAX_SCHEMA_RETRIES = 1
 
 
 def _system_prompt() -> str:
     return PROMPT_PATH.read_text()
 
 
-def _estimate(item) -> dict:
-    return {"value": item.value, "moe": item.moe, "var": item.variable, "table": item.table_id, "vintage": item.vintage}
-
-
-def _compact_context(context: DemographicSiteContext) -> dict:
-    a23, a18, d20 = context.acs_2023, context.acs_2018, context.dec_2020
-    return {
-        "site_id": context.site_id,
-        "geoid": context.geoid,
-        "tract_name": context.tract_name,
-        "acs_2019_2023": {
-            "population": _estimate(a23.population),
-            "vacancy_rate": _estimate(a23.vacancy_rate),
-            "avg_household_size": _estimate(a23.avg_household_size),
-            "family_households": _estimate(a23.family_households),
-            "nonfamily_households": _estimate(a23.nonfamily_households),
-            "units_1_detached": _estimate(a23.units_1_detached),
-            "units_1_attached": _estimate(a23.units_1_attached),
-            "units_2": _estimate(a23.units_2),
-            "units_3_to_4": _estimate(a23.units_3_to_4),
-            "units_5_or_more": _estimate(a23.units_5_or_more),
-            "population_65_plus": _estimate(a23.population_65_plus),
-        },
-        "acs_2014_2018": {
-            "population": _estimate(a18.population),
-            "vacancy_rate": _estimate(a18.vacancy_rate),
-            "avg_household_size": _estimate(a18.avg_household_size),
-            "family_households": _estimate(a18.family_households),
-            "nonfamily_households": _estimate(a18.nonfamily_households),
-        },
-        "census_2020_pl": {
-            "population": _estimate(d20.population),
-            "vacant_units": _estimate(d20.vacant_units),
-        },
-        "coverage_notes": context.coverage_notes,
-    }
-
-
 def _user_prompt(context: DemographicSiteContext, typologies: list[Typology]) -> str:
     payload = {
         "responsible_use": "Decision support only — not legal, financial, or zoning advice.",
-        "site_context": _compact_context(context),
+        "site_id": context.site_id,
+        "deterministic_facts": facts_pack_for_llm(context),
+        "code_side_cannot_determine": code_side_cannot_determine(),
         "candidate_typologies": [item.value for item in typologies],
     }
     return (
-        "Assess each listed candidate typology using ONLY site_context. "
-        "At most 2 claims per typology. Summaries max 2 sentences. "
-        "Return JSON as "
-        '{"assessments": [ ... ]}.\n'
+        "Score EVERY candidate typology in one comparative pass using ONLY "
+        "deterministic_facts. Do not emit claims. Return JSON as "
+        '{"judgments": [ ... ]}.\n'
         + json.dumps(payload)
     )
 
@@ -81,41 +48,25 @@ def run_demographic_analyst(
 ) -> list[AnalystAssessment]:
     typologies = typologies or CANDIDATE_TYPOLOGIES
     generate = completer or complete_json
-    if len(typologies) > 3:
-        combined: list[AnalystAssessment] = []
-        for start in range(0, len(typologies), 3):
-            combined.extend(
-                run_demographic_analyst(
-                    context,
-                    typologies=typologies[start : start + 3],
-                    completer=generate,
-                )
-            )
-        return combined
-    system = _system_prompt()
-    user = _user_prompt(context, typologies)
-    last_error: Exception | None = None
-    raw = ""
-    for _ in range(MAX_SCHEMA_RETRIES + 1):
-        raw = generate(system, user)
-        try:
-            items = parse_json_list(raw)
-            assessments = [parse_analyst_assessment(item) for item in items]
-            _assert_round1_shape(assessments, context, typologies)
-        except (ValidationError, ValueError, TypeError) as exc:
-            last_error = exc
-            user = (
-                user
-                + "\n\nYour previous output failed schema validation: "
-                + str(exc)
-                + "\nReturn a JSON object {\"assessments\": [...]} only. "
-                "Include every candidate typology. Each claim must use keys "
-                "statement, basis, source (optional confidence_note). "
-                "agent must be demographic_analyst."
-            )
-            continue
-        return assessments
-    raise ValueError(f"Demographic Analyst output failed schema validation: {last_error}\nRaw: {raw[:1000]}")
+    extra = code_side_cannot_determine()
+    judgments = collect_judgments(
+        generate,
+        _system_prompt(),
+        _user_prompt(context, typologies),
+        typologies,
+        agent_label="Demographic Analyst",
+        claims_kept="ACS and Decennial claims were still attached from code.",
+    )
+    return [
+        merge_assessment(
+            agent=AnalystName.demographic_analyst,
+            site_id=context.site_id,
+            judgment=item,
+            claims=deterministic_claims_for_typology(item.typology, context),
+            extra_gaps=extra,
+        )
+        for item in judgments
+    ]
 
 
 def run_demographic_analyst_for_demo(*, completer: Completer | None = None) -> list[AnalystAssessment]:
@@ -124,19 +75,3 @@ def run_demographic_analyst_for_demo(*, completer: Completer | None = None) -> l
     if context.site_id != record["pin"]:
         raise ValueError("Demographic fixture site_id does not match demo PIN")
     return run_demographic_analyst(context, completer=completer)
-
-
-def _assert_round1_shape(
-    assessments: list[AnalystAssessment],
-    context: DemographicSiteContext,
-    typologies: list[Typology],
-) -> None:
-    got = {item.typology for item in assessments}
-    missing = [item for item in typologies if item not in got]
-    if missing:
-        raise ValueError(f"Missing typologies in Demographic Analyst output: {missing}")
-    for item in assessments:
-        if item.agent.value != "demographic_analyst":
-            raise ValueError("agent must be demographic_analyst")
-        if item.site_id != context.site_id:
-            raise ValueError("site_id must match the parcel PIN")

@@ -36,36 +36,58 @@ def test_demographic_fixture_has_moe_and_gaps() -> None:
 
 def test_demographic_analyst_validates_mocked_round1() -> None:
     context = load_demographic_site_from_path(FIXTURES / "demographic_tract_42003191800.json")
-    payload = [
-        {
-            "agent": "demographic_analyst",
-            "site_id": "0139F00077000000",
-            "typology": "duplex",
-            "score": 6,
-            "basis": "trend_inferred",
-            "claims": [
-                {
-                    "statement": "Average household size declined from 2.30 (ACS 2014-2018) to 2.12 (ACS 2019-2023).",
-                    "basis": "trend_inferred",
-                    "source": "ACS 5-Year B25010_001E, vintages 2014-2018 and 2019-2023",
-                    "confidence_note": "MOE is ±0.13 then ±0.20; the decline may not be significant.",
-                }
-            ],
-            "cannot_determine": [
-                "Vacancy rate by units-in-structure is not in the retrieved ACS tables.",
-                "USPS postal vacancy was not retrieved.",
-            ],
-            "summary": "Trends suggest smaller household size; this may reflect supply constraints rather than preference. Decision support only.",
-        }
-    ]
 
     def fake_complete(system: str, user: str) -> str:
         assert "Demographic Analyst" in system
         assert "42003191800" in user
         assert "there is demand for" not in system.lower() or "never" in system.lower()
-        return json.dumps({"assessments": payload})
+        assert "deterministic_facts" in user
+        return json.dumps(
+            {
+                "judgments": [
+                    {
+                        "typology": "duplex",
+                        "score": 6,
+                        "basis": "trend_inferred",
+                        "summary": "Trends suggest smaller household size; this may reflect supply constraints rather than preference.",
+                        "cannot_determine": [],
+                    }
+                ]
+            }
+        )
 
     results = run_demographic_analyst(context, typologies=[Typology.duplex], completer=fake_complete)
     assert results[0].agent is AnalystName.demographic_analyst
     assert results[0].score == 6
     assert any("USPS" in item for item in results[0].cannot_determine)
+    assert "B25010" in results[0].claims[0].source
+
+
+def test_demographic_one_call_all_six() -> None:
+    context = load_demographic_site_from_path(FIXTURES / "demographic_tract_42003191800.json")
+    calls = {"n": 0}
+
+    def fake(system: str, user: str) -> str:
+        calls["n"] += 1
+        start = user.find('{"responsible_use"')
+        payload, _ = json.JSONDecoder().raw_decode(user[start:])
+        typs = payload["candidate_typologies"]
+        assert len(typs) == 6
+        return json.dumps(
+            {
+                "judgments": [
+                    {
+                        "typology": slug,
+                        "score": i + 1,
+                        "basis": "trend_inferred",
+                        "summary": f"note {slug}",
+                        "cannot_determine": [],
+                    }
+                    for i, slug in enumerate(typs)
+                ]
+            }
+        )
+
+    results = run_demographic_analyst(context, completer=fake)
+    assert calls["n"] == 1
+    assert [item.score for item in results] == [1, 2, 3, 4, 5, 6]

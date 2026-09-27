@@ -185,7 +185,13 @@ the decision is made, not reconstructed later.
 
 - **Decision:** Shared `agents/judgment.py` retries once on schema failure, then salvages valid typologies and falls back the rest (`cannot_determine` + score placeholder 0) instead of raising. Equity CHAS Table 8 figures and Sustainability PRT/FEMA/slope/carbon-direction claims are built in code with citations. Each of those two agents scores all six typologies in one call. Demographic and Pro Forma are unchanged in this slice.
 - **Rationale:** Tract CHAS and site flood/transit facts do not vary by typology, so 3+3 batching only split comparative scores. Citation restatement was the same failure mode as Zoning.
-- **Open questions:** Demographic and Pro Forma redesigns still pending.
+- **Open questions:** Pro Forma still batches 3+3 with model-written claims.
+
+## [Component 3 / 2026-09-27] Demographic: code-owned ACS claims, one comparative call
+
+- **Decision:** ACS 2019-2023 / 2014-2018 and 2020 PL estimates (table, variable, vintage, MOE) are attached as `Claim`s in `demographic_facts.py`. The Demographic LLM returns only `judgments` and scores all six typologies in one call, using the shared judgment fallback. USPS vacancy and vacancy-by-structure-type stay `cannot_determine`. Household-size change vs combined MOE is a confidence note, not a generated citation.
+- **Rationale:** Tract ACS is site-constant; 3+3 batching split demand-fit scores that are meant to be comparative. The model was restating table IDs it already had in the payload.
+- **Open questions:** Pro Forma redesign still pending.
 
 
 

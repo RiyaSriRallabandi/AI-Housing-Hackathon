@@ -28,6 +28,7 @@ def _payload_from_user(user: str) -> dict:
 
 JUDGMENT_AGENTS = {
     "zoning_analyst",
+    "demographic_analyst",
     "equity_analyst",
     "sustainability_analyst",
 }
