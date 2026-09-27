@@ -10,7 +10,7 @@ Five independent Analyst agents (zoning, demographics, financial feasibility, eq
 
 ## Current status
 
-Component 1 (shared contract), Component 2 Zoning + Demographic + Pro Forma + Equity data, and Round 1 Zoning, Demographic, Pro Forma, and Equity Analysts are in place. Shared LLM is Groq `openai/gpt-oss-120b`. Working example site: **170 Aidan Ct, Brookline**, Census tract **42003191800**.
+Component 1 (shared contract), Component 2 Zoning + Demographic + Pro Forma + Equity + Sustainability data, and Round 1 for those five Analysts are in place. Shared LLM is Groq `openai/gpt-oss-120b`. Working example site: **170 Aidan Ct, Brookline**, Census tract **42003191800**.
 
 ## Shared output contract
 
@@ -78,6 +78,12 @@ See `data/SOURCE_LOG.md` for URLs, retrieval date (2026-09-26), and per-source g
 
 - HUD CHAS via ArcGIS `ACS_5YR_ESTIMATES_CHAS_TRACT` for GEOID `42003191800`. Vintage **2013–2017** (older than HUD’s 2018–2022 release). Cost burden, not displacement.
 
+## Data sources (Sustainability slice)
+
+- Transit: WPRDC PRT Transit Stops (catalog GTFS slug 404s; current GTFS-derived stops, feed 2606). Scheduled ≠ reliability. Demo centroid: McNeilly Station ~637 m; outside the City 1,500 ft major-transit overlay.
+- Flood: City `FEMA_2026` overlay (NFHL catalog). Demo point is Zone X / not SFHA — layer coverage, not a flood determination.
+- Carbon: generic typology-level direction only (`estimated`). No site LCA.
+
 ## Limitations (will grow as sources are wired)
 
 - Not legal, financial, or zoning advice.
@@ -86,6 +92,7 @@ See `data/SOURCE_LOG.md` for URLs, retrieval date (2026-09-26), and per-source g
 - ACS tract estimates have margins of error; vacancy by units-in-structure and USPS postal vacancy are not retrieved.
 - Construction $/sf is ICC BVD August 2026 (national average, Type VB), not a Pittsburgh bid.
 - Equity CHAS for this tract is 2013–2017, older than HUD’s 2018–2022 release.
+- Sustainability flood hit is Zone X (minimal flood hazard), not SFHA; slope flag is screening only; PRT trips are scheduled, not on-time.
 
 ## License / event
 

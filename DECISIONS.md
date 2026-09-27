@@ -153,3 +153,11 @@ the decision is made, not reconstructed later.
 - **Open questions:** Live Groq schema-validity; whether a newer tract FeatureServer exists.
 - **Future refresh:** HUD USER Dataset Update Schedule lists the next Consolidated Planning/CHAS data for **December 2026** (current posted vintage 2018–2022, released 2025-12-23). That is a known follow-on: swap this tract layer for the newer CHAS when it lands — useful for the submission “what we would build next” note.
 
+## [Component 2 / 2026-09-27] Sustainability Core: PRT stops + FEMA_2026
+
+- **Decision:** Treat WPRDC `prt-of-allegheny-county-transit-stops` (GTFS-derived current stops, feed 2606) as the Core GTFS source. Query City `FEMA_2026` on the official Zoning Map as the retrieved NFHL-style flood layer. Carbon claims stay generic typology-level **estimated** — no invented kg CO2.
+- **Options considered:** Stop because catalog slug `port-authority-of-allegheny-county-transit-data` 404s (rejected — same publisher, current PRT product); download `gtfs-archive` zips for every query (rejected for C2; archive logged); treat a 1,500 ft overlay miss as “no transit” (rejected — McNeilly Station is ~637 m).
+- **Rationale:** Stops table carries `from_gtfs`, `feed_version`, mode, routes, and weekday scheduled trips. FEMA Zone X at this point is coverage (Area of Minimal Flood Hazard / not SFHA), not a data hole.
+- **Assumptions made:** Unique `stop_id` + haversine from parcel centroid is the right access metric for Round 1. Slope screening uses the official-map 25%+ layer already wired for Zoning.
+- **Open questions:** Live Groq schema-validity; whether to parse a full GTFS zip for headways beyond `trips_wd`.
+

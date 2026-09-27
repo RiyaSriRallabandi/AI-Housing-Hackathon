@@ -59,6 +59,8 @@ ADU_OVERLAY_LAYER = (
     "https://services1.arcgis.com/YZCmUqbcsUpOKfj7/arcgis/rest/services/PGHWebZoningOverlays/FeatureServer/0"
 )
 
+OVERLAY_URLS = dict(OVERLAY_LAYERS)
+
 
 class OverlayHit(BaseModel):
     model_config = ConfigDict(extra="forbid")
@@ -113,6 +115,11 @@ def _query_features(base: str, lon: float, lat: float, *, where: str = "1=1", ti
     if payload.get("error"):
         return []
     return [feature.get("attributes") or {} for feature in payload.get("features") or []]
+
+
+def query_named_overlay(layer_id: str, lon: float, lat: float, *, timeout: int = 30) -> list[dict]:
+    """Point-in-polygon attributes for one official-map overlay layer."""
+    return _query_features(OVERLAY_URLS[layer_id], lon, lat, timeout=timeout)
 
 
 def adu_overlay_at(lon: float, lat: float, *, timeout: int = 30) -> dict:

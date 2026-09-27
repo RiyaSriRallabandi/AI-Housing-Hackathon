@@ -1,0 +1,162 @@
+{
+  "site_id": "0139F00077000000",
+  "lon": -80.01047284597392,
+  "lat": 40.38137128784211,
+  "flood": {
+    "layer_covers_point": true,
+    "fld_zone": "X",
+    "zone_subtype": "AREA OF MINIMAL FLOOD HAZARD",
+    "sfha_tf": "F",
+    "in_sfha": false,
+    "attributes": {
+      "FLD_ZONE": "X",
+      "ZONE_SUBTY": "AREA OF MINIMAL FLOOD HAZARD",
+      "SFHA_TF": "F",
+      "STATIC_BFE": -9999,
+      "DFIRM_ID": "42003C"
+    },
+    "source_url": "https://services1.arcgis.com/YZCmUqbcsUpOKfj7/arcgis/rest/services/FEMA_2026/FeatureServer/0",
+    "catalog_url": "https://www.fema.gov/flood-maps/national-flood-hazard-layer",
+    "caveat": "City FEMA_2026 overlay is the retrieved NFHL-style layer on the official Zoning Map. Not a substitute for a formal flood determination. Zone X coverage is still a map designation; SFHA_TF=F means not in the Special Flood Hazard Area."
+  },
+  "steep_slope_25pct": {
+    "flagged": true,
+    "attributes": {
+      "slope25": "Yes"
+    },
+    "source_url": "https://services1.arcgis.com/YZCmUqbcsUpOKfj7/arcgis/rest/services/PGHWebSlope25/FeatureServer/0",
+    "caveat": "25%+ slope overlay is screening-level only (Useful catalog row; also on the official map). Not a geotechnical survey."
+  },
+  "major_transit_buffer": {
+    "in_1500ft_major_transit_buffer": false,
+    "source_url": "https://services1.arcgis.com/YZCmUqbcsUpOKfj7/arcgis/rest/services/PGHWebMajorTransitBuffer/FeatureServer/0",
+    "note": "City 1,500 ft major-transit buffer is a zoning overlay, not a walk-distance to the nearest PRT stop. A miss here can still have nearby scheduled service."
+  },
+  "prt": {
+    "catalog_url": "https://data.wprdc.org/dataset/port-authority-of-allegheny-county-transit-data",
+    "resolved_url": "https://data.wprdc.org/dataset/prt-of-allegheny-county-transit-stops",
+    "resource_id": "d6e6ed6e-9220-4a0e-9796-e72d83ce8e7a",
+    "gtfs_archive_url": "https://data.wprdc.org/dataset/gtfs-archive",
+    "feed_version": "2606",
+    "nearest": [
+      {
+        "stop_id": "X70008",
+        "stop_name": "MCNEILLY STATION",
+        "stop_lon": -80.005055,
+        "stop_lat": 40.377397,
+        "mode": "RAIL",
+        "route_code": "BLUE,SLVR",
+        "hood": "Overbrook",
+        "trips_wd": 84.0,
+        "from_gtfs": 1,
+        "feed_version": "2606",
+        "distance_m": 637.1
+      },
+      {
+        "stop_id": "X70007",
+        "stop_name": "MCNEILLY STATION",
+        "stop_lon": -80.00461,
+        "stop_lat": 40.377659,
+        "mode": "RAIL",
+        "route_code": "BLUE,SLVR",
+        "hood": "Overbrook",
+        "trips_wd": 84.0,
+        "from_gtfs": 1,
+        "feed_version": "2606",
+        "distance_m": 645.8
+      },
+      {
+        "stop_id": "X11175",
+        "stop_name": "EBEN ST AT SHIRE PL",
+        "stop_lon": -80.008278,
+        "stop_lat": 40.388376,
+        "mode": "BUS",
+        "route_code": "39",
+        "hood": "Brookline",
+        "trips_wd": 35.0,
+        "from_gtfs": 1,
+        "feed_version": "2606",
+        "distance_m": 800.8
+      },
+      {
+        "stop_id": "X04360",
+        "stop_name": "CHELTON AVE AT FREEDOM AVE",
+        "stop_lon": -80.012749,
+        "stop_lat": 40.3884,
+        "mode": "BUS",
+        "route_code": "39",
+        "hood": "Brookline",
+        "trips_wd": 35.0,
+        "from_gtfs": 1,
+        "feed_version": "2606",
+        "distance_m": 805.0
+      },
+      {
+        "stop_id": "X70085",
+        "stop_name": "SHIRE PL AT BREINING ST",
+        "stop_lon": -80.007088,
+        "stop_lat": 40.388402,
+        "mode": "BUS",
+        "route_code": "39",
+        "hood": "Overbrook",
+        "trips_wd": 35.0,
+        "from_gtfs": 1,
+        "feed_version": "2606",
+        "distance_m": 832.7
+      },
+      {
+        "stop_id": "X05870",
+        "stop_name": "FREEDOM AVE AT CREEDMORE AVE FS",
+        "stop_lon": -80.011747,
+        "stop_lat": 40.389035,
+        "mode": "BUS",
+        "route_code": "39",
+        "hood": "Brookline",
+        "trips_wd": 35.0,
+        "from_gtfs": 1,
+        "feed_version": "2606",
+        "distance_m": 859.0
+      },
+      {
+        "stop_id": "X70009",
+        "stop_name": "KILLARNEY",
+        "stop_lon": -80.007738,
+        "stop_lat": 40.373897,
+        "mode": "RAIL",
+        "route_code": "BLUE,SLVR",
+        "hood": null,
+        "trips_wd": 84.0,
+        "from_gtfs": 1,
+        "feed_version": "2606",
+        "distance_m": 862.8
+      },
+      {
+        "stop_id": "X70010",
+        "stop_name": "KILLARNEY STATION",
+        "stop_lon": -80.008182,
+        "stop_lat": 40.373624,
+        "mode": "RAIL",
+        "route_code": "BLUE,SLVR",
+        "hood": null,
+        "trips_wd": 84.0,
+        "from_gtfs": 1,
+        "feed_version": "2606",
+        "distance_m": 883.0
+      }
+    ],
+    "unique_within_400m": 0,
+    "unique_within_800m": 2,
+    "unique_within_1500ft": 0,
+    "retrieved_on": "2026-09-27",
+    "caveat": "Scheduled GTFS-derived service is not realized reliability. Catalog slug port-authority-of-allegheny-county-transit-data 404s; current stops are published as prt-of-allegheny-county-transit-stops (resource d6e6ed6e-9220-4a0e-9796-e72d83ce8e7a). Historical zips are on gtfs-archive."
+  },
+  "coverage_notes": [
+    "Decision support only \u2014 not legal, financial, or zoning advice.",
+    "City FEMA_2026 overlay is the retrieved NFHL-style layer on the official Zoning Map. Not a substitute for a formal flood determination. Zone X coverage is still a map designation; SFHA_TF=F means not in the Special Flood Hazard Area.",
+    "25%+ slope overlay is screening-level only (Useful catalog row; also on the official map). Not a geotechnical survey.",
+    "Scheduled GTFS-derived service is not realized reliability. Catalog slug port-authority-of-allegheny-county-transit-data 404s; current stops are published as prt-of-allegheny-county-transit-stops (resource d6e6ed6e-9220-4a0e-9796-e72d83ce8e7a). Historical zips are on gtfs-archive.",
+    "Carbon / per-unit infrastructure claims must be generic typology-level direction only, basis estimated \u2014 not a site LCA or measured emissions.",
+    "Do not treat the 1,500 ft major-transit overlay as the only transit measure; cite PRT stops.",
+    "PA DEP eMapPA and EPA EJScreen (Useful) were not retrieved."
+  ]
+}

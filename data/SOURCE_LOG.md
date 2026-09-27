@@ -109,3 +109,21 @@ See `data/demo_site.json`.
 - **Catalog caveat:** Based on multi-year ACS; releases lag; tables are complex.
 - **What this does NOT cover:** Displacement from a specific new building. HUD Income Limits and Location Affordability Index (Useful) were not retrieved. HUD User CHAS API was not used (token; no tract geography). National 2018–2022 ZIP download was WAF-blocked.
 
+## Pittsburgh Regional Transit GTFS (Sustainability)
+
+- **Catalog URL (brief):** https://data.wprdc.org/dataset/port-authority-of-allegheny-county-transit-data — **404** on 2026-09-27
+- **Resolved URL:** https://data.wprdc.org/dataset/prt-of-allegheny-county-transit-stops (CKAN datastore/GeoJSON resource `d6e6ed6e-9220-4a0e-9796-e72d83ce8e7a`). Historical GTFS zips: https://data.wprdc.org/dataset/gtfs-archive
+- **Retrieved:** 2026-09-27 for parcel centroid (−80.01047, 40.38137). Feed version **2606** (`from_gtfs=1`).
+- **Nearest unique stops:** McNeilly Station (RAIL BLUE,SLVR) 637 m / 646 m (two stop_ids), 84 weekday scheduled trips; nearest bus (route 39) ~801 m. Unique stops within 400 m: **0**; within 800 m: **2**; within 1,500 ft (~457 m): **0**.
+- **City overlay:** `PGHWebMajorTransitBuffer` (1,500 ft) did **not** intersect this point. Overlay miss ≠ no transit.
+- **Catalog caveat:** Scheduled service is not realized reliability.
+- **What this does NOT cover:** On-time performance, rider counts, or Access Across America (Useful).
+
+## FEMA National Flood Hazard Layer (Sustainability)
+
+- **Catalog URL (brief):** https://www.fema.gov/flood-maps/national-flood-hazard-layer
+- **Resolved URL:** Official Zoning Map `FEMA_2026` FeatureServer `https://services1.arcgis.com/YZCmUqbcsUpOKfj7/arcgis/rest/services/FEMA_2026/FeatureServer/0`
+- **Retrieved:** 2026-09-27 at the demo centroid. **FLD_ZONE=X**, **ZONE_SUBTY=AREA OF MINIMAL FLOOD HAZARD**, **SFHA_TF=F**. The layer **covers** the site; the site is **not** in the Special Flood Hazard Area.
+- **Catalog caveat:** Not a substitute for a formal flood determination.
+- **Related Useful (wired because it is on the official map):** `PGHWebSlope25` flagged **Yes** — screening only, not a geotechnical survey. PA DEP eMapPA and EPA EJScreen were not retrieved.
+

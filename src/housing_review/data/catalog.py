@@ -247,3 +247,53 @@ def equity_analyst_sources() -> list[SourceRecord]:
             ),
         ),
     ]
+
+
+def sustainability_analyst_sources() -> list[SourceRecord]:
+    retrieved = date(2026, 9, 27)
+    return [
+        SourceRecord(
+            agent="sustainability_analyst",
+            name="Pittsburgh Regional Transit GTFS (current stops)",
+            catalog_url="https://data.wprdc.org/dataset/port-authority-of-allegheny-county-transit-data",
+            resolved_url="https://data.wprdc.org/dataset/prt-of-allegheny-county-transit-stops",
+            retrieved_on=retrieved,
+            caveat="Scheduled service is not the same as realized reliability.",
+            does_not_cover=(
+                "Catalog slug port-authority-of-allegheny-county-transit-data 404s. "
+                "Current GTFS-derived stops are dataset prt-of-allegheny-county-transit-stops "
+                "(GeoJSON/datastore resource d6e6ed6e-9220-4a0e-9796-e72d83ce8e7a, "
+                "from_gtfs / feed_version). Full trip-level GTFS zips live under gtfs-archive; "
+                "on-time performance is not in this layer. Access Across America was not retrieved."
+            ),
+            notes=(
+                "170 Aidan Ct centroid 2026-09-27: nearest unique stop McNeilly Station "
+                "(RAIL BLUE,SLVR) ~637 m, 84 weekday scheduled trips; no unique stop within "
+                "400 m or 1,500 ft. City PGHWebMajorTransitBuffer miss at this point."
+            ),
+        ),
+        SourceRecord(
+            agent="sustainability_analyst",
+            name="FEMA National Flood Hazard Layer (City FEMA_2026 overlay)",
+            catalog_url="https://www.fema.gov/flood-maps/national-flood-hazard-layer",
+            resolved_url=(
+                "https://services1.arcgis.com/YZCmUqbcsUpOKfj7/arcgis/rest/services/"
+                "FEMA_2026/FeatureServer/0"
+            ),
+            retrieved_on=retrieved,
+            caveat=(
+                "Not a substitute for a formal flood determination; map amendments may matter. "
+                "A Zone X hit means the layer covers the point (Area of Minimal Flood Hazard), "
+                "not that the site is in a Special Flood Hazard Area."
+            ),
+            does_not_cover=(
+                "Survey, LOMA/LOMR, insurance rating, or a lender flood determination. "
+                "PA DEP eMapPA and EPA EJScreen (Useful) were not retrieved."
+            ),
+            notes=(
+                "Official Zoning Map FEMA_2026 at the demo centroid: FLD_ZONE=X, "
+                "ZONE_SUBTY=AREA OF MINIMAL FLOOD HAZARD, SFHA_TF=F. "
+                "PGHWebSlope25 flagged Yes (screening only)."
+            ),
+        ),
+    ]
