@@ -228,7 +228,13 @@ the decision is made, not reconstructed later.
 
 - **Decision:** The Chair receives all five independent Round 1 assessments. `scores_by_agent` and the limitations panel are compiled in code (no fused ranking, no winner). The LLM only classifies per-typology **factual disputes** (possible data-reading discrepancy; flag for verification) vs **value disputes** (real trade-off between legitimate objectives). Schema retry once, then empty dispute lists with scores still attached. Classification is about statements, not score spread: incompatible claims about the same site attribute (e.g. Use Table permitted vs not) are factual even when the agents also have different missions; a score gap alone is a value dispute.
 - **Adversarial check (not committed):** A copy of Round 1 cache with Sustainability's apartment Use Table claim flipped to "permitted (P)" against Zoning's "blank — not permitted." First Chair run labeled only a value dispute. After the prompt rule above, the same input produced a zoning vs sustainability **factual_dispute** (verify Use Table P vs blank) plus a separate **value_dispute** (permission vs carbon/density). Duplex (uncorrupted) stayed value-only.
-- **Open questions:** Weighting sliders (Component 6) on cached Round 1 scores.
+- **Open questions:** None for this slice.
+
+## [Component 6 / 2026-09-27] Human-weighted view over cached scores
+
+- **Decision:** Ranking after Chair is a pure function (`apply_agent_weights`) of cached Round 1 scores, Chair disputes/limitations, and five user weights. No LLM. Default is equal 20% shares, labeled **equal-weight view**, not the answer. Weights are relative and normalized to sum to 1. Output per typology: weighted score, unique rank (ties keep Round 1 order), per-agent contribution (`weight × score`), that typology's `cannot_determine` by agent, and Chair factual/value disputes. If Equity scores are identical across typologies and its weight is positive, attach a precision note that raising Equity does not differentiate typologies.
+- **Naming:** This is a user-weighted view. Do not call it consensus or the answer.
+- **Open questions:** Brand/color extraction and UI sliders.
 
 
 

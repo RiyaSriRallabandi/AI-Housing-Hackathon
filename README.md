@@ -10,7 +10,7 @@ Five independent Analyst agents (zoning, demographics, financial feasibility, eq
 
 ## Current status
 
-Component 1 (shared contract), Component 2–3 for all five Analysts, Component 4 **Round 1** (independent, sequential), and Component 5 **Chair** (side-by-side scores, factual vs value disputes, compiled limitations; no winner) are in place. Shared LLM is Groq `openai/gpt-oss-120b` with Gemini 3.5 Flash-Lite as env fallback. Working example site: **170 Aidan Ct, Brookline**, Census tract **42003191800**. Round 2 cross-examination was live-tested and removed; human weighting sliders are not wired yet.
+Component 1 (shared contract), Component 2–3 for all five Analysts, Component 4 **Round 1** (independent, sequential), Component 5 **Chair** (side-by-side scores, factual vs value disputes, compiled limitations; no winner), and Component 6 **weighted view** (deterministic re-rank of cached scores; default equal-weight view, not “the answer”) are in place. Shared LLM is Groq `openai/gpt-oss-120b` with Gemini 3.5 Flash-Lite as env fallback. Working example site: **170 Aidan Ct, Brookline**, Census tract **42003191800**. Round 2 cross-examination was live-tested and removed. UI sliders are not wired yet.
 
 ## Shared output contract
 
@@ -30,6 +30,8 @@ Every Analyst assessment must validate against `housing_review.schemas.AnalystAs
 Round 2 uses `AnalystAssessmentRound2`, which additionally requires `round_2_notes`. Extra fields are rejected.
 
 The Chair uses `ChairSynthesis` (per-typology scores, factual vs value disputes, compiled limitations, mandatory responsible-use note).
+
+Human weighting uses `apply_agent_weights` / `WeightedView`: a JSON-serializable ranking with per-agent contributions, `cannot_determine`, and Chair disputes still attached. It does not call a model.
 
 Malformed agent JSON should be rejected and retried, not silently accepted.
 
