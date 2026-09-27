@@ -38,39 +38,59 @@ def test_sustainability_sources_log_gtfs_slug_and_fema() -> None:
 
 def test_sustainability_analyst_validates_mocked_round1() -> None:
     context = load_sustainability_site_from_path(FIXTURES / "sustainability_0139F00077000000.json")
-    payload = [
-        {
-            "agent": "sustainability_analyst",
-            "site_id": "0139F00077000000",
-            "typology": "apartment",
-            "score": 7,
-            "basis": "estimated",
-            "claims": [
-                {
-                    "statement": "Nearest scheduled stop is McNeilly Station (rail) at about 637 m.",
-                    "basis": "measured",
-                    "source": "WPRDC PRT Transit Stops d6e6ed6e-9220-4a0e-9796-e72d83ce8e7a feed 2606",
-                    "confidence_note": "Scheduled, not realized reliability. Outside 1,500 ft overlay.",
-                },
-                {
-                    "statement": "Apartments generally have lower per-unit carbon than detached houses.",
-                    "basis": "estimated",
-                    "source": "Generic typology-level direction in site_context.carbon; not a site LCA",
-                },
-            ],
-            "cannot_determine": ["On-time performance of route BLUE/SLVR."],
-            "summary": "Rail is nearby but outside the City 1,500 ft overlay. Flood map is Zone X, not SFHA.",
-        }
-    ]
 
     def fake(system: str, user: str) -> str:
         assert "Sustainability Analyst" in system
         assert "estimated" in user
         assert "MCNEILLY" in user
-        assert "FLD_ZONE" in user or "fld_zone" in user
-        return json.dumps({"assessments": payload})
+        assert "fld_zone" in user
+        return json.dumps(
+            {
+                "judgments": [
+                    {
+                        "typology": "apartment",
+                        "score": 7,
+                        "basis": "estimated",
+                        "summary": "Rail is nearby but outside the City 1,500 ft overlay. Flood map is Zone X, not SFHA.",
+                        "cannot_determine": [],
+                    }
+                ]
+            }
+        )
 
     results = run_sustainability_analyst(context, typologies=[Typology.apartment], completer=fake)
     assert results[0].agent is AnalystName.sustainability_analyst
     assert results[0].score == 7
-    assert results[0].claims[1].basis.value == "estimated"
+    assert results[0].claims[-1].basis.value == "estimated"
+    assert "MCNEILLY" in results[0].claims[0].statement.upper() or "McNeilly" in results[0].claims[0].statement
+    assert "FEMA_2026" in results[0].claims[1].source or "fema" in results[0].claims[1].source.lower()
+
+
+def test_sustainability_one_call_all_six() -> None:
+    context = load_sustainability_site_from_path(FIXTURES / "sustainability_0139F00077000000.json")
+    calls = {"n": 0}
+
+    def fake(system: str, user: str) -> str:
+        calls["n"] += 1
+        start = user.find('{"responsible_use"')
+        payload, _ = json.JSONDecoder().raw_decode(user[start:])
+        assert len(payload["candidate_typologies"]) == 6
+        return json.dumps(
+            {
+                "judgments": [
+                    {
+                        "typology": slug,
+                        "score": 5,
+                        "basis": "estimated",
+                        "summary": f"note {slug}",
+                        "cannot_determine": [],
+                    }
+                    for slug in payload["candidate_typologies"]
+                ]
+            }
+        )
+
+    results = run_sustainability_analyst(context, completer=fake)
+    assert calls["n"] == 1
+    assert len(results) == 6
+    assert all(item.claims[-1].basis.value == "estimated" for item in results)

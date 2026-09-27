@@ -31,32 +31,64 @@ def test_equity_sources_log_chas_vintage() -> None:
 
 def test_equity_analyst_validates_mocked_round1() -> None:
     context = load_equity_site_from_path(FIXTURES / "equity_chas_42003191800.json")
-    payload = [
-        {
-            "agent": "equity_analyst",
-            "site_id": "0139F00077000000",
-            "typology": "adu",
-            "score": 7,
-            "basis": "measured",
-            "claims": [
-                {
-                    "statement": "About 18.5% of households were cost-burdened in 2013-2017 CHAS.",
-                    "basis": "measured",
-                    "source": "CHAS 2013-2017 T8_CB_PCT GEOID 42003191800",
-                    "confidence_note": "Older than HUD 2018-2022 CHAS.",
-                }
-            ],
-            "cannot_determine": ["Displacement from this project."],
-            "summary": "Affordability mismatch risk, not measured displacement.",
-        }
-    ]
 
     def fake(system: str, user: str) -> str:
         assert "Equity Analyst" in system
         assert "2013-2017" in user
-        assert "B25070" in user
-        return json.dumps({"assessments": payload})
+        assert "B25070" in system
+        assert "deterministic_facts" in user
+        return json.dumps(
+            {
+                "judgments": [
+                    {
+                        "typology": "adu",
+                        "score": 7,
+                        "basis": "measured",
+                        "summary": "Affordability mismatch risk, not measured displacement.",
+                        "cannot_determine": [],
+                    }
+                ]
+            }
+        )
 
     results = run_equity_analyst(context, typologies=[Typology.adu], completer=fake)
     assert results[0].agent is AnalystName.equity_analyst
     assert results[0].score == 7
+    assert "18.45" in results[0].claims[0].statement
+    assert "T8_CB_PCT" in results[0].claims[0].source
+    assert any("displacement" in note.lower() for note in results[0].cannot_determine)
+
+
+def test_equity_one_call_and_fallback() -> None:
+    context = load_equity_site_from_path(FIXTURES / "equity_chas_42003191800.json")
+    calls = {"n": 0}
+
+    def fake(system: str, user: str) -> str:
+        calls["n"] += 1
+        start = user.find('{"responsible_use"')
+        payload, _ = json.JSONDecoder().raw_decode(user[start:])
+        assert len(payload["candidate_typologies"]) == 6
+        if calls["n"] == 1:
+            return json.dumps({"verdict": "nope"})
+        return json.dumps(
+            {
+                "judgments": [
+                    {
+                        "typology": "duplex",
+                        "score": 6,
+                        "basis": "estimated",
+                        "summary": "ok duplex",
+                        "cannot_determine": [],
+                    },
+                    {"typology": "apartment", "score": "bad"},
+                ]
+            }
+        )
+
+    results = run_equity_analyst(context, completer=fake)
+    assert calls["n"] == 2
+    by_typ = {item.typology: item for item in results}
+    assert by_typ[Typology.duplex].score == 6
+    assert by_typ[Typology.apartment].score == 0
+    assert any("failed to produce valid" in note for note in by_typ[Typology.apartment].cannot_determine)
+    assert "T8_CB_PCT" in by_typ[Typology.apartment].claims[0].source

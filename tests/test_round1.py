@@ -26,6 +26,13 @@ def _payload_from_user(user: str) -> dict:
     return payload
 
 
+JUDGMENT_AGENTS = {
+    "zoning_analyst",
+    "equity_analyst",
+    "sustainability_analyst",
+}
+
+
 def _assessment(agent: str, typology: str, token: str) -> dict:
     return {
         "agent": agent,
@@ -50,7 +57,7 @@ def _completer(agent: str, token: str, seen_users: list[str]):
         seen_users.append(user)
         payload = _payload_from_user(user)
         typs = payload["candidate_typologies"]
-        if agent == "zoning_analyst":
+        if agent in JUDGMENT_AGENTS:
             return json.dumps(
                 {
                     "judgments": [
