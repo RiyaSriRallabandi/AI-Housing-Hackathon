@@ -135,3 +135,12 @@ the decision is made, not reconstructed later.
 - **Rationale:** eCode360 §911.02 and the City use-classifications handout define Single-Unit Attached Residential (one unit on its own lot, party wall). The mapping is now explicit in the corpus lookup.
 - **Assumptions made:** Duplex → Two-Unit; apartment → Multi-Unit; detached_single_family → Single-Unit Detached.
 - **Open questions:** None.
+
+## [Component 2 / 2026-09-26] Pro Forma construction cost from ICC BVD August 2026
+
+- **Decision:** Use ICC **Building Valuation Data – AUGUST 2026** as the labeled generic $/sf source. Default **Type VB**. Occupancy R-3 (duplex, townhome, detached_single_family, adu), R-2 (apartment), R-4 (senior_housing). Every score that depends on this is `estimated`. No Pittsburgh local ICC modifier.
+- **Options considered:** Arbitrary $/sf (rejected); `cannot_determine` on all build-cost claims (rejected after user directed ICC BVD); apply a made-up Pittsburgh factor (rejected — none published).
+- **Rationale:** User specified ICC BVD and a search of City PLI/BBI. PLI 2026 fees are $ per $1,000 of applicant construction value; they do not publish a BVD square-foot table or regional modifier. ICC states the table is a national average and not an estimating guide.
+- **Assumptions made:** Type VB is a reasonable default for typical wood-frame residential when the application does not specify construction type. Existing FINISHEDLIVINGAREA is only a size proxy for implied cost.
+- **Open questions:** Live Groq schema-validity on the compact Pro Forma payload.
+

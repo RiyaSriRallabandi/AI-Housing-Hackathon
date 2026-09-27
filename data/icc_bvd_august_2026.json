@@ -1,0 +1,68 @@
+{
+  "table_title": "Building Valuation Data – AUGUST 2026",
+  "source_url": "https://www.iccsafe.org/wp-content/uploads/BVD-BSJ-AUG2026.pdf",
+  "retrieved_on": "2026-09-26",
+  "next_update": "February 2027",
+  "ibc_edition": "2024 International Building Code occupancy groups",
+  "default_construction_type": "VB",
+  "default_construction_type_reason": "Typical unprotected wood-frame residential construction; other types remain in the table if a project specifies them.",
+  "national_average_note": "ICC states these are average costs based on typical methods, a national average that does not take into account regional cost differences. Regional Cost Modifiers are subject to the authority having jurisdiction.",
+  "not_an_estimating_guide": "ICC states the table is intended to help jurisdictions set permit fees, not as a project estimating guide.",
+  "excludes_land": true,
+  "pittsburgh_local_modifier": {
+    "found": false,
+    "searched_on": "2026-09-26",
+    "urls": [
+      "https://www.pittsburghpa.gov/Business-Development/Permits-Licenses-and-Inspections/Fees",
+      "https://www.pittsburghpa.gov/files/assets/city/v/1/pli/documents/fees/2026-fee-schedule.pdf"
+    ],
+    "note": "The former Bureau of Building Inspection is now the Department of Permits, Licenses, and Inspections (PLI). The 2026 PLI fee schedule (effective 1/1/2026) charges residential permits at $6.00 per $1,000 of construction value (min $130). It does not publish an ICC BVD square-foot table or a local multiplier on ICC BVD. Construction value is taken from the project; it is not a Pittsburgh-specific $/sf schedule."
+  },
+  "occupancy_for_typology": {
+    "duplex": "R-3",
+    "townhome": "R-3",
+    "detached_single_family": "R-3",
+    "adu": "R-3",
+    "apartment": "R-2",
+    "senior_housing": "R-4"
+  },
+  "square_foot_costs_usd": {
+    "R-2": {
+      "label": "Residential, multiple family",
+      "IA": 241.56,
+      "IB": 231.31,
+      "IIA": 221.47,
+      "IIB": 211.41,
+      "IIIA": 190.52,
+      "IIIB": 184.22,
+      "IV": 210.88,
+      "VA": 167.24,
+      "VB": 159.71
+    },
+    "R-3": {
+      "label": "Residential, one- and two-family",
+      "unfinished_basement_sf": 31.5,
+      "IA": 226.8,
+      "IB": 220.77,
+      "IIA": 215.47,
+      "IIB": 210.87,
+      "IIIA": 203.82,
+      "IIIB": 196.56,
+      "IV": 215.12,
+      "VA": 189.52,
+      "VB": 177.63
+    },
+    "R-4": {
+      "label": "Residential, care/assisted living facilities",
+      "IA": 286.01,
+      "IB": 275.76,
+      "IIA": 265.91,
+      "IIB": 255.86,
+      "IIIA": 234.19,
+      "IIIB": 227.89,
+      "IV": 255.32,
+      "VA": 210.91,
+      "VB": 203.38
+    }
+  }
+}

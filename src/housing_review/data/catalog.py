@@ -155,3 +155,65 @@ def demographic_analyst_sources() -> list[SourceRecord]:
             ),
         ),
     ]
+
+
+def pro_forma_analyst_sources() -> list[SourceRecord]:
+    retrieved = date(2026, 9, 26)
+    return [
+        SourceRecord(
+            agent="pro_forma_analyst",
+            name="Allegheny County Property Assessments",
+            catalog_url="https://data.wprdc.org/dataset/property-assessments",
+            resolved_url="https://data.wprdc.org/dataset/property-assessments",
+            retrieved_on=retrieved,
+            caveat="Assessed value is not market value — do not conflate the two.",
+            does_not_cover=(
+                "Does not provide construction cost, asking rents, or a guarantee of "
+                "resale price. USEDESC is an assessment class (this parcel: TOWNHOUSE), "
+                "not a Title 9 zoning use."
+            ),
+            notes=(
+                "CKAN resource 65855e14-549e-4992-b5be-d629afc676fa (API version). "
+                "PARID 0139F00077000000 retrieved 2026-09-26: FAIRMARKETLAND 30000, "
+                "FAIRMARKETTOTAL 177300, FINISHEDLIVINGAREA 1704, SALECODE 36 QUIT CLAIM."
+            ),
+        ),
+        SourceRecord(
+            agent="pro_forma_analyst",
+            name="Allegheny County Property Sale Transactions",
+            catalog_url="https://data.wprdc.org/dataset/allegheny-county-property-sale-transactions",
+            resolved_url="https://data.wprdc.org/dataset/real-estate-sales",
+            retrieved_on=retrieved,
+            caveat="Filter using sale-validation codes; many transfers are not arm's-length sales.",
+            does_not_cover=(
+                "Catalog slug allegheny-county-property-sale-transactions 404s; live dataset "
+                "id is real-estate-sales. This parcel's 2015 transfer is QUIT CLAIM, not VALID SALE."
+            ),
+            notes=(
+                "Datastore 5bbe6c55-bce6-4edb-9d04-68edeb6bf7b1. Comparables: PROPERTYZIP=15226 "
+                "and SALECODE=0 (VALID SALE), sorted SALEDATE desc."
+            ),
+        ),
+        SourceRecord(
+            agent="pro_forma_analyst",
+            name="ICC Building Valuation Data",
+            catalog_url="https://www.iccsafe.org/wp-content/uploads/BVD-BSJ-AUG2026.pdf",
+            resolved_url="https://www.iccsafe.org/wp-content/uploads/BVD-BSJ-AUG2026.pdf",
+            retrieved_on=retrieved,
+            caveat=(
+                "National average for permit-fee valuation, not a Pittsburgh bid and not an "
+                "estimating guide (ICC's own disclaimer). Excludes land. Every dependent "
+                "score is estimated."
+            ),
+            does_not_cover=(
+                "Site-specific contractor pricing, Pittsburgh labor/materials, financing, or "
+                "developer margin. City of Pittsburgh PLI/BBI published no local ICC BVD "
+                "modifier as of 2026-09-26; PLI fees are $ per $1,000 of stated construction value."
+            ),
+            notes=(
+                "Table: Building Valuation Data – AUGUST 2026. Default construction type VB. "
+                "Occupancy: R-3 (duplex/townhome/detached/adu) $177.63/sf; R-2 (apartment) "
+                "$159.71/sf; R-4 (senior_housing) $203.38/sf. Next ICC update February 2027."
+            ),
+        ),
+    ]

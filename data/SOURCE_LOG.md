@@ -75,3 +75,27 @@ See `data/demo_site.json`.
 - **Catalog URL (brief):** https://www.census.gov/geographies/mapping-files/time-series/geo/tiger-line-file.html
 - **Resolved:** https://geocoding.geo.census.gov/geocoder/geographies/coordinates (Public_AR_Current / Current_Current)
 - **Retrieved:** 2026-09-26. Parcel centroid → Census Tract 1918, GEOID 42003191800. Neighborhood-layer tract fields were not used.
+
+## Allegheny County Property Assessments (Pro Forma)
+
+- **Catalog URL (brief):** https://data.wprdc.org/dataset/property-assessments
+- **Resolved:** WPRDC datastore resource `65855e14-549e-4992-b5be-d629afc676fa` (API version). Metadata last_etl_update 2026-09-07.
+- **Retrieved:** 2026-09-26 for PARID `0139F00077000000`. Fair-market land $30,000; building $147,300; total $177,300. Finished living area 1,704 sf. Assessment USEDESC/STYLEDESC **TOWNHOUSE** (assessment class, not Title 9).
+- **Catalog caveat:** Assessed value is not market value.
+- **What this does NOT cover:** Construction cost, asking rents, or resale certainty.
+
+## Allegheny County Property Sale Transactions (Pro Forma)
+
+- **Catalog URL (brief):** https://data.wprdc.org/dataset/allegheny-county-property-sale-transactions — **404** on 2026-09-26
+- **Resolved URL:** https://data.wprdc.org/dataset/real-estate-sales (datastore `5bbe6c55-bce6-4edb-9d04-68edeb6bf7b1`)
+- **Retrieved:** 2026-09-26. Parcel transfer 2015-07-02 $215,000 SALECODE 36 QUIT CLAIM — **not** treated as arm's-length. Comparables: ZIP 15226 and SALECODE 0 (VALID SALE), most recent first.
+- **Catalog caveat:** Filter using sale-validation codes; many transfers are not arm's-length sales.
+
+## ICC Building Valuation Data (Pro Forma construction cost)
+
+- **URL:** https://www.iccsafe.org/wp-content/uploads/BVD-BSJ-AUG2026.pdf
+- **Table:** Building Valuation Data – AUGUST 2026 (next update February 2027). Occupancy groups from 2024 IBC.
+- **Retrieved:** 2026-09-26. Default construction type **VB**. R-3 (one- and two-family) $177.63/sf; R-2 (multiple family) $159.71/sf; R-4 (care/assisted living) $203.38/sf.
+- **Pittsburgh local modifier search (2026-09-26):** None found. PLI (successor to Bureau of Building Inspection) 2026 fee schedule uses $6.00 per $1,000 of stated construction value for residential permits — not an ICC BVD regional multiplier. Used the national table unmodified.
+- **ICC caveats:** National average; not regional; not an estimating guide; excludes land. Dependent scores are **estimated**.
+

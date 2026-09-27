@@ -10,7 +10,7 @@ Five independent Analyst agents (zoning, demographics, financial feasibility, eq
 
 ## Current status
 
-Component 1 (shared contract), Component 2 Zoning + Demographic data, and Round 1 Zoning + Demographic Analysts are in place. Shared LLM is Groq `openai/gpt-oss-120b`. Working example site: **170 Aidan Ct, Brookline**, Census tract **42003191800**.
+Component 1 (shared contract), Component 2 Zoning + Demographic + Pro Forma data, and Round 1 Zoning, Demographic, and Pro Forma Analysts are in place. Shared LLM is Groq `openai/gpt-oss-120b`. Working example site: **170 Aidan Ct, Brookline**, Census tract **42003191800**.
 
 ## Shared output contract
 
@@ -69,13 +69,18 @@ See `data/SOURCE_LOG.md` for URLs, retrieval date (2026-09-26), and per-source g
 - Tract join: Census Geocoder (TIGER Current) at the parcel centroid → GEOID `42003191800`.
 - ACS 5-Year and 2020 Decennial via data.census.gov (api.census.gov requires a key). Details in `data/SOURCE_LOG.md`.
 
+## Data sources (Pro Forma slice)
+
+- Assessments and sales: WPRDC (assessed value ≠ market; only SALECODE 0 VALID SALE as comps).
+- Construction $/sf: ICC Building Valuation Data – AUGUST 2026, Type VB, national average. Pittsburgh PLI/BBI published no local ICC modifier (2026-09-26 search). Dependent scores are `estimated`.
+
 ## Limitations (will grow as sources are wired)
 
 - Not legal, financial, or zoning advice.
 - Corpus is a deliberate residential subset (Ch. 903, 911, 912, 913, 914), not the full Title 9.
 - Overlay slope flag at the demo parcel is screening-level only, not a geotechnical determination.
 - ACS tract estimates have margins of error; vacancy by units-in-structure and USPS postal vacancy are not retrieved.
-- Construction cost is not in the hackathon catalog; that gap is still a checkpoint.
+- Construction $/sf is ICC BVD August 2026 (national average, Type VB), not a Pittsburgh bid.
 
 ## License / event
 
