@@ -170,4 +170,11 @@ the decision is made, not reconstructed later.
 - **Live Groq (2026-09-27, `openai/gpt-oss-120b`):** First pass (10 calls) validated 30 assessments but Zoning read a blank Use Table cell as Chapter 913 and invented parking; ADU treated a null overlay as a fact. Prompts tightened; overlay screen attached. Second pass (11 calls, one schema retry) kept the same directional scores: duplex/townhome/detached high zoning certainty, apartment/ADU low; Pro Forma low/marginal (ICC estimated); Equity CHAS 2013–2017 with displacement in `cannot_determine`; Sustainability McNeilly ~637 m, Zone X, carbon `estimated`. Remaining slip: townhome Zoning *summary* still said “no off-street parking” while claims cited Schedule A without a zero. Transcript is gitignored at `data/cache/round1_live.json`.
 - **Open questions:** Round 2 / Chair.
 
+## [Component 3 / 2026-09-27] Zoning citations copied from structured contract
+
+- **Decision:** Permitted-use and parking claim `source` fields must equal `citation_contract` strings (`§911.02 Use Table`, `§914.02.A Parking Schedule A`, or `§912.08` for ADU). Parking statements must quote the structured min and max. Compact prompts no longer include raw Ch. 914/912 dumps.
+- **Rationale:** Live Groq invented `§911.04A.69` and omitted Schedule A maxima when mining excerpts. The corpus already had the correct rows for every district/typology.
+- **Assumptions made:** Exact string equality on `source` is stricter than “contains,” which is the point. One schema retry still appends the validator error; a second failure still raises (no `cannot_determine` fallback).
+
+
 

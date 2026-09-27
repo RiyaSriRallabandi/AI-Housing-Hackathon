@@ -20,9 +20,10 @@ def test_demo_round1_zoning_gets_overlay_screen_from_sustainability_fixture() ->
 
 
 def _payload_from_user(user: str) -> dict:
-    start = user.rfind('{"responsible_use"')
+    start = user.find('{"responsible_use"')
     assert start >= 0
-    return json.loads(user[start:])
+    payload, _end = json.JSONDecoder().raw_decode(user[start:])
+    return payload
 
 
 def _assessment(agent: str, typology: str, token: str) -> dict:
@@ -50,6 +51,25 @@ def _completer(agent: str, token: str, seen_users: list[str]):
         payload = _payload_from_user(user)
         typs = payload["candidate_typologies"]
         items = [_assessment(agent, typology, token) for typology in typs]
+        if agent == "zoning_analyst":
+            contract = payload["site_context"]["citation_contract"]
+            for item in items:
+                row = contract[item["typology"]]
+                park = f"Schedule A minimum {row['parking_minimum']}"
+                if row.get("parking_maximum"):
+                    park += f", maximum {row['parking_maximum']}"
+                item["claims"] = [
+                    {
+                        "statement": f"{agent} round1 {token} for {item['typology']}",
+                        "basis": "estimated",
+                        "source": row["use_source"],
+                    },
+                    {
+                        "statement": park,
+                        "basis": "estimated",
+                        "source": row["parking_citation"],
+                    },
+                ]
         return json.dumps({"assessments": items})
 
     return fake

@@ -202,4 +202,114 @@ def lookup_for_mapped_districts(district_codes: list[str]) -> dict:
             "Use Table; it is not a substitute for §911.02."
         ),
         "chapter_914_parking_excerpt": parking_schedule_residential_excerpt(),
+        "parking_schedule_a": parking_schedule_a_for_typologies(),
+        "citation_contract": citation_contract_for_district(primary) if primary else {},
     }
+
+
+TYPOLOGY_USE_PREFIXES = {
+    "duplex": "Two-Unit Residential",
+    "apartment": "Multi-Unit Residential",
+    "townhome": "Single-Unit Attached",
+    "detached_single_family": "Single-Unit Detached",
+    "senior_housing": "Housing for the Elderly",
+}
+
+
+def citation_contract_for_district(district_code: str) -> dict[str, dict]:
+    """Per-typology citations copied from structured Use Table + Schedule A rows.
+
+    Agents must paste these strings, not invent section numbers from chapter excerpts.
+    """
+    perms = permissions_for_district(district_code)
+    parking_tbl = parking_schedule_a_for_typologies()["by_typology"]
+    contract: dict[str, dict] = {}
+    for slug, prefix in TYPOLOGY_USE_PREFIXES.items():
+        rows = [item for item in perms if item["use"].startswith(prefix)]
+        park = parking_tbl[slug]
+        contract[slug] = {
+            "use_source": rows[0]["source"] if rows else "",
+            "use_names": [item["use"] for item in rows],
+            "statuses": [item["status"] for item in rows],
+            "parking_citation": park["citation"],
+            "parking_minimum": park.get("minimum") or "",
+            "parking_maximum": park.get("maximum") or "",
+        }
+    adu_park = parking_tbl["adu"]
+    contract["adu"] = {
+        "use_source": "§912.08",
+        "use_names": ["Accessory Dwelling Unit"],
+        "statuses": ["not a §911.02 primary-use row; overlay + Chapter 912"],
+        "parking_citation": adu_park["citation"],
+        "parking_minimum": adu_park.get("minimum") or "",
+        "parking_maximum": adu_park.get("maximum") or "",
+    }
+    return contract
+
+
+# Title 9 Schedule A row labels → brief typology slugs. Verified against ch914.txt.
+_SCHEDULE_A_LABELS: list[tuple[str, str | None]] = [
+    ("Single-Unit, Detached", "detached_single_family"),
+    ("Single-Unit Attached", "townhome"),
+    ("Two-Unit", "duplex"),
+    ("Three-Unit", None),
+    ("Multi-Unit", "apartment"),
+    ("Group Residential", None),
+    ("Housing for the Elderly", "senior_housing"),
+]
+
+
+def parking_schedule_a_for_typologies() -> dict:
+    """Structured Schedule A min/max so claims can cite a row, not a chapter blob."""
+    excerpt = parking_schedule_residential_excerpt()
+    rows = _parse_schedule_a_residential(excerpt)
+    by_typology: dict[str, dict] = {}
+    for label, slug in _SCHEDULE_A_LABELS:
+        parsed = rows.get(label) or {}
+        if slug:
+            by_typology[slug] = {
+                "schedule_a_use": label,
+                "minimum": parsed.get("minimum"),
+                "maximum": parsed.get("maximum"),
+                "citation": "§914.02.A Parking Schedule A",
+            }
+    by_typology["adu"] = {
+        "schedule_a_use": None,
+        "minimum": "exempt from Section 914 on-site parking (if ADU Overlay applies)",
+        "maximum": None,
+        "citation": "§912.08 (Accessory Dwelling Units shall be exempt from the on-site parking requirements of Section 914)",
+    }
+    return {
+        "source": "§914.02.A Parking Schedule A, residential rows (corpus ch914.txt)",
+        "by_typology": by_typology,
+    }
+
+
+def _parse_schedule_a_residential(excerpt: str) -> dict[str, dict[str, str]]:
+    labels = [label for label, _ in _SCHEDULE_A_LABELS]
+    found: dict[str, dict[str, str]] = {}
+    collapsed = re.sub(r"[ \t]+", " ", excerpt)
+    collapsed = re.sub(r"\n+", "\n", collapsed)
+    for index, label in enumerate(labels):
+        start = collapsed.find(label)
+        if start < 0:
+            continue
+        end = len(collapsed)
+        for later in labels[index + 1 :]:
+            pos = collapsed.find(later, start + len(label))
+            if pos >= 0:
+                end = min(end, pos)
+        chunk = collapsed[start + len(label) : end]
+        chunk = re.sub(r"\s+", " ", chunk).strip(" :\n\t")
+        if "Parking Demand Analysis" in chunk:
+            found[label] = {
+                "minimum": "Parking Demand Analysis Required, see Section 914.02.B",
+                "maximum": "see Section 914.02.B",
+            }
+            continue
+        rates = re.findall(r"\d+\s+per\s+\w+|No maximum", chunk, flags=re.I)
+        minimum = rates[0] if rates else None
+        maximum = rates[1] if len(rates) > 1 else None
+        if minimum:
+            found[label] = {"minimum": minimum, "maximum": maximum or ""}
+    return found

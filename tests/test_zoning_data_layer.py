@@ -121,6 +121,21 @@ def test_parking_excerpt_is_schedule_a_not_toc() -> None:
     assert "Off-Street Parking Exemption" not in excerpt
 
 
+def test_parking_schedule_a_rows_quote_attached_minimum_zero() -> None:
+    from housing_review.data.corpus import parking_schedule_a_for_typologies
+
+    table = parking_schedule_a_for_typologies()["by_typology"]
+    attached = table["townhome"]
+    assert attached["schedule_a_use"] == "Single-Unit Attached"
+    assert attached["minimum"] == "0 per unit"
+    assert attached["maximum"] == "4 per unit"
+    assert "914.02.A" in attached["citation"]
+    two_unit = table["duplex"]
+    assert two_unit["minimum"] == "1 per unit"
+    assert two_unit["maximum"] == "2 per unit"
+    assert table["adu"]["citation"].startswith("§912.08")
+
+
 def test_brief_typology_maps_to_title9_names() -> None:
     from housing_review.data.corpus import TYPOLOGY_TITLE9, lookup_for_mapped_districts
 

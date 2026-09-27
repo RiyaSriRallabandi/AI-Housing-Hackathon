@@ -16,7 +16,18 @@ def _fixture_context():
     )
 
 
-def _valid_assessment(typology: str, score: int) -> dict:
+def _valid_assessment(typology: str, score: int, *, lookup: dict | None = None) -> dict:
+    row = ((lookup or {}).get("citation_contract") or {}).get(typology) or {
+        "use_source": "§911.02 Use Table",
+        "parking_citation": "§914.02.A Parking Schedule A",
+        "parking_minimum": "1 per unit",
+        "parking_maximum": "2 per unit",
+        "statuses": ["P"],
+    }
+    pmax = row.get("parking_maximum") or ""
+    park_stmt = f"Schedule A minimum {row['parking_minimum']}"
+    if pmax:
+        park_stmt += f", maximum {pmax}"
     return {
         "agent": "zoning_analyst",
         "site_id": "0139F00077000000",
@@ -25,16 +36,20 @@ def _valid_assessment(typology: str, score: int) -> dict:
         "basis": "measured",
         "claims": [
             {
-                "statement": "The mapped district is R2-L (Two-Unit Residential, Low-Density).",
+                "statement": f"Use status {row.get('statuses')}.",
                 "basis": "measured",
-                "source": "Pittsburgh Zoning Districts GIS zon_new=R2-L; Chapter 903",
-                "confidence_note": "Map alone does not replace the Use Table in §911.02.",
-            }
+                "source": row["use_source"],
+            },
+            {
+                "statement": park_stmt,
+                "basis": "measured",
+                "source": row["parking_citation"],
+            },
         ],
         "cannot_determine": [
             "Whether a variance would actually be granted.",
         ],
-        "summary": "R2-L dimensional standards from Chapter 903 are available; as-of-right use status still needs §911.02. Decision support only.",
+        "summary": "Assessment uses citation_contract sources only. Decision support only.",
     }
 
 
@@ -59,8 +74,12 @@ def test_config_env_override(monkeypatch) -> None:
 
 def test_zoning_analyst_validates_mocked_round1() -> None:
     context = _fixture_context()
+    lookup = context.code_lookup or {}
     typologies = [Typology.duplex, Typology.adu]
-    payload = [_valid_assessment("duplex", 7), _valid_assessment("adu", 3)]
+    payload = [
+        _valid_assessment("duplex", 7, lookup=lookup),
+        _valid_assessment("adu", 3, lookup=lookup),
+    ]
 
     def fake_complete(system: str, user: str) -> str:
         assert "Zoning Analyst" in system
@@ -83,7 +102,7 @@ def test_zoning_analyst_retries_on_malformed_json() -> None:
         calls["n"] += 1
         if calls["n"] == 1:
             return json.dumps({"verdict": "best"})
-        return json.dumps([_valid_assessment("duplex", 6)])
+        return json.dumps([_valid_assessment("duplex", 6, lookup=context.code_lookup)])
 
     results = run_zoning_analyst(
         context,
