@@ -50,26 +50,22 @@ def _completer(agent: str, token: str, seen_users: list[str]):
         seen_users.append(user)
         payload = _payload_from_user(user)
         typs = payload["candidate_typologies"]
-        items = [_assessment(agent, typology, token) for typology in typs]
         if agent == "zoning_analyst":
-            contract = payload["site_context"]["citation_contract"]
-            for item in items:
-                row = contract[item["typology"]]
-                park = f"Schedule A minimum {row['parking_minimum']}"
-                if row.get("parking_maximum"):
-                    park += f", maximum {row['parking_maximum']}"
-                item["claims"] = [
-                    {
-                        "statement": f"{agent} round1 {token} for {item['typology']}",
-                        "basis": "estimated",
-                        "source": row["use_source"],
-                    },
-                    {
-                        "statement": park,
-                        "basis": "estimated",
-                        "source": row["parking_citation"],
-                    },
-                ]
+            return json.dumps(
+                {
+                    "judgments": [
+                        {
+                            "typology": typology,
+                            "score": 5,
+                            "basis": "estimated",
+                            "summary": f"{agent} round1 {token} for {typology}",
+                            "cannot_determine": ["Peer Analyst claims (Round 1 has no visibility)."],
+                        }
+                        for typology in typs
+                    ]
+                }
+            )
+        items = [_assessment(agent, typology, token) for typology in typs]
         return json.dumps({"assessments": items})
 
     return fake

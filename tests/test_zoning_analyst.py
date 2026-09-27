@@ -16,40 +16,13 @@ def _fixture_context():
     )
 
 
-def _valid_assessment(typology: str, score: int, *, lookup: dict | None = None) -> dict:
-    row = ((lookup or {}).get("citation_contract") or {}).get(typology) or {
-        "use_source": "§911.02 Use Table",
-        "parking_citation": "§914.02.A Parking Schedule A",
-        "parking_minimum": "1 per unit",
-        "parking_maximum": "2 per unit",
-        "statuses": ["P"],
-    }
-    pmax = row.get("parking_maximum") or ""
-    park_stmt = f"Schedule A minimum {row['parking_minimum']}"
-    if pmax:
-        park_stmt += f", maximum {pmax}"
+def _valid_judgment(typology: str, score: int) -> dict:
     return {
-        "agent": "zoning_analyst",
-        "site_id": "0139F00077000000",
         "typology": typology,
         "score": score,
-        "basis": "measured",
-        "claims": [
-            {
-                "statement": f"Use status {row.get('statuses')}.",
-                "basis": "measured",
-                "source": row["use_source"],
-            },
-            {
-                "statement": park_stmt,
-                "basis": "measured",
-                "source": row["parking_citation"],
-            },
-        ],
-        "cannot_determine": [
-            "Whether a variance would actually be granted.",
-        ],
-        "summary": "Assessment uses citation_contract sources only. Decision support only.",
+        "basis": "estimated",
+        "summary": f"Comparative zoning note for {typology}.",
+        "cannot_determine": [],
     }
 
 
@@ -74,24 +47,28 @@ def test_config_env_override(monkeypatch) -> None:
 
 def test_zoning_analyst_validates_mocked_round1() -> None:
     context = _fixture_context()
-    lookup = context.code_lookup or {}
     typologies = [Typology.duplex, Typology.adu]
-    payload = [
-        _valid_assessment("duplex", 7, lookup=lookup),
-        _valid_assessment("adu", 3, lookup=lookup),
-    ]
 
     def fake_complete(system: str, user: str) -> str:
         assert "Zoning Analyst" in system
         assert "0139F00077000000" in user
         assert "geometry" not in user
-        return json.dumps({"assessments": payload})
+        assert "deterministic_facts" in user
+        return json.dumps(
+            {
+                "judgments": [
+                    _valid_judgment("duplex", 7),
+                    _valid_judgment("adu", 3),
+                ]
+            }
+        )
 
     results = run_zoning_analyst(context, typologies=typologies, completer=fake_complete)
     assert len(results) == 2
     assert results[0].agent is AnalystName.zoning_analyst
     assert results[0].typology is Typology.duplex
     assert results[0].score == 7
+    assert results[0].claims[0].source == "§911.02 Use Table"
 
 
 def test_zoning_analyst_retries_on_malformed_json() -> None:
@@ -102,7 +79,7 @@ def test_zoning_analyst_retries_on_malformed_json() -> None:
         calls["n"] += 1
         if calls["n"] == 1:
             return json.dumps({"verdict": "best"})
-        return json.dumps([_valid_assessment("duplex", 6, lookup=context.code_lookup)])
+        return json.dumps({"judgments": [_valid_judgment("duplex", 6)]})
 
     results = run_zoning_analyst(
         context,

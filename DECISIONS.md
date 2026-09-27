@@ -176,5 +176,11 @@ the decision is made, not reconstructed later.
 - **Rationale:** Live Groq invented `§911.04A.69` and omitted Schedule A maxima when mining excerpts. The corpus already had the correct rows for every district/typology.
 - **Assumptions made:** Exact string equality on `source` is stricter than “contains,” which is the point. One schema retry still appends the validator error; a second failure still raises (no `cannot_determine` fallback).
 
+## [Component 3 / 2026-09-27] Zoning deterministic facts; one comparative LLM call
+
+- **Decision:** Use-table, Schedule A parking, and Chapter 903 dimensions are built as `Claim`s in code (`zoning_facts.py`) with citations. The Zoning LLM returns only `judgments` (score, basis, summary, cannot_determine). All six typologies are scored in **one** Groq call (~2.8K input tokens, under Free 8K TPM). Other Analysts still batch 3+3. Retry once on judgment-schema failure; second failure raises. No citation-validator retry path for Zoning facts.
+- **Open questions:** Live Groq comparative scores on 170 Aidan Ct (pending review).
+
+
 
 

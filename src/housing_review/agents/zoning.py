@@ -3,56 +3,53 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-from pydantic import ValidationError
+from pydantic import BaseModel, ValidationError, field_validator
 
 from housing_review.data.demo_site import demo_site_record
 from housing_review.data.site import ZoningSiteContext, load_zoning_site
-from housing_review.llm import Completer, complete_json, parse_json_list
-from housing_review.schemas import AnalystAssessment, Typology, parse_analyst_assessment
+from housing_review.data.zoning_facts import (
+    code_side_cannot_determine,
+    deterministic_claims_for_typology,
+    district_code_from_context,
+    facts_pack_for_llm,
+)
+from housing_review.llm import Completer, complete_json
+from housing_review.schemas import AnalystAssessment, Typology
+from housing_review.schemas.common import (
+    STRICT_CONFIG,
+    ConfidenceBasis,
+    NonEmptyStr,
+    Score,
+    coerce_typology,
+)
+from housing_review.schemas.parse import parse_analyst_assessment
 
 PROMPT_PATH = Path(__file__).resolve().parent.parent / "prompts" / "zoning_analyst_round1.txt"
 CANDIDATE_TYPOLOGIES = list(Typology)
 MAX_SCHEMA_RETRIES = 1
 
 
+class ZoningJudgment(BaseModel):
+    """LLM-only slice: score and summary. Deterministic claims are attached in code."""
+
+    model_config = STRICT_CONFIG
+
+    typology: Typology
+    score: Score
+    basis: ConfidenceBasis
+    summary: NonEmptyStr
+    cannot_determine: list[str]
+
+    @field_validator("typology", mode="before")
+    @classmethod
+    def _typology(cls, value: object) -> Typology:
+        if not isinstance(value, (Typology, str)):
+            raise TypeError("typology must be a string")
+        return coerce_typology(value)
+
+
 def _system_prompt() -> str:
     return PROMPT_PATH.read_text()
-
-
-def _compact_code_lookup(lookup: dict | None) -> dict:
-    """Send structured citation rows, not raw chapter dumps the model can mine."""
-    if not lookup:
-        return {}
-    return {
-        "mapped_districts": lookup.get("mapped_districts"),
-        "use_table_column": lookup.get("use_table_column"),
-        "use_table_legend": lookup.get("use_table_legend"),
-        "typology_title9_names": lookup.get("typology_title9_names"),
-        "use_permissions_this_column": lookup.get("use_permissions_this_column"),
-        "citation_contract": lookup.get("citation_contract"),
-        "chapter_903_density_excerpt": lookup.get("chapter_903_density_excerpt"),
-    }
-
-
-def _compact_site_context(context: ZoningSiteContext) -> dict:
-    """Drop geometry and bulky overlay attributes so Groq's 8K TPM free cap is usable."""
-    lookup = context.code_lookup or {}
-    return {
-        "site_id": context.site_id,
-        "parcel": {
-            "pin": context.parcel.pin,
-            "map_block_lot": context.parcel.map_block_lot,
-            "acreage": context.parcel.acreage,
-            "lon": context.parcel.lon,
-            "lat": context.parcel.lat,
-        },
-        "districts": [item.model_dump(mode="json") for item in context.districts],
-        "citation_contract": lookup.get("citation_contract") or {},
-        "code_lookup": _compact_code_lookup(lookup),
-        "adu_overlay": context.adu_overlay,
-        "overlays": [{"layer_id": hit.layer_id, "source_url": hit.source_url} for hit in context.overlays],
-        "coverage_notes": context.coverage_notes,
-    }
 
 
 def _user_prompt(context: ZoningSiteContext, typologies: list[Typology], demo: dict | None) -> str:
@@ -64,24 +61,17 @@ def _user_prompt(context: ZoningSiteContext, typologies: list[Typology], demo: d
         }
     payload = {
         "responsible_use": "Decision support only — not legal, financial, or zoning advice.",
-        "site_context": _compact_site_context(context),
+        "site_id": context.site_id,
+        "mapped_district": district_code_from_context(context),
+        "deterministic_facts": facts_pack_for_llm(context, typologies),
+        "code_side_cannot_determine": code_side_cannot_determine(context.residential_profile),
         "demo_record": demo_slim,
         "candidate_typologies": [item.value for item in typologies],
     }
     return (
-        "Assess each listed candidate typology using ONLY site_context. "
-        "Look up use permissions in code_lookup.use_permissions_this_column "
-        "for this site's mapped district column — do not assume R2-L. "
-        "JSON typology slugs stay as listed (townhome, not townhouse). "
-        "Cite Title 9 names from code_lookup.typology_title9_names "
-        "(townhome = Single-Unit Attached Residential). "
-        "Copy citation_contract[typology].use_source exactly on the use claim. "
-        "Copy citation_contract[typology].parking_citation exactly on the parking "
-        "claim and quote parking_minimum and parking_maximum in that statement. "
-        "ADU Overlay membership is adu_overlay.in_adu_overlay from the live map query. "
-        "At most 2 claims per typology. "
-        "Summaries max 2 sentences. Return JSON as "
-        '{"assessments": [ ... ]}.\n'
+        "Score EVERY candidate typology in one comparative pass using ONLY "
+        "deterministic_facts. Do not emit claims. Return JSON as "
+        '{"judgments": [ ... ]}.\n'
         + json.dumps(payload)
     )
 
@@ -93,21 +83,9 @@ def run_zoning_analyst(
     completer: Completer | None = None,
     demo_record: dict | None = None,
 ) -> list[AnalystAssessment]:
-    """Round 1 Zoning Analyst. Completer is injectable so tests never need a live key."""
+    """Round 1 Zoning. One LLM call for all requested typologies; claims come from code."""
     typologies = typologies or CANDIDATE_TYPOLOGIES
     generate = completer or complete_json
-    if len(typologies) > 3:
-        combined: list[AnalystAssessment] = []
-        for start in range(0, len(typologies), 3):
-            combined.extend(
-                run_zoning_analyst(
-                    context,
-                    typologies=typologies[start : start + 3],
-                    completer=generate,
-                    demo_record=demo_record,
-                )
-            )
-        return combined
     system = _system_prompt()
     user = _user_prompt(context, typologies, demo_record)
     last_error: Exception | None = None
@@ -115,26 +93,22 @@ def run_zoning_analyst(
     for _ in range(MAX_SCHEMA_RETRIES + 1):
         raw = generate(system, user)
         try:
-            items = parse_json_list(raw)
-            assessments = [parse_analyst_assessment(item) for item in items]
-            _assert_round1_shape(assessments, context, typologies)
-            assert_structured_citations(assessments, context.code_lookup or {})
+            judgments = [_parse_judgment(item) for item in _parse_judgments(raw)]
+            _assert_judgments(judgments, typologies)
         except (ValidationError, ValueError, TypeError) as exc:
             last_error = exc
             user = (
                 user
-                + "\n\nYour previous output failed schema validation: "
+                + "\n\nYour previous output failed judgment-schema validation: "
                 + str(exc)
-                + "\nReturn a JSON object {\"assessments\": [...]} only. "
-                "Include every candidate typology. Each claim must use keys "
-                "statement, basis, source (optional confidence_note). "
-                "Do not use text or citation. "
-                "Copy citation_contract use_source and parking_citation exactly. "
-                "Parking statements must include parking_minimum and parking_maximum."
+                + "\nReturn {\"judgments\": [...]} only. Each object: typology, score, "
+                "basis, summary, cannot_determine. No claims. Include every typology."
             )
             continue
-        return assessments
-    raise ValueError(f"Zoning Analyst output failed schema validation: {last_error}\nRaw: {raw[:1000]}")
+        return [_merge(context, item) for item in judgments]
+    raise ValueError(
+        f"Zoning Analyst judgment output failed schema validation: {last_error}\nRaw: {raw[:1000]}"
+    )
 
 
 def run_zoning_analyst_for_demo(*, include_overlays: bool = True, completer: Completer | None = None) -> list[AnalystAssessment]:
@@ -143,60 +117,54 @@ def run_zoning_analyst_for_demo(*, include_overlays: bool = True, completer: Com
     return run_zoning_analyst(context, completer=completer, demo_record=record)
 
 
-def _assert_round1_shape(
-    assessments: list[AnalystAssessment],
-    context: ZoningSiteContext,
-    typologies: list[Typology],
-) -> None:
-    got = {item.typology for item in assessments}
+def _parse_judgments(raw: str) -> list:
+    text = raw.strip()
+    if text.startswith("```"):
+        text = text.strip("`")
+        if text.startswith("json"):
+            text = text[4:]
+        text = text.strip()
+    data = json.loads(text)
+    if isinstance(data, dict) and "judgments" in data:
+        data = data["judgments"]
+    if not isinstance(data, list):
+        raise ValueError("Expected a JSON object with key judgments")
+    return data
+
+
+def _parse_judgment(item: object) -> ZoningJudgment:
+    if not isinstance(item, dict):
+        raise TypeError("each judgment must be an object")
+    return ZoningJudgment.model_validate(item)
+
+
+def _assert_judgments(judgments: list[ZoningJudgment], typologies: list[Typology]) -> None:
+    got = {item.typology for item in judgments}
     missing = [item for item in typologies if item not in got]
     if missing:
-        raise ValueError(f"Missing typologies in Zoning Analyst output: {missing}")
-    for item in assessments:
-        if item.agent.value != "zoning_analyst":
-            raise ValueError("agent must be zoning_analyst")
-        if item.site_id != context.site_id:
-            raise ValueError("site_id must match the parcel PIN")
+        raise ValueError(f"Missing typologies in Zoning judgments: {missing}")
 
 
-def _source_copies_contract(actual: str, required: str) -> bool:
-    got = (actual or "").strip()
-    need = (required or "").strip()
-    return bool(need) and got == need
-
-
-def assert_structured_citations(assessments: list[AnalystAssessment], lookup: dict) -> None:
-    """Use-table and parking claim sources must equal the structured contract strings."""
-    contract = lookup.get("citation_contract") or {}
-    errors: list[str] = []
-    for item in assessments:
-        row = contract.get(item.typology.value)
-        if not row:
-            errors.append(f"{item.typology.value}: missing citation_contract row")
-            continue
-        use_src = row.get("use_source") or ""
-        park_src = row.get("parking_citation") or ""
-        pmin = row.get("parking_minimum") or ""
-        pmax = row.get("parking_maximum") or ""
-        if not any(_source_copies_contract(claim.source, use_src) for claim in item.claims):
-            errors.append(
-                f"{item.typology.value}: permitted-use claim source must equal {use_src!r}"
-            )
-        park_ok = False
-        for claim in item.claims:
-            if not _source_copies_contract(claim.source, park_src):
-                continue
-            missing = [label for label, value in (("minimum", pmin), ("maximum", pmax)) if value and value not in claim.statement]
-            if missing:
-                errors.append(
-                    f"{item.typology.value}: parking statement missing {missing} from citation_contract"
-                )
-                continue
-            park_ok = True
-        if not park_ok:
-            errors.append(
-                f"{item.typology.value}: parking claim source must equal {park_src!r} "
-                "and quote parking_minimum/parking_maximum"
-            )
-    if errors:
-        raise ValueError("Structured citation mismatch:\n" + "\n".join(errors))
+def _merge(context: ZoningSiteContext, judgment: ZoningJudgment) -> AnalystAssessment:
+    district = district_code_from_context(context) or ""
+    claims = deterministic_claims_for_typology(
+        judgment.typology,
+        district_code=district,
+        profile=context.residential_profile,
+        adu_overlay=context.adu_overlay,
+    )
+    gaps = list(dict.fromkeys(
+        code_side_cannot_determine(context.residential_profile) + list(judgment.cannot_determine)
+    ))
+    return parse_analyst_assessment(
+        {
+            "agent": "zoning_analyst",
+            "site_id": context.site_id,
+            "typology": judgment.typology.value,
+            "score": judgment.score,
+            "basis": judgment.basis.value,
+            "claims": [item.model_dump(mode="json") for item in claims],
+            "cannot_determine": gaps,
+            "summary": judgment.summary,
+        }
+    )

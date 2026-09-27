@@ -5,13 +5,14 @@ from pathlib import Path
 
 import pytest
 
-from housing_review.agents.zoning import assert_structured_citations, run_zoning_analyst
-from housing_review.data.corpus import citation_contract_for_district, lookup_for_mapped_districts
+from housing_review.agents.zoning import run_zoning_analyst
+from housing_review.data.corpus import citation_contract_for_district
 from housing_review.data.parcels import parcel_from_geojson
 from housing_review.data.residential import profile_residential_district
 from housing_review.data.site import ZoningSiteContext
 from housing_review.data.zoning_code import citations_for_districts
 from housing_review.data.zoning_districts import ZoningDistrictHit
+from housing_review.data.zoning_facts import DIMENSIONS_SOURCE, deterministic_claims_for_typology
 from housing_review.schemas import Typology
 
 FIXTURES = Path(__file__).resolve().parent / "fixtures"
@@ -29,6 +30,8 @@ def _context_for_district(district_code: str) -> ZoningSiteContext:
         code_url="https://ecode360.com/45474054",
         object_id=1,
     )
+    from housing_review.data.corpus import lookup_for_mapped_districts
+
     lookup = lookup_for_mapped_districts([district_code])
     profile = profile_residential_district(district_code)
     return ZoningSiteContext(
@@ -37,109 +40,134 @@ def _context_for_district(district_code: str) -> ZoningSiteContext:
         districts=[hit],
         residential_profile=profile,
         overlays=[],
-        adu_overlay={"in_adu_overlay": False, "hits": []},
+        adu_overlay={"in_adu_overlay": False, "hits": [], "layer_url": "https://example.invalid/adu"},
         code_lookup=lookup,
         code_citations=citations_for_districts([hit], profile=profile),
         coverage_notes=["Decision support only — not legal, financial, or zoning advice."],
     )
 
 
-def _assessment_from_contract(typology: str, row: dict, *, site_id: str = "0139F00077000000") -> dict:
-    pmax = row.get("parking_maximum") or ""
-    statement = f"Schedule A minimum {row['parking_minimum']}"
-    if pmax:
-        statement += f", maximum {pmax}"
+def _judgment(typology: str, score: int, token: str = "ok") -> dict:
     return {
-        "agent": "zoning_analyst",
-        "site_id": site_id,
         "typology": typology,
-        "score": 5,
-        "basis": "measured",
-        "claims": [
-            {
-                "statement": f"{row['use_names']} status {row['statuses']}",
-                "basis": "measured",
-                "source": row["use_source"],
-            },
-            {
-                "statement": statement,
-                "basis": "measured",
-                "source": row["parking_citation"],
-            },
-        ],
+        "score": score,
+        "basis": "estimated",
+        "summary": f"Comparative note {token} for {typology}.",
         "cannot_determine": [],
-        "summary": "Copied citation_contract fields.",
     }
 
 
-def _copying_completer(context: ZoningSiteContext):
-    def fake(system: str, user: str) -> str:
-        start = user.rfind('{"responsible_use"')
-        payload = json.loads(user[start:])
-        contract = payload["site_context"]["citation_contract"]
-        typs = payload["candidate_typologies"]
-        items = [_assessment_from_contract(slug, contract[slug], site_id=context.site_id) for slug in typs]
-        return json.dumps({"assessments": items})
-
-    return fake
-
-
-def test_citation_contract_differs_by_district_status_not_by_source() -> None:
-    r2 = citation_contract_for_district("R2-L")
-    rm = citation_contract_for_district("RM-H")
-    for slug in Typology:
-        assert r2[slug.value]["use_source"] == rm[slug.value]["use_source"]
-        assert r2[slug.value]["parking_citation"] == rm[slug.value]["parking_citation"]
-        assert r2[slug.value]["parking_minimum"] == rm[slug.value]["parking_minimum"]
-        assert r2[slug.value]["parking_maximum"] == rm[slug.value]["parking_maximum"]
-    assert any("blank" in status for status in r2["apartment"]["statuses"])
-    assert rm["apartment"]["statuses"][0] == "P"
-
-
-def test_copying_agent_matches_contract_for_all_typologies_and_districts() -> None:
+def test_deterministic_claims_generalize_across_districts_and_typologies() -> None:
     report: list[str] = []
     for district in DISTRICTS:
-        context = _context_for_district(district)
-        contract = context.code_lookup["citation_contract"]
-        results = run_zoning_analyst(context, completer=_copying_completer(context))
-        assert {item.typology for item in results} == set(Typology)
-        assert_structured_citations(results, context.code_lookup)
-        report.append(f"\n{district} column={context.code_lookup['use_table_column']}")
-        for item in results:
-            row = contract[item.typology.value]
-            use_claim = next(c for c in item.claims if c.source == row["use_source"])
-            park_claim = next(c for c in item.claims if c.source == row["parking_citation"])
-            report.append(
-                f"  {item.typology.value:24} use_src={use_claim.source!r} "
-                f"park_src={park_claim.source!r} "
-                f"min={row['parking_minimum']!r} max={row['parking_maximum']!r} "
-                f"status={row['statuses']}"
+        profile = profile_residential_district(district)
+        contract = citation_contract_for_district(district)
+        report.append(f"\n{district} min_lot={profile.min_lot_sf if profile else None}")
+        for typology in Typology:
+            claims = deterministic_claims_for_typology(
+                typology,
+                district_code=district,
+                profile=profile,
+                adu_overlay={"in_adu_overlay": False, "layer_url": "https://example.invalid/adu"},
             )
+            row = contract[typology.value]
+            use_claim = claims[0]
+            park_claim = claims[1]
+            dim_claim = claims[2]
+            assert use_claim.source == row["use_source"]
+            assert park_claim.source == row["parking_citation"]
+            assert row["parking_minimum"] in park_claim.statement
+            if row["parking_maximum"]:
+                assert row["parking_maximum"] in park_claim.statement
+            assert dim_claim.source == DIMENSIONS_SOURCE
+            assert "retrieved 2026-09-26" in dim_claim.source
+            assert "ecode360.com/45474194" in dim_claim.source
+            if typology is Typology.adu:
+                assert claims[3].statement.startswith("Live PGHWebZoningOverlays")
+            report.append(
+                f"  {typology.value:24} use={use_claim.source!r} "
+                f"status={row['statuses']} park={park_claim.statement!r}"
+            )
+        if district == "R2-L":
+            apt = deterministic_claims_for_typology(
+                Typology.apartment, district_code=district, profile=profile, adu_overlay=None
+            )
+            assert "blank" in apt[0].statement
+            town = deterministic_claims_for_typology(
+                Typology.townhome, district_code=district, profile=profile, adu_overlay=None
+            )
+            assert "0 per unit" in town[1].statement
+            assert "4 per unit" in town[1].statement
+        if district == "RM-H":
+            apt = deterministic_claims_for_typology(
+                Typology.apartment, district_code=district, profile=profile, adu_overlay=None
+            )
+            assert ": P." in apt[0].statement or "P" in apt[0].statement
+            assert profile and profile.min_lot_sf == 1200
     print("\n".join(report))
-    assert len(results) == len(Typology)
 
 
-def test_invented_use_table_section_is_rejected() -> None:
-    context = _context_for_district("RM-H")
-    row = context.code_lookup["citation_contract"]["townhome"]
-    bad = _assessment_from_contract("townhome", row)
-    bad["claims"][0]["source"] = "§911.04A.69 Use Table"
-
-    def fake(system: str, user: str) -> str:
-        return json.dumps({"assessments": [bad]})
-
-    with pytest.raises(ValueError, match="permitted-use claim source"):
-        run_zoning_analyst(context, typologies=[Typology.townhome], completer=fake)
-
-
-def test_parking_claim_without_maximum_is_rejected() -> None:
+def test_llm_judgments_do_not_supply_citations() -> None:
+    calls = {"n": 0}
     context = _context_for_district("R2-L")
-    row = context.code_lookup["citation_contract"]["townhome"]
-    bad = _assessment_from_contract("townhome", row)
-    bad["claims"][1]["statement"] = f"Schedule A minimum {row['parking_minimum']}"
 
     def fake(system: str, user: str) -> str:
-        return json.dumps({"assessments": [bad]})
+        calls["n"] += 1
+        assert "judgments" in user
+        assert "deterministic_facts" in user
+        start = user.find('{"responsible_use"')
+        payload, _ = json.JSONDecoder().raw_decode(user[start:])
+        items = [_judgment(slug, 6) for slug in payload["candidate_typologies"]]
+        return json.dumps({"judgments": items})
 
-    with pytest.raises(ValueError, match="parking statement missing"):
-        run_zoning_analyst(context, typologies=[Typology.townhome], completer=fake)
+    results = run_zoning_analyst(context, completer=fake)
+    assert calls["n"] == 1
+    assert len(results) == 6
+    contract = citation_contract_for_district("R2-L")
+    for item in results:
+        row = contract[item.typology.value]
+        assert any(c.source == row["use_source"] for c in item.claims)
+        assert any(c.source == row["parking_citation"] for c in item.claims)
+        assert any(c.source == DIMENSIONS_SOURCE for c in item.claims)
+
+
+def test_one_call_scores_all_six_together() -> None:
+    context = _context_for_district("RM-H")
+    seen_batch_sizes: list[int] = []
+
+    def fake(system: str, user: str) -> str:
+        start = user.find('{"responsible_use"')
+        payload, _ = json.JSONDecoder().raw_decode(user[start:])
+        typs = payload["candidate_typologies"]
+        seen_batch_sizes.append(len(typs))
+        return json.dumps({"judgments": [_judgment(slug, i + 1) for i, slug in enumerate(typs)]})
+
+    results = run_zoning_analyst(context, completer=fake)
+    assert seen_batch_sizes == [6]
+    assert [item.score for item in results] == [1, 2, 3, 4, 5, 6]
+
+
+def test_ai_claims_field_is_rejected_then_retried() -> None:
+    context = _context_for_district("R2-L")
+    calls = {"n": 0}
+
+    def flaky(system: str, user: str) -> str:
+        calls["n"] += 1
+        if calls["n"] == 1:
+            return json.dumps({"judgments": [{"typology": "duplex", "score": 9, "claims": []}]})
+        return json.dumps({"judgments": [_judgment("duplex", 7)]})
+
+    results = run_zoning_analyst(context, typologies=[Typology.duplex], completer=flaky)
+    assert calls["n"] == 2
+    assert results[0].score == 7
+    assert results[0].claims[0].source == "§911.02 Use Table"
+
+
+def test_second_judgment_failure_raises() -> None:
+    context = _context_for_district("R2-L")
+
+    def always_bad(system: str, user: str) -> str:
+        return json.dumps({"verdict": "best"})
+
+    with pytest.raises(ValueError, match="judgment output failed"):
+        run_zoning_analyst(context, typologies=[Typology.duplex], completer=always_bad)
