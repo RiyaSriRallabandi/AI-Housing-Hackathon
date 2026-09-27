@@ -6,7 +6,7 @@ No network or model calls.
 
 from __future__ import annotations
 
-from collections.abc import Mapping
+from collections.abc import Mapping, Sequence
 
 from housing_review.schemas.chair import ChairSynthesis, TypologyComparison
 from housing_review.schemas.common import AnalystName, Typology, coerce_agent
@@ -33,6 +33,43 @@ _WEIGHT_TOLERANCE = 1e-12
 
 def default_weights() -> dict[AnalystName, float]:
     return {name: EQUAL_AGENT_WEIGHT for name in AGENT_ORDER}
+
+
+def roc_weights(preference_order: Sequence[AnalystName | str]) -> dict[AnalystName, float]:
+    """Rank-order centroid weights from a 1st–last preference order of the five analysts.
+
+    Rank 1 is the agent that matters most. Shares sum to 1, decrease with rank,
+    and never hit zero.
+    """
+    names = [coerce_agent(item) for item in preference_order]
+    n = len(AGENT_ORDER)
+    if len(names) != n:
+        raise ValueError(f"Preference order must list all {n} analysts once")
+    if len(set(names)) != n:
+        raise ValueError("Preference order must list each analyst exactly once")
+    missing = [name for name in AGENT_ORDER if name not in names]
+    if missing:
+        raise ValueError(f"Preference order is missing {missing}")
+    weights: dict[AnalystName, float] = {}
+    for rank, name in enumerate(names, start=1):
+        harmonic_tail = sum(1.0 / index for index in range(rank, n + 1))
+        weights[name] = harmonic_tail / n
+    return weights
+
+
+def apply_weighted_view(
+    round1: Round1Transcript,
+    chair: ChairSynthesis,
+    *,
+    preference_order: Sequence[AnalystName | str] | None = None,
+    weights: Mapping[AnalystName | str, float] | None = None,
+) -> WeightedView:
+    """One ranking path. First reveal uses ROC on an ordinal ranking; sliders pass weights."""
+    if preference_order is not None and weights is not None:
+        raise ValueError("Provide preference_order or weights, not both")
+    if preference_order is not None:
+        weights = roc_weights(preference_order)
+    return apply_agent_weights(round1, chair, weights)
 
 
 def normalize_weights(weights: Mapping[AnalystName | str, float] | None = None) -> dict[AnalystName, float]:

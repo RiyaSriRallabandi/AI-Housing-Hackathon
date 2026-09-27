@@ -31,7 +31,7 @@ Round 2 uses `AnalystAssessmentRound2`, which additionally requires `round_2_not
 
 The Chair uses `ChairSynthesis` (per-typology scores, factual vs value disputes, compiled limitations, mandatory responsible-use note).
 
-Human weighting uses `apply_agent_weights` / `WeightedView`: a JSON-serializable ranking with per-agent contributions, `cannot_determine`, and Chair disputes still attached. It does not call a model.
+Human weighting uses `apply_weighted_view` / `WeightedView`. A 1st–5th analyst ranking becomes rank-order centroid weights; sliders edit those shares. Both go through `apply_agent_weights`. Default with no ranking is the equal-weight view.
 
 Malformed agent JSON should be rejected and retried, not silently accepted.
 

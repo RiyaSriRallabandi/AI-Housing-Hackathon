@@ -234,7 +234,8 @@ the decision is made, not reconstructed later.
 
 - **Decision:** Ranking after Chair is a pure function (`apply_agent_weights`) of cached Round 1 scores, Chair disputes/limitations, and five user weights. No LLM. Default is equal 20% shares, labeled **equal-weight view**, not the answer. Weights are relative and normalized to sum to 1. Output per typology: weighted score, unique rank (ties keep Round 1 order), per-agent contribution (`weight × score`), that typology's `cannot_determine` by agent, and Chair factual/value disputes. If Equity scores are identical across typologies and its weight is positive, attach a precision note that raising Equity does not differentiate typologies.
 - **Naming:** This is a user-weighted view. Do not call it consensus or the answer.
-- **Open questions:** Brand/color extraction and UI sliders.
+- **Exploration:** The first reveal converts a 1st–5th analyst preference into shares with rank-order centroid (`roc_weights`: \(w_k = \frac{1}{n}\sum_{i=k}^{n} 1/i\)). Later slider edits pass shares directly. Both call `apply_weighted_view` → `apply_agent_weights`. There is one ranking function.
+- **Open questions:** Brand/color extraction and visual UI.
 
 
 
