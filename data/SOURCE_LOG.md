@@ -99,3 +99,13 @@ See `data/demo_site.json`.
 - **Pittsburgh local modifier search (2026-09-26):** None found. PLI (successor to Bureau of Building Inspection) 2026 fee schedule uses $6.00 per $1,000 of stated construction value for residential permits — not an ICC BVD regional multiplier. Used the national table unmodified.
 - **ICC caveats:** National average; not regional; not an estimating guide; excludes land. Dependent scores are **estimated**.
 
+## HUD CHAS (Equity)
+
+- **Catalog URL (brief):** https://www.huduser.gov/portal/datasets/cp.html
+- **Resolved URL:** https://services.arcgis.com/VTyQ9soqVukalItT/ArcGIS/rest/services/ACS_5YR_ESTIMATES_CHAS_TRACT/FeatureServer/1
+- **Retrieved:** 2026-09-27 for GEOID `42003191800` (Census Tract 1918).
+- **Vintage:** **2013–2017** (layer “Date of Coverage”). HUD’s most recent CHAS release is **2018–2022** (announced 2025-12-23). This extract is older; do not treat it as current-year conditions. HUD USER Dataset Update Schedule lists the **next CHAS update for December 2026**.
+- **Figures used:** T2_EST1 occupied households 2,330; T8_CB 430 (18.45%) cost-burdened >30%; T8_CB50 190 (8.15%) >50%; T8_LE30 235 households ≤30% HAMFI of which 74.47% cost-burdened.
+- **Catalog caveat:** Based on multi-year ACS; releases lag; tables are complex.
+- **What this does NOT cover:** Displacement from a specific new building. HUD Income Limits and Location Affordability Index (Useful) were not retrieved. HUD User CHAS API was not used (token; no tract geography). National 2018–2022 ZIP download was WAF-blocked.
+

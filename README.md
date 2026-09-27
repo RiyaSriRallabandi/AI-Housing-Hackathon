@@ -10,7 +10,7 @@ Five independent Analyst agents (zoning, demographics, financial feasibility, eq
 
 ## Current status
 
-Component 1 (shared contract), Component 2 Zoning + Demographic + Pro Forma data, and Round 1 Zoning, Demographic, and Pro Forma Analysts are in place. Shared LLM is Groq `openai/gpt-oss-120b`. Working example site: **170 Aidan Ct, Brookline**, Census tract **42003191800**.
+Component 1 (shared contract), Component 2 Zoning + Demographic + Pro Forma + Equity data, and Round 1 Zoning, Demographic, Pro Forma, and Equity Analysts are in place. Shared LLM is Groq `openai/gpt-oss-120b`. Working example site: **170 Aidan Ct, Brookline**, Census tract **42003191800**.
 
 ## Shared output contract
 
@@ -74,6 +74,10 @@ See `data/SOURCE_LOG.md` for URLs, retrieval date (2026-09-26), and per-source g
 - Assessments and sales: WPRDC (assessed value ≠ market; only SALECODE 0 VALID SALE as comps).
 - Construction $/sf: ICC Building Valuation Data – AUGUST 2026, Type VB, national average. Pittsburgh PLI/BBI published no local ICC modifier (2026-09-26 search). Dependent scores are `estimated`.
 
+## Data sources (Equity slice)
+
+- HUD CHAS via ArcGIS `ACS_5YR_ESTIMATES_CHAS_TRACT` for GEOID `42003191800`. Vintage **2013–2017** (older than HUD’s 2018–2022 release). Cost burden, not displacement.
+
 ## Limitations (will grow as sources are wired)
 
 - Not legal, financial, or zoning advice.
@@ -81,6 +85,7 @@ See `data/SOURCE_LOG.md` for URLs, retrieval date (2026-09-26), and per-source g
 - Overlay slope flag at the demo parcel is screening-level only, not a geotechnical determination.
 - ACS tract estimates have margins of error; vacancy by units-in-structure and USPS postal vacancy are not retrieved.
 - Construction $/sf is ICC BVD August 2026 (national average, Type VB), not a Pittsburgh bid.
+- Equity CHAS for this tract is 2013–2017, older than HUD’s 2018–2022 release.
 
 ## License / event
 

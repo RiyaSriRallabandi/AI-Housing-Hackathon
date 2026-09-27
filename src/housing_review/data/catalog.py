@@ -217,3 +217,33 @@ def pro_forma_analyst_sources() -> list[SourceRecord]:
             ),
         ),
     ]
+
+
+def equity_analyst_sources() -> list[SourceRecord]:
+    retrieved = date(2026, 9, 27)
+    return [
+        SourceRecord(
+            agent="equity_analyst",
+            name="HUD CHAS (tract FeatureServer)",
+            catalog_url="https://www.huduser.gov/portal/datasets/cp.html",
+            resolved_url=(
+                "https://services.arcgis.com/VTyQ9soqVukalItT/ArcGIS/rest/services/"
+                "ACS_5YR_ESTIMATES_CHAS_TRACT/FeatureServer/1"
+            ),
+            retrieved_on=retrieved,
+            caveat=(
+                "Based on multi-year ACS; this layer's date of coverage is 2013-2017, "
+                "older than HUD's 2018-2022 CHAS release (announced 2025-12-23). "
+                "Does not measure displacement from a specific project."
+            ),
+            does_not_cover=(
+                "HUD User CHAS API (token, no tract geography) and the 2018-2022 national "
+                "ZIP download were not used. HUD Income Limits and Location Affordability "
+                "Index were not retrieved (Useful)."
+            ),
+            notes=(
+                "GEOID 42003191800 on 2026-09-27: T8_CB_PCT 18.45, T8_CB50_PCT 8.15, "
+                "T2_EST1 2330 occupied households. Table 8 HAMFI cost-burden fields."
+            ),
+        ),
+    ]

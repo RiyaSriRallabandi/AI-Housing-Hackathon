@@ -144,3 +144,12 @@ the decision is made, not reconstructed later.
 - **Assumptions made:** Type VB is a reasonable default for typical wood-frame residential when the application does not specify construction type. Existing FINISHEDLIVINGAREA is only a size proxy for implied cost.
 - **Open questions:** Live Groq schema-validity on the compact Pro Forma payload.
 
+## [Component 2 / 2026-09-27] Equity CHAS from ArcGIS tract FeatureServer
+
+- **Decision:** Use `ACS_5YR_ESTIMATES_CHAS_TRACT` FeatureServer GEOID `42003191800` as the Core CHAS source. Cite vintage **2013–2017** and note it is older than HUD’s 2018–2022 release. Do not fall back to ACS B25070/B25091.
+- **Options considered:** HUD User CHAS API (token; no tract); 2018–2022 national ZIP (WAF-blocked); ACS B25070/B25091 stand-in (held unless this layer failed).
+- **Rationale:** The layer returned real Table 8 cost-burden fields for this tract. User directed this URL before any ACS stand-in.
+- **Assumptions made:** T2_EST1 is occupied households; T8_CB / T8_CB_PCT are >30% cost burden; T8_CB50 / T8_CB50_PCT are >50%.
+- **Open questions:** Live Groq schema-validity; whether a newer tract FeatureServer exists.
+- **Future refresh:** HUD USER Dataset Update Schedule lists the next Consolidated Planning/CHAS data for **December 2026** (current posted vintage 2018–2022, released 2025-12-23). That is a known follow-on: swap this tract layer for the newer CHAS when it lands — useful for the submission “what we would build next” note.
+
