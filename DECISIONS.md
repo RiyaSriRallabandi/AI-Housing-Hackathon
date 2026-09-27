@@ -104,6 +104,21 @@ the decision is made, not reconstructed later.
 - **Assumptions made:** `include_overlays=False` for this live check to stay under 8K TPM. Cache written to `data/cache/zoning_analyst_live_round1.json` (gitignored).
 - **Open questions:** Overlay-inclusive call; Round 2 / other analysts on the same Groq model.
 
+## [Component 2 / 2026-09-26] Demographic data layer for tract 42003191800
+
+- **Decision:** Join the demo parcel to Census Tract 1918 (GEOID `42003191800`) via the Census Geocoder (TIGER Current). Pull ACS 5-Year 2019–2023 and 2014–2018 plus 2020 PL 94-171 from `data.census.gov` table API. Do not use neighborhood-layer tract fields.
+- **Options considered:** Official `api.census.gov` (HTML “Missing Key” without a Census API key); download full TIGER shapefiles (unnecessary for one point); USPS vacancy (Useful, skipped).
+- **Rationale:** Roadmap next step after Zoning C3. Catalog Core sources are ACS 5-Year and Decennial; TIGER is the geographic join. data.census.gov is the same Census tables as the ACS developer API.
+- **Assumptions made:** 2014–2018 vs 2019–2023 ACS 5-Year periods do not overlap, so they can be compared as trajectory with MOE caveats. Vacancy-by-structure stays `cannot_determine`.
+- **Open questions:** Whether to add a free Census API key later; USPS vacancy if time.
+
+## [Component 3 / 2026-09-26] Demographic Analyst Round 1
+
+- **Decision:** Same shared Groq config and `{assessments: [...]}` JSON contract as Zoning. Prompt copied from `04_system_prompts.md` plus schema example and MOE / USPS / vacancy-by-structure gaps.
+- **Options considered:** Wait for a Census API key (rejected; data.census.gov already returned tables).
+- **Rationale:** Isolated agent test before debate orchestration (roadmap step 3 for the second analyst).
+- **Open questions:** Live Groq schema-validity on this compact tract payload.
+
 ## [Component 2 / 2026-09-26] Zoning code corpus via browser fetch (all districts)
 
 - **Decision:** Store full text of Title 9 Chapters **903, 911, 912, 913, and 914** in `data/zoning_corpus/` as a general-purpose corpus. The Zoning Analyst looks up the §911.02 column from whatever GIS district the site maps to. ADU Overlay membership is a live `PGHWebZoningOverlays` intersect for ADU / Accessory Dwelling labels, not a stored fact about 170 Aidan Ct.

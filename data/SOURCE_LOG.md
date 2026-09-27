@@ -53,3 +53,25 @@ Copied to `data/public_data_catalog.csv` (user-provided). Core rows match `06_da
 **Working demo parcel:** 170 Aidan Ct, Pittsburgh, PA 15226 (Brookline). PIN `0139F00077000000` / `139-F-77`. GIS district **R2-L**. Address from City `Addresses_GeneralUse` (intersects the parcel polygon). Census tract **42003191800** (Tract 1918) from Census Geocoder 2026-09-26.
 
 See `data/demo_site.json`.
+
+## American Community Survey 5-Year (Demographic)
+
+- **Catalog URL (brief):** https://www.census.gov/data/developers/data-sets/acs-5year.html
+- **Resolved URL:** https://data.census.gov/api/access/data/table (api.census.gov returned HTML title “Missing Key” without a Census API key on 2026-09-26)
+- **Retrieved:** 2026-09-26 for GEOID `42003191800`
+- **Tables:** ACSDT5Y2023 B01003, B25002, B25010, B25024, B11001, B01001; ACSDT5Y2018 B01003, B25002, B25010, B11001
+- **Catalog caveat:** Estimates have margins of error — avoid false precision at tract scale.
+- **What this does NOT cover for this site:** guaranteed demand; vacancy by units-in-structure; USPS postal vacancy (Useful, not retrieved). Population 5,332 ±663 (2019–2023) vs 5,459 ±381 (2014–2018) — change may be insignificant.
+
+## Decennial Census (Demographic)
+
+- **Catalog URL (brief):** https://www.census.gov/programs-surveys/decennial-census/data.html
+- **Resolved:** DECENNIALPL2020.P1 and .H1 via data.census.gov for tract 42003191800
+- **Retrieved:** 2026-09-26. 2020 population 5,252; 2,590 housing units (154 vacant).
+- **Does not cover:** household size, family type, units-in-structure (not in PL 94-171).
+
+## TIGER / Census Geocoder
+
+- **Catalog URL (brief):** https://www.census.gov/geographies/mapping-files/time-series/geo/tiger-line-file.html
+- **Resolved:** https://geocoding.geo.census.gov/geocoder/geographies/coordinates (Public_AR_Current / Current_Current)
+- **Retrieved:** 2026-09-26. Parcel centroid → Census Tract 1918, GEOID 42003191800. Neighborhood-layer tract fields were not used.

@@ -10,7 +10,7 @@ Five independent Analyst agents (zoning, demographics, financial feasibility, eq
 
 ## Current status
 
-Component 1 (shared contract), Component 2 Zoning data, and Zoning Analyst Round 1 are in place. Shared LLM is Groq `openai/gpt-oss-120b`. Working example site: **170 Aidan Ct, Brookline** (PIN `0139F00077000000`, **R2-L**).
+Component 1 (shared contract), Component 2 Zoning + Demographic data, and Round 1 Zoning + Demographic Analysts are in place. Shared LLM is Groq `openai/gpt-oss-120b`. Working example site: **170 Aidan Ct, Brookline**, Census tract **42003191800**.
 
 ## Shared output contract
 
@@ -64,11 +64,17 @@ See `data/SOURCE_LOG.md` for URLs, retrieval date (2026-09-26), and per-source g
 - Zoning code: Title 9 on eCode360 (https://ecode360.com/45474054). Residential-relevant Chapters 903, 911 (full §911.02 Use Table), 912, 913, and 914 retrieved 2026-09-26 via browser (Cloudflare blocks naive curl). Files in `data/zoning_corpus/`.
 - Official map: Instant App overlays joined by point (steep slope, historic, IZ, ADU overlay query, etc.).
 
+## Data sources (Demographic slice)
+
+- Tract join: Census Geocoder (TIGER Current) at the parcel centroid → GEOID `42003191800`.
+- ACS 5-Year and 2020 Decennial via data.census.gov (api.census.gov requires a key). Details in `data/SOURCE_LOG.md`.
+
 ## Limitations (will grow as sources are wired)
 
 - Not legal, financial, or zoning advice.
 - Corpus is a deliberate residential subset (Ch. 903, 911, 912, 913, 914), not the full Title 9.
 - Overlay slope flag at the demo parcel is screening-level only, not a geotechnical determination.
+- ACS tract estimates have margins of error; vacancy by units-in-structure and USPS postal vacancy are not retrieved.
 - Construction cost is not in the hackathon catalog; that gap is still a checkpoint.
 
 ## License / event
