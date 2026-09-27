@@ -8,6 +8,14 @@ from housing_review.schemas.common import Typology
 DISPLACEMENT_GAP = (
     "CHAS does not measure who would move because of this project (displacement)."
 )
+PRICE_DATA_TOKEN = "price_data"
+PRICE_DATA_GAP = (
+    f"{PRICE_DATA_TOKEN}: likely sale/rent of a new unit of this typology is not in the Equity payload."
+)
+TYPOLOGY_AFFORDABILITY_GAP = (
+    "Typology-specific affordability cannot be determined without sale or rent "
+    "price data for that housing type."
+)
 
 
 def chas_source(context: EquitySiteContext, field: str) -> str:
@@ -94,5 +102,6 @@ def code_side_cannot_determine() -> list[str]:
     return [
         DISPLACEMENT_GAP,
         "Useful HUD Income Limits and Location Affordability Index were not retrieved.",
-        "Likely sale/rent price of a new unit of this typology is not in the Equity payload.",
+        PRICE_DATA_GAP,
+        TYPOLOGY_AFFORDABILITY_GAP,
     ]

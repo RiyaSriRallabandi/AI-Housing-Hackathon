@@ -13,13 +13,16 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-# Defaults after 2026-09-26 live checks: Gemini 2.5 Flash 404s for new keys;
-# Gemini 3.8 Flash accepted the key but returned 503 (high demand) while
-# AI Studio still showed 0/20 RPD. Groq free-tier docs:
+# Defaults after 2026-09-27 live checks:
+# Groq openai/gpt-oss-120b is the shared primary (reset TPD daily).
+# Gemini fallback is gemini-3.5-flash-lite (env switch). gemini-2.5-flash 404s
+# for this key; gemini-3.8-flash returned 503 high-demand on sequential calls.
 # https://console.groq.com/docs/models  (id openai/gpt-oss-120b)
-# https://console.groq.com/docs/rate-limits (Free table: 30 RPM, 1K RPD, 8K TPM, 200K TPD)
+# https://console.groq.com/docs/rate-limits (Free: 30 RPM, 1K RPD, 8K TPM, 200K TPD)
 LLM_PROVIDER = "groq"
 LLM_MODEL = "openai/gpt-oss-120b"
+GEMINI_FALLBACK_PROVIDER = "google_gemini"
+GEMINI_FALLBACK_MODEL = "gemini-3.5-flash-lite"
 
 LLM_MAX_RETRIES = 3
 LLM_RETRY_BACKOFF_SECONDS = 2.0

@@ -4,6 +4,7 @@ import json
 from pathlib import Path
 
 from housing_review.agents.judgment import collect_judgments, merge_assessment
+from housing_review.agents.summary_guards import assert_demographic_summaries_avoid_demand_claims
 from housing_review.data.demo_site import demo_site_record
 from housing_review.data.demographic_facts import (
     code_side_cannot_determine,
@@ -56,6 +57,7 @@ def run_demographic_analyst(
         typologies,
         agent_label="Demographic Analyst",
         claims_kept="ACS and Decennial claims were still attached from code.",
+        check=assert_demographic_summaries_avoid_demand_claims,
     )
     return [
         merge_assessment(

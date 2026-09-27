@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from statistics import median
+
 from housing_review.data.assessments import ASSESSMENTS_DATASET, ASSESSMENTS_RESOURCE_ID
 from housing_review.data.proforma import ProFormaSiteContext
 from housing_review.data.sales import SALES_DATASET, SALES_RESOURCE_ID
@@ -37,6 +39,17 @@ def sales_source(context: ProFormaSiteContext) -> str:
         f"WPRDC real-estate sales resource {SALES_RESOURCE_ID}; {sales.source_url}; "
         f"{SALES_DATASET}; retrieved {sales.retrieved_on}"
     )
+
+
+def comps_median(context: ProFormaSiteContext) -> dict | None:
+    prices = sorted(
+        float(item.price)
+        for item in context.sales.comparable_valid_sales
+        if item.price is not None
+    )
+    if not prices:
+        return None
+    return {"n": len(prices), "median_usd": round(float(median(prices)), 2)}
 
 
 def deterministic_claims_for_typology(
@@ -87,6 +100,22 @@ def deterministic_claims_for_typology(
                 confidence_note=context.sales.caveat,
             )
         )
+    stats = comps_median(context)
+    if stats:
+        claims.append(
+            Claim(
+                statement=(
+                    f"Median price of {stats['n']} zip-filtered VALID SALE comps is "
+                    f"${stats['median_usd']} (code-computed sample median, not a market appraisal)."
+                ),
+                basis="measured",
+                source=sales_source(context),
+                confidence_note=(
+                    "Median of the retrieved VALID SALE sample only. Do not recompute "
+                    "medians or averages from a raw comps list."
+                ),
+            )
+        )
     return claims
 
 
@@ -107,15 +136,7 @@ def facts_pack_for_llm(context: ProFormaSiteContext, typologies: list[Typology])
                 "whole_house_proxy": typology in WHOLE_HOUSE_TYPOLOGIES,
             }
         )
-    comps = [
-        {
-            "date": item.sale_date,
-            "price": item.price,
-            "address": item.address,
-            "arms_length": item.likely_arms_length,
-        }
-        for item in context.sales.comparable_valid_sales[:8]
-    ]
+    stats = comps_median(context)
     return {
         "assessment": {
             "parid": land.get("PARID"),
@@ -130,7 +151,15 @@ def facts_pack_for_llm(context: ProFormaSiteContext, typologies: list[Typology])
             "source": land_source(context),
         },
         "parcel_sales": [item.model_dump(mode="json") for item in context.sales.parcel_sales],
-        "comparable_valid_sales_zip": comps,
+        "comparable_valid_sales_zip": {
+            "n": stats["n"] if stats else 0,
+            "median_usd": stats["median_usd"] if stats else None,
+            "note": (
+                "Median was computed in code from VALID SALE comps. "
+                "Do not calculate a median, mean, or other aggregate from individual sale prices."
+            ),
+            "source": sales_source(context),
+        },
         "sales_source": sales_source(context),
         "construction_cost": costs,
         "size_proxy_finished_sf": context.size_proxy_finished_sf,

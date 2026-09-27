@@ -4,6 +4,7 @@ import json
 from pathlib import Path
 
 from housing_review.agents.judgment import collect_judgments, merge_assessment
+from housing_review.agents.summary_guards import assert_sustainability_summaries_are_comparative
 from housing_review.data.demo_site import demo_site_record
 from housing_review.data.sustainability import (
     SustainabilitySiteContext,
@@ -31,13 +32,14 @@ def _user_prompt(context: SustainabilitySiteContext, typologies: list[Typology])
     payload = {
         "responsible_use": "Decision support only — not legal, financial, or zoning advice.",
         "site_id": context.site_id,
-        "deterministic_facts": facts_pack_for_llm(context),
+        "attached_claims": facts_pack_for_llm(context, typologies),
         "code_side_cannot_determine": code_side_cannot_determine(),
         "candidate_typologies": [item.value for item in typologies],
     }
     return (
         "Score EVERY candidate typology in one comparative pass using ONLY "
-        "deterministic_facts. Do not emit claims. Return JSON as "
+        "attached_claims (the cited claim statements). Do not use any other "
+        "numbers. Do not emit claims. Return JSON as "
         '{"judgments": [ ... ]}.\n'
         + json.dumps(payload)
     )
@@ -59,6 +61,7 @@ def run_sustainability_analyst(
         typologies,
         agent_label="Sustainability Analyst",
         claims_kept="Transit, flood, and generic carbon claims were still attached from code.",
+        check=assert_sustainability_summaries_are_comparative,
     )
     return [
         merge_assessment(

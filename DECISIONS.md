@@ -199,6 +199,26 @@ the decision is made, not reconstructed later.
 - **Rationale:** Per-typology ICC figures are as deterministic as Zoning parking rows; the model was rewriting the citation string. One call calibrates feasibility scores across all six typologies.
 - **Open questions:** Live Groq Round 1 after all five Analysts are on this design. Round 2 still parked.
 
+## [Component 3 / 2026-09-27] Groq primary; Gemini 3.5 Flash-Lite fallback
+
+- **Decision:** Keep `LLM_PROVIDER=groq` and `LLM_MODEL=openai/gpt-oss-120b` as the shared primary. When Groq Free TPD/TPM is exhausted, switch via env to `google_gemini` / `gemini-3.5-flash-lite`. Do not use `gemini-3.8-flash` (live 503 high-demand on sequential Round 1 calls). Do not re-probe `gemini-2.5-flash` (404 “no longer available to new users” on this key).
+- **Options considered:** Stay on 3.8 Flash and retry 503s; keep trying 2.5 Flash; treat model swap as the main quality lever.
+- **Rationale:** Citations are code-owned on all five Analysts, so model strength matters less than stopping overstated judgment. Live Groq (2026-09-27) and Gemini 3.5 Flash-Lite both produced valid Round 1 JSON; 3.8 Flash failed mid-run; 2.5 Flash is permanently unavailable here. The Equity semantic overreach guard (concept check + claims-backed LLM review) is what blocks typology-affordability claims CHAS cannot support — not which Flash id is selected.
+- **Assumptions made:** Groq TPD resets daily; Gemini fallback is an env override, not automatic failover. Extra Equity review call counts against the active provider’s quota.
+- **Open questions:** Round 2 still parked.
+
+## [Component 3 / 2026-09-27] Equity: no typology-affordability claims without prices
+
+- **Decision:** When `price_data` is unknown, Equity summaries may restate tract CHAS cost-burden percentages and must say typology-specific affordability cannot be determined. Reject any summary that links a typology to affordability, cost-burden risk, mismatch, means, or similar — by concept, not two banned words — then run a separate LLM review against the cited CHAS claims asking whether the summary implies unsupported typology affordability. `cannot_determine` always includes the typology-affordability / `price_data` gaps.
+- **Rationale:** Live Gemini 3.5 Flash-Lite still wrote “affordability-mismatch risk” after the keyword guard banned only “affordable/unaffordable.”
+- **Open questions:** None for this slice.
+
+## [Component 3 / 2026-09-27] Equity scores are tract-constant (flat-5)
+
+- **Decision:** Identical Equity scores across the six typologies are expected. The Analyst only has tract-level CHAS cost-burden facts, which do not vary by housing type, so it cannot rank one product over another. Future work: HUD Fair Market Rents as a typology-mapped rent benchmark, plus HUD Income Limits so existing residents' ability to pay at that benchmark can be stated. Senior housing would remain unmapped to both sources.
+- **Rationale:** Live Round 1 after the affordability guard produced 5/5/5/5/5/5. That is a data limitation, not a scoring bug.
+
+
 
 
 

@@ -63,6 +63,35 @@ def test_demographic_analyst_validates_mocked_round1() -> None:
     assert "B25010" in results[0].claims[0].source
 
 
+def test_demographic_rejects_demand_word_in_summary() -> None:
+    context = load_demographic_site_from_path(FIXTURES / "demographic_tract_42003191800.json")
+    calls = {"n": 0}
+
+    def fake(system: str, user: str) -> str:
+        calls["n"] += 1
+        if calls["n"] == 1:
+            summary = "The falling vacancy rate points to growing demand for higher-density housing."
+        else:
+            summary = "Trends suggest a smaller household size is consistent with attached units."
+        return json.dumps(
+            {
+                "judgments": [
+                    {
+                        "typology": "apartment",
+                        "score": 6,
+                        "basis": "trend_inferred",
+                        "summary": summary,
+                        "cannot_determine": [],
+                    }
+                ]
+            }
+        )
+
+    results = run_demographic_analyst(context, typologies=[Typology.apartment], completer=fake)
+    assert calls["n"] == 2
+    assert "demand" not in results[0].summary.lower()
+
+
 def test_demographic_one_call_all_six() -> None:
     context = load_demographic_site_from_path(FIXTURES / "demographic_tract_42003191800.json")
     calls = {"n": 0}

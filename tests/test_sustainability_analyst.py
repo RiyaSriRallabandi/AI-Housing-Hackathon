@@ -43,7 +43,9 @@ def test_sustainability_analyst_validates_mocked_round1() -> None:
         assert "Sustainability Analyst" in system
         assert "estimated" in user
         assert "MCNEILLY" in user
-        assert "fld_zone" in user
+        assert "FLD_ZONE" in user
+        assert "EBEN ST" not in user
+        assert '"unique_within_800m"' not in user
         return json.dumps(
             {
                 "judgments": [
@@ -51,7 +53,10 @@ def test_sustainability_analyst_validates_mocked_round1() -> None:
                         "typology": "apartment",
                         "score": 7,
                         "basis": "estimated",
-                        "summary": "Rail is nearby but outside the City 1,500 ft overlay. Flood map is Zone X, not SFHA.",
+                        "summary": (
+                            "Apartment scores higher than detached on per-unit carbon; "
+                            "rail is nearby but outside the City 1,500 ft overlay."
+                        ),
                         "cannot_determine": [],
                     }
                 ]
@@ -82,7 +87,10 @@ def test_sustainability_one_call_all_six() -> None:
                         "typology": slug,
                         "score": 5,
                         "basis": "estimated",
-                        "summary": f"note {slug}",
+                        "summary": (
+                            f"{slug.replace('_', ' ')} sits relative to the other five "
+                            f"on generic carbon versus detached."
+                        ),
                         "cannot_determine": [],
                     }
                     for slug in payload["candidate_typologies"]
@@ -94,3 +102,44 @@ def test_sustainability_one_call_all_six() -> None:
     assert calls["n"] == 1
     assert len(results) == 6
     assert all(item.claims[-1].basis.value == "estimated" for item in results)
+
+
+def test_sustainability_retries_identical_summaries() -> None:
+    context = load_sustainability_site_from_path(FIXTURES / "sustainability_0139F00077000000.json")
+    calls = {"n": 0}
+    template = (
+        "All typologies share Zone X and a rail stop; higher-density forms score higher "
+        "than detached single-family."
+    )
+
+    def fake(system: str, user: str) -> str:
+        calls["n"] += 1
+        start = user.find('{"responsible_use"')
+        payload, _ = json.JSONDecoder().raw_decode(user[start:])
+        typs = payload["candidate_typologies"]
+        if calls["n"] == 1:
+            summaries = [template] * len(typs)
+        else:
+            summaries = [
+                f"{slug.replace('_', ' ')} scores relative to the other five on carbon versus detached."
+                for slug in typs
+            ]
+        return json.dumps(
+            {
+                "judgments": [
+                    {
+                        "typology": slug,
+                        "score": 5,
+                        "basis": "estimated",
+                        "summary": summaries[i],
+                        "cannot_determine": [],
+                    }
+                    for i, slug in enumerate(typs)
+                ]
+            }
+        )
+
+    results = run_sustainability_analyst(context, completer=fake)
+    assert calls["n"] == 2
+    texts = {item.summary for item in results}
+    assert len(texts) == 6

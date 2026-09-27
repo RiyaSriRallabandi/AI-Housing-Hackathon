@@ -61,6 +61,8 @@ def test_pro_forma_analyst_validates_mocked_round1() -> None:
     def fake(system: str, user: str) -> str:
         assert "Pro Forma Analyst" in system
         assert "177.63" in user
+        assert "median_usd" in user
+        assert "301000" not in user
         return json.dumps(
             {
                 "judgments": [
@@ -83,6 +85,8 @@ def test_pro_forma_analyst_validates_mocked_round1() -> None:
     assert "177.63" in icc.statement
     assert "Building Valuation Data" in icc.source
     assert any("Financing" in note for note in results[0].cannot_determine)
+    assert any("Median price of 8" in c.statement for c in results[0].claims)
+    assert any("295500" in c.statement for c in results[0].claims)
 
 
 def test_pro_forma_adu_keeps_increment_gap_and_estimated_icc() -> None:

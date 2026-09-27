@@ -65,7 +65,7 @@
     "Decision support only \u2014 not legal, financial, or zoning advice.",
     "CHAS is based on multi-year ACS; this layer lags HUD's current download. It shows current (vintage-period) cost burden, not displacement from a new building.",
     "Layer date of coverage is 2013-2017 ACS/CHAS. HUD's most recent CHAS release is 2018-2022 (HUD announced 2025-12-23). This tract extract is older than that release.",
-    "Frame findings as affordability mismatch risk, not measured displacement. CHAS does not track who would move because of a specific project.",
+    "Frame findings as tract CHAS cost-burden facts only. Typology-specific affordability cannot be determined without unit price data. CHAS does not track who would move because of a specific project.",
     "Do not assume market-rate housing is inherently harmful or subsidized housing inherently beneficial without grounding in this tract's income/cost-burden figures.",
     "Useful HUD Income Limits and Location Affordability Index were not retrieved."
   ]

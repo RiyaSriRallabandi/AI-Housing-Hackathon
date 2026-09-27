@@ -2,6 +2,8 @@ from __future__ import annotations
 
 import json
 
+from collections.abc import Callable
+
 from pydantic import BaseModel, ValidationError, field_validator
 
 from housing_review.llm import Completer
@@ -55,14 +57,18 @@ def collect_judgments(
     *,
     agent_label: str,
     claims_kept: str,
+    check: Callable[[list[AgentJudgment]], None] | None = None,
 ) -> list[AgentJudgment]:
-    """Retry once on schema failure; then salvage valid typologies and fallback the rest."""
+    """Retry once on schema or content-guard failure; then salvage or fallback."""
     raw = ""
     for _ in range(MAX_SCHEMA_RETRIES + 1):
         raw = generate(system, user)
         try:
             judgments = [_parse_judgment(item) for item in _parse_judgments(raw)]
             _assert_complete(judgments, typologies, agent_label)
+            ordered = _order(judgments, typologies)
+            if check:
+                check(ordered)
         except (ValidationError, ValueError, TypeError) as exc:
             user = (
                 user
@@ -72,10 +78,17 @@ def collect_judgments(
                 "basis, summary, cannot_determine. No claims. Include every typology."
             )
             continue
-        by_typ = {item.typology: item for item in judgments}
-        return [by_typ[item] for item in typologies]
+        return ordered
     salvaged = _salvage(raw, typologies)
     note = failure_note(agent_label, claims_kept)
+    if len(salvaged) == len(typologies):
+        ordered = [salvaged[item] for item in typologies]
+        try:
+            if check:
+                check(ordered)
+            return ordered
+        except (ValidationError, ValueError, TypeError):
+            return [_fallback(item, note) for item in typologies]
     return [salvaged.get(item) or _fallback(item, note) for item in typologies]
 
 
@@ -109,6 +122,11 @@ def _assert_complete(
     missing = [item for item in typologies if item not in got]
     if missing:
         raise ValueError(f"Missing typologies in {agent_label} judgments: {missing}")
+
+
+def _order(judgments: list[AgentJudgment], typologies: list[Typology]) -> list[AgentJudgment]:
+    by_typ = {item.typology: item for item in judgments}
+    return [by_typ[item] for item in typologies]
 
 
 def _salvage(raw: str, typologies: list[Typology]) -> dict[Typology, AgentJudgment]:

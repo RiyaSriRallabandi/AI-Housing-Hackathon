@@ -107,7 +107,7 @@ See `data/demo_site.json`.
 - **Vintage:** **2013–2017** (layer “Date of Coverage”). HUD’s most recent CHAS release is **2018–2022** (announced 2025-12-23). This extract is older; do not treat it as current-year conditions. HUD USER Dataset Update Schedule lists the **next CHAS update for December 2026**.
 - **Figures used:** T2_EST1 occupied households 2,330; T8_CB 430 (18.45%) cost-burdened >30%; T8_CB50 190 (8.15%) >50%; T8_LE30 235 households ≤30% HAMFI of which 74.47% cost-burdened.
 - **Catalog caveat:** Based on multi-year ACS; releases lag; tables are complex.
-- **What this does NOT cover:** Displacement from a specific new building. HUD Income Limits and Location Affordability Index (Useful) were not retrieved. HUD User CHAS API was not used (token; no tract geography). National 2018–2022 ZIP download was WAF-blocked.
+- **What this does NOT cover:** Displacement from a specific new building. HUD Income Limits and Location Affordability Index (Useful) were not retrieved. HUD User CHAS API was not used (token; no tract geography). National 2018–2022 ZIP download was WAF-blocked. **Scoring limitation:** CHAS is tract-constant, so Equity cannot differentiate the six typologies (flat scores are correct). Future work: HUD Fair Market Rents (typology-level rent benchmark) plus HUD Income Limits (what existing tract residents could pay at that benchmark); senior housing would remain unmapped to both.
 
 ## Pittsburgh Regional Transit GTFS (Sustainability)
 

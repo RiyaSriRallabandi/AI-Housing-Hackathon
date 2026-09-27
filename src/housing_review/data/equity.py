@@ -28,8 +28,9 @@ def _notes(chas: ChasTractSlice) -> list[str]:
         "Decision support only — not legal, financial, or zoning advice.",
         chas.caveat,
         chas.vintage_note,
-        "Frame findings as affordability mismatch risk, not measured displacement. "
-        "CHAS does not track who would move because of a specific project.",
+        "Report tract CHAS cost-burden facts only. Typology-specific affordability "
+        "cannot be determined without unit price data. CHAS does not track who "
+        "would move because of a specific project.",
         "Do not assume market-rate housing is inherently harmful or subsidized housing "
         "inherently beneficial without grounding in this tract's income/cost-burden figures.",
         "Useful HUD Income Limits and Location Affordability Index were not retrieved.",

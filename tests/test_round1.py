@@ -4,6 +4,7 @@ import json
 
 import pytest
 
+from housing_review.agents.summary_guards import EQUITY_REVIEW_TASK
 from housing_review.debate import load_demo_round1_contexts, run_round1
 from housing_review.debate.round1 import Round1Contexts
 from housing_review.schemas.common import AnalystName, Typology
@@ -31,6 +32,8 @@ def _completer(agent: str, token: str, seen_users: list[str]):
 
     def fake(system: str, user: str) -> str:
         seen_users.append(user)
+        if EQUITY_REVIEW_TASK in user:
+            return json.dumps({"overreach": False, "violations": []})
         payload = _payload_from_user(user)
         typs = payload["candidate_typologies"]
         return json.dumps(

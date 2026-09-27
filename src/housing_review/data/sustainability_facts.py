@@ -65,6 +65,7 @@ def deterministic_claims_for_typology(
             f"Nearest scheduled PRT stop is {nearest.stop_name} ({nearest.mode}), "
             f"about {round(nearest.distance_m)} m from the parcel centroid; "
             f"{prt.unique_within_400m} unique stops within 400 m, "
+            f"{prt.unique_within_800m} unique stops within 800 m, "
             f"{prt.unique_within_1500ft} within 1,500 ft."
         )
     else:
@@ -100,53 +101,28 @@ def deterministic_claims_for_typology(
     ]
 
 
-def facts_pack_for_llm(context: SustainabilitySiteContext) -> dict:
-    flood = context.flood
-    prt = context.prt
-    nearest = [
-        {
-            "stop_name": item.stop_name,
-            "mode": item.mode,
-            "route_code": item.route_code,
-            "distance_m": item.distance_m,
-            "trips_wd": item.trips_wd,
-            "from_gtfs": item.from_gtfs,
-        }
-        for item in prt.nearest[:6]
-    ]
-    return {
-        "flood": {
-            "layer_covers_point": flood.layer_covers_point,
-            "fld_zone": flood.fld_zone,
-            "zone_subtype": flood.zone_subtype,
-            "sfha_tf": flood.sfha_tf,
-            "in_sfha": flood.in_sfha,
-            "source": flood_source(context),
-            "caveat": flood.caveat,
-        },
-        "steep_slope_25pct": {
-            "flagged": context.steep_slope_25pct.flagged,
-            "caveat": context.steep_slope_25pct.caveat,
-        },
-        "major_transit_buffer": {
-            "in_1500ft_major_transit_buffer": context.major_transit_buffer.in_1500ft_major_transit_buffer,
-            "note": context.major_transit_buffer.note,
-            "source_url": context.major_transit_buffer.source_url,
-        },
-        "prt": {
-            "unique_within_400m": prt.unique_within_400m,
-            "unique_within_800m": prt.unique_within_800m,
-            "unique_within_1500ft": prt.unique_within_1500ft,
-            "nearest": nearest,
-            "source": prt_source(context),
-            "caveat": prt.caveat,
-        },
-        "carbon": {
-            "rule": CARBON_SOURCE,
-            "by_typology": {item.value: CARBON_STATEMENT[item] for item in Typology},
-            "basis": "estimated",
-        },
-    }
+def facts_pack_for_llm(
+    context: SustainabilitySiteContext,
+    typologies: list[Typology],
+) -> list[dict]:
+    """Only the cited claim statements — not extra PRT rows or unclaimed counts."""
+    pack = []
+    for typology in typologies:
+        claims = deterministic_claims_for_typology(typology, context)
+        pack.append(
+            {
+                "typology": typology.value,
+                "claims": [
+                    {
+                        "statement": item.statement,
+                        "source": item.source,
+                        "basis": item.basis.value,
+                    }
+                    for item in claims
+                ],
+            }
+        )
+    return pack
 
 
 def code_side_cannot_determine() -> list[str]:

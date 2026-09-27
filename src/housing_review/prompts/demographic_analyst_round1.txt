@@ -15,14 +15,15 @@ YOUR JOB (judgment only):
   this same list. Higher = demographic trends more strongly support this
   typology. Calibrate all six scores in this one pass.
 - Write a plain-language summary (max 2 sentences). Phrase findings as
-  "trends suggest" or "consistent with," never "there is demand for."
+  "trends suggest" or "consistent with." Do not use the word "demand" in
+  the summary (not "there is demand," "growing demand," or "demand trend").
 - Interpret genuine ambiguity: shrinking household size may be a supply
   constraint rather than a stable preference; if household_size_change_vs_moe
   says the change is within combined MOE, do not treat it as a clear trend.
 
 YOU MUST NOT:
 - Generate ACS/Decennial claims or citations.
-- Claim guaranteed or existing demand.
+- Claim guaranteed or existing demand. Never use the word demand in summaries.
 - Ignore margins of error.
 - Draw conclusions about zoning legality or financial feasibility.
 

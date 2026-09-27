@@ -3,7 +3,11 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-from housing_review.agents.judgment import collect_judgments, merge_assessment
+from housing_review.agents.judgment import AgentJudgment, collect_judgments, merge_assessment
+from housing_review.agents.summary_guards import (
+    assert_equity_summaries_respect_unknown_price,
+    review_equity_summaries_against_claims,
+)
 from housing_review.data.demo_site import demo_site_record
 from housing_review.data.equity import EquitySiteContext, load_equity_site_from_path
 from housing_review.data.equity_facts import (
@@ -48,6 +52,16 @@ def run_equity_analyst(
 ) -> list[AnalystAssessment]:
     typologies = typologies or CANDIDATE_TYPOLOGIES
     generate = completer or complete_json
+    extra = code_side_cannot_determine()
+
+    def check(items: list[AgentJudgment]) -> None:
+        assert_equity_summaries_respect_unknown_price(items, extra)
+        review_equity_summaries_against_claims(
+            generate,
+            items,
+            {item.typology: deterministic_claims_for_typology(item.typology, context) for item in items},
+        )
+
     judgments = collect_judgments(
         generate,
         _system_prompt(),
@@ -55,8 +69,8 @@ def run_equity_analyst(
         typologies,
         agent_label="Equity Analyst",
         claims_kept="CHAS cost-burden claims were still attached from code.",
+        check=check,
     )
-    extra = code_side_cannot_determine()
     return [
         merge_assessment(
             agent=AnalystName.equity_analyst,

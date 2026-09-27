@@ -32,6 +32,7 @@ def test_config_default_model_is_central(monkeypatch) -> None:
     monkeypatch.delenv("LLM_MODEL", raising=False)
     monkeypatch.delenv("LLM_PROVIDER", raising=False)
     assert config.LLM_MODEL == "openai/gpt-oss-120b"
+    assert config.GEMINI_FALLBACK_MODEL == "gemini-3.5-flash-lite"
     loaded = config.load_llm_config()
     assert loaded.model == "openai/gpt-oss-120b"
     assert loaded.provider == "groq"
