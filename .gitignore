@@ -15,6 +15,12 @@ __pycache__/
 dist/
 build/
 
+# Local data caches (source log is committed; raw downloads are not)
+data/raw/
+data/cache/
+!data/cache/.gitkeep
+!data/raw/.gitkeep
+
 # OS / editor
 .DS_Store
 .idea/
