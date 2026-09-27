@@ -62,6 +62,8 @@ _TYPOLOGY_ALIASES: dict[str, Typology] = {
     "townhomes": Typology.townhome,
     "townhouse": Typology.townhome,
     "townhouses": Typology.townhome,
+    "single unit attached": Typology.townhome,
+    "single unit attached residential": Typology.townhome,
     "adu": Typology.adu,
     "accessory dwelling unit": Typology.adu,
     "senior_housing": Typology.senior_housing,

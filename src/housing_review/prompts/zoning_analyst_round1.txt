@@ -30,6 +30,11 @@ YOU MUST NOT:
 - Treat ADU Overlay status as a stored property of a demo site. Use the live
   adu_overlay query result in site_context.
 
+YOU MUST: In claims, cite Title 9 use names (Single-Unit Attached Residential,
+Two-Unit Residential, Multi-Unit Residential, Single-Unit Detached Residential).
+Keep the JSON typology field as the brief slug (townhome, not townhouse).
+Title 9 does not say townhome or townhouse.
+
 Every claim must cite the exact zoning code section or clause it comes from.
 If the code is silent or ambiguous on something relevant, say so explicitly
 in cannot_determine rather than guessing.

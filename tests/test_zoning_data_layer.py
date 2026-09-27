@@ -119,3 +119,15 @@ def test_parking_excerpt_is_schedule_a_not_toc() -> None:
     assert "1 per unit" in excerpt
     assert "Two-Unit" in excerpt
     assert "Off-Street Parking Exemption" not in excerpt
+
+
+def test_brief_typology_maps_to_title9_names() -> None:
+    from housing_review.data.corpus import TYPOLOGY_TITLE9, lookup_for_mapped_districts
+
+    names = lookup_for_mapped_districts(["R2-L"])["typology_title9_names"]
+    assert names["townhome"]["title9_use"] == "Single-Unit Attached Residential"
+    assert "townhouse" not in names["townhome"]["title9_use"].lower()
+    assert names["duplex"]["title9_use"] == "Two-Unit Residential"
+    assert names["apartment"]["title9_use"] == "Multi-Unit Residential"
+    assert names["detached_single_family"]["title9_use"] == "Single-Unit Detached Residential"
+    assert TYPOLOGY_TITLE9["adu"]["title9_use"].startswith("Accessory")

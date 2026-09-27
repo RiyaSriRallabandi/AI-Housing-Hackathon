@@ -17,6 +17,39 @@ CHAPTER_URLS = {
     "914": "https://ecode360.com/45478031",
 }
 
+# Brief/schema slugs vs Title 9 primary-use names (eCode360 Ch. 911, retrieved 2026-09-26).
+# The JSON typology field stays the brief slug. Claims should cite the Title 9 name.
+TYPOLOGY_TITLE9 = {
+    "duplex": {
+        "title9_use": "Two-Unit Residential",
+        "definition": "Two dwelling units contained within a single building.",
+    },
+    "apartment": {
+        "title9_use": "Multi-Unit Residential",
+        "definition": "Four or more dwelling units contained within a single building.",
+    },
+    "townhome": {
+        "title9_use": "Single-Unit Attached Residential",
+        "definition": (
+            "One dwelling unit on its own separate lot, attached to one or more "
+            "dwelling units by a party wall or separate abutting wall. Title 9 "
+            "does not use the words townhome or townhouse."
+        ),
+    },
+    "adu": {
+        "title9_use": "Accessory Dwelling Unit (Chapter 912, including §912.08)",
+        "definition": "Accessory use, not a §911.02 primary-use row. Overlay membership is a live map query.",
+    },
+    "senior_housing": {
+        "title9_use": "Housing for the Elderly (Limited) / Housing for the Elderly (General)",
+        "definition": "Look up both Use Table rows for this district column; they may differ (P / S / A / blank).",
+    },
+    "detached_single_family": {
+        "title9_use": "Single-Unit Detached Residential",
+        "definition": "One detached housing unit on a zoning lot.",
+    },
+}
+
 HOUSING_USE_PREFIXES = (
     "Single-Unit Detached",
     "Single-Unit Attached",
@@ -159,6 +192,7 @@ def lookup_for_mapped_districts(district_codes: list[str]) -> dict:
         "use_subdistrict": use,
         "density_subdistrict": density,
         "use_table_column": use_table_column_key(primary) if primary else None,
+        "typology_title9_names": TYPOLOGY_TITLE9,
         "use_table_legend": use_table().get("legend"),
         "use_permissions_this_column": permissions_for_district(primary) if primary else [],
         "chapter_903_density_excerpt": chapter_903_density_excerpt(density),

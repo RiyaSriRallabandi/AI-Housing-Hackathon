@@ -127,3 +127,11 @@ the decision is made, not reconstructed later.
 - **Scope:** This is a **deliberate** residential-relevant subset (903, 911, 912, 913, 914), not a silent hole. Commercial/industrial-only chapters are out of scope for now.
 - **Assumptions made:** GIS codes like `R2-L` join to Use Table column `R2`. Duplicate printed names in the Use Table (second RM/GI) are stored as `RIV-RM` / `RIV-GI` so lookups are unique. The published overlay layer had no ADU-named polygons on retrieval; live queries can still return hits if the layer is updated.
 - **Open questions:** Whether a dedicated ADU Overlay FeatureServer exists under another name; user review of live Round 1 scores against the code.
+
+## [Component 3 / 2026-09-26] Brief slug townhome vs Title 9 Single-Unit Attached
+
+- **Decision:** Keep JSON typology as `townhome` (hackathon brief / shared schema). Zoning claims cite Title 9 **Single-Unit Attached Residential**. Accept `townhouse` and the Title 9 name as input aliases only.
+- **Options considered:** Rename the schema enum to `townhouse` or `single_unit_attached` (rejected — brief lists townhome); treat townhome as a code term (rejected — Title 9 never uses it).
+- **Rationale:** eCode360 §911.02 and the City use-classifications handout define Single-Unit Attached Residential (one unit on its own lot, party wall). The mapping is now explicit in the corpus lookup.
+- **Assumptions made:** Duplex → Two-Unit; apartment → Multi-Unit; detached_single_family → Single-Unit Detached.
+- **Open questions:** None.

@@ -104,6 +104,15 @@ def test_claim_requires_source() -> None:
         parse_analyst_assessment(payload)
 
 
+def test_townhome_aliases_match_brief_and_title9() -> None:
+    assert parse_analyst_assessment(valid_payload(typology="townhome")).typology is Typology.townhome
+    assert parse_analyst_assessment(valid_payload(typology="townhouse")).typology is Typology.townhome
+    assert (
+        parse_analyst_assessment(valid_payload(typology="Single-Unit Attached Residential")).typology
+        is Typology.townhome
+    )
+
+
 def test_unknown_typology_rejected() -> None:
     with pytest.raises(ValidationError):
         parse_analyst_assessment(valid_payload(typology="skyscraper"))
