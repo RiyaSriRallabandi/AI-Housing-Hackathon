@@ -106,18 +106,3 @@ def parse_json_object(raw: str) -> JsonDict:
     if not isinstance(data, dict):
         raise ValueError("Expected a JSON object")
     return data
-
-
-def parse_json_list(raw: str) -> list[Any]:
-    text = raw.strip()
-    if text.startswith("```"):
-        text = text.strip("`")
-        if text.startswith("json"):
-            text = text[4:]
-        text = text.strip()
-    data = json.loads(text)
-    if isinstance(data, dict) and "assessments" in data:
-        data = data["assessments"]
-    if not isinstance(data, list):
-        raise ValueError("Expected a JSON array of assessments")
-    return data

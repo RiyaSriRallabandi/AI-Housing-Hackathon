@@ -179,19 +179,25 @@ the decision is made, not reconstructed later.
 ## [Component 3 / 2026-09-27] Zoning deterministic facts; one comparative LLM call
 
 - **Decision:** Use-table, Schedule A parking, and Chapter 903 dimensions are built as `Claim`s in code (`zoning_facts.py`) with citations. The Zoning LLM returns only `judgments` (score, basis, summary, cannot_determine). All six typologies are scored in **one** Groq call (~2.8K input tokens, under Free 8K TPM). Other Analysts still batch 3+3. Retry once on judgment-schema failure. A second failure no longer aborts Round 1: valid typologies are salvaged; the rest get score placeholder 0, an explanatory summary, and `cannot_determine` noting two invalid model outputs. Deterministic claims still attach. No citation-validator retry path for Zoning facts.
-- **Open questions:** Demographic and Pro Forma still batch 3+3 with model-written claims.
+- **Open questions:** None for this slice.
 
 ## [Component 3 / 2026-09-27] Equity and Sustainability: code-owned claims, one call, shared judgment fallback
 
 - **Decision:** Shared `agents/judgment.py` retries once on schema failure, then salvages valid typologies and falls back the rest (`cannot_determine` + score placeholder 0) instead of raising. Equity CHAS Table 8 figures and Sustainability PRT/FEMA/slope/carbon-direction claims are built in code with citations. Each of those two agents scores all six typologies in one call. Demographic and Pro Forma are unchanged in this slice.
 - **Rationale:** Tract CHAS and site flood/transit facts do not vary by typology, so 3+3 batching only split comparative scores. Citation restatement was the same failure mode as Zoning.
-- **Open questions:** Pro Forma still batches 3+3 with model-written claims.
+- **Open questions:** None for this slice.
 
 ## [Component 3 / 2026-09-27] Demographic: code-owned ACS claims, one comparative call
 
 - **Decision:** ACS 2019-2023 / 2014-2018 and 2020 PL estimates (table, variable, vintage, MOE) are attached as `Claim`s in `demographic_facts.py`. The Demographic LLM returns only `judgments` and scores all six typologies in one call, using the shared judgment fallback. USPS vacancy and vacancy-by-structure-type stay `cannot_determine`. Household-size change vs combined MOE is a confidence note, not a generated citation.
 - **Rationale:** Tract ACS is site-constant; 3+3 batching split demand-fit scores that are meant to be comparative. The model was restating table IDs it already had in the payload.
-- **Open questions:** Pro Forma redesign still pending.
+- **Open questions:** None for this slice.
+
+## [Component 3 / 2026-09-27] Pro Forma: code-owned assessment/ICC claims, one comparative call
+
+- **Decision:** Assessed land, parcel sales, and ICC BVD $/sf (citation copied from `cost_for_typology()`) are attached as `Claim`s in `proforma_facts.py`. ICC rows stay `basis: estimated`. The Pro Forma LLM returns only `judgments` and scores all six typologies in one call, using the shared judgment fallback. ADU/apartment/senior keep the whole-house FINISHEDLIVINGAREA increment in `cannot_determine`. The Round 1 test completer no longer has an `assessments` / `fixture:{agent}` branch — that path existed only so slice 2 could stay green while Pro Forma was still on the old schema.
+- **Rationale:** Per-typology ICC figures are as deterministic as Zoning parking rows; the model was rewriting the citation string. One call calibrates feasibility scores across all six typologies.
+- **Open questions:** Live Groq Round 1 after all five Analysts are on this design. Round 2 still parked.
 
 
 

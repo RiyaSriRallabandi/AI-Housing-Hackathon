@@ -57,33 +57,91 @@ def test_pro_forma_sources_log_icc_and_assessments() -> None:
 
 def test_pro_forma_analyst_validates_mocked_round1() -> None:
     context = load_proforma_site_from_path(FIXTURES / "proforma_0139F00077000000.json")
-    payload = [
-        {
-            "agent": "pro_forma_analyst",
-            "site_id": "0139F00077000000",
-            "typology": "duplex",
-            "score": 5,
-            "basis": "estimated",
-            "claims": [
-                {
-                    "statement": "ICC BVD August 2026 R-3 Type VB is $177.63/sf national average.",
-                    "basis": "estimated",
-                    "source": "ICC Building Valuation Data – AUGUST 2026 occupancy R-3 type VB",
-                    "confidence_note": "Not Pittsburgh-specific.",
-                }
-            ],
-            "cannot_determine": ["Financing terms."],
-            "summary": "Directional only; construction cost is a national ICC average.",
-        }
-    ]
 
     def fake(system: str, user: str) -> str:
         assert "Pro Forma Analyst" in system
         assert "177.63" in user
-        return json.dumps({"assessments": payload})
+        return json.dumps(
+            {
+                "judgments": [
+                    {
+                        "typology": "duplex",
+                        "score": 5,
+                        "basis": "estimated",
+                        "summary": "Directional only; construction cost is a national ICC average.",
+                        "cannot_determine": [],
+                    }
+                ]
+            }
+        )
 
     results = run_pro_forma_analyst(context, typologies=[Typology.duplex], completer=fake)
     assert len(results) == 1
     assert results[0].agent is AnalystName.pro_forma_analyst
-    assert results[0].basis.value == "estimated"
     assert results[0].score == 5
+    icc = next(item for item in results[0].claims if item.basis.value == "estimated")
+    assert "177.63" in icc.statement
+    assert "Building Valuation Data" in icc.source
+    assert any("Financing" in note for note in results[0].cannot_determine)
+
+
+def test_pro_forma_adu_keeps_increment_gap_and_estimated_icc() -> None:
+    context = load_proforma_site_from_path(FIXTURES / "proforma_0139F00077000000.json")
+
+    def fake(system: str, user: str) -> str:
+        return json.dumps(
+            {
+                "judgments": [
+                    {
+                        "typology": "adu",
+                        "score": 4,
+                        "basis": "estimated",
+                        "summary": "Whole-house ICC proxy is not an ADU increment.",
+                        "cannot_determine": [],
+                    }
+                ]
+            }
+        )
+
+    results = run_pro_forma_analyst(context, typologies=[Typology.adu], completer=fake)
+    icc = next(item for item in results[0].claims if "ICC" in item.statement or "occupancy" in item.statement)
+    assert icc.basis.value == "estimated"
+    assert icc.source == next(
+        row["citation"] for row in context.construction_cost if row["typology"] == "adu"
+    )
+    assert any("FINISHEDLIVINGAREA" in note for note in results[0].cannot_determine)
+
+
+def test_pro_forma_one_call_all_six() -> None:
+    context = load_proforma_site_from_path(FIXTURES / "proforma_0139F00077000000.json")
+    calls = {"n": 0}
+
+    def fake(system: str, user: str) -> str:
+        calls["n"] += 1
+        start = user.find('{"responsible_use"')
+        payload, _ = json.JSONDecoder().raw_decode(user[start:])
+        typs = payload["candidate_typologies"]
+        assert len(typs) == 6
+        return json.dumps(
+            {
+                "judgments": [
+                    {
+                        "typology": slug,
+                        "score": i + 1,
+                        "basis": "estimated",
+                        "summary": f"note {slug}",
+                        "cannot_determine": [],
+                    }
+                    for i, slug in enumerate(typs)
+                ]
+            }
+        )
+
+    results = run_pro_forma_analyst(context, completer=fake)
+    assert calls["n"] == 1
+    assert [item.score for item in results] == [1, 2, 3, 4, 5, 6]
+    duplex = next(item for item in results if item.typology is Typology.duplex)
+    assert duplex.claims[1].source == next(
+        row["citation"] for row in context.construction_cost if row["typology"] == "duplex"
+    )
+    assert duplex.claims[1].basis.value == "estimated"

@@ -26,55 +26,27 @@ def _payload_from_user(user: str) -> dict:
     return payload
 
 
-JUDGMENT_AGENTS = {
-    "zoning_analyst",
-    "demographic_analyst",
-    "equity_analyst",
-    "sustainability_analyst",
-}
-
-
-def _assessment(agent: str, typology: str, token: str) -> dict:
-    return {
-        "agent": agent,
-        "site_id": "0139F00077000000",
-        "typology": typology,
-        "score": 5,
-        "basis": "estimated",
-        "claims": [
-            {
-                "statement": f"{agent} round1 {token} for {typology}",
-                "basis": "estimated",
-                "source": f"fixture:{agent}",
-            }
-        ],
-        "cannot_determine": ["Peer Analyst claims (Round 1 has no visibility)."],
-        "summary": f"Independent {agent} note {token}.",
-    }
-
-
 def _completer(agent: str, token: str, seen_users: list[str]):
+    """Round 1 unit-test fake: every Analyst now returns judgments only."""
+
     def fake(system: str, user: str) -> str:
         seen_users.append(user)
         payload = _payload_from_user(user)
         typs = payload["candidate_typologies"]
-        if agent in JUDGMENT_AGENTS:
-            return json.dumps(
-                {
-                    "judgments": [
-                        {
-                            "typology": typology,
-                            "score": 5,
-                            "basis": "estimated",
-                            "summary": f"{agent} round1 {token} for {typology}",
-                            "cannot_determine": ["Peer Analyst claims (Round 1 has no visibility)."],
-                        }
-                        for typology in typs
-                    ]
-                }
-            )
-        items = [_assessment(agent, typology, token) for typology in typs]
-        return json.dumps({"assessments": items})
+        return json.dumps(
+            {
+                "judgments": [
+                    {
+                        "typology": typology,
+                        "score": 5,
+                        "basis": "estimated",
+                        "summary": f"{agent} round1 {token} for {typology}",
+                        "cannot_determine": ["Peer Analyst claims (Round 1 has no visibility)."],
+                    }
+                    for typology in typs
+                ]
+            }
+        )
 
     return fake
 
@@ -106,7 +78,6 @@ def test_round1_runs_five_agents_without_peer_transcripts() -> None:
         assert typs == set(Typology)
         assert len(by_agent[name]) == len(Typology)
 
-    # Later agents must not see earlier agents' secret tokens (independence).
     leaked = []
     for index, name in enumerate(AGENT_ORDER):
         blob = "\n".join(seen[name])
