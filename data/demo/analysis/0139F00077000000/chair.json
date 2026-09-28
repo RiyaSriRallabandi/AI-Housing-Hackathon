@@ -1,0 +1,214 @@
+{
+  "site_id": "0139F00077000000",
+  "typology_comparison": [
+    {
+      "typology": "duplex",
+      "scores_by_agent": {
+        "zoning_analyst": 9,
+        "demographic_analyst": 6,
+        "pro_forma_analyst": 6,
+        "equity_analyst": 5,
+        "sustainability_analyst": 6
+      },
+      "factual_disputes": [],
+      "value_disputes": [
+        {
+          "issue": "Regulatory permission vs. carbon efficiency and demographic/financial feasibility trade-offs.",
+          "agents_involved": [
+            "zoning_analyst",
+            "demographic_analyst",
+            "pro_forma_analyst",
+            "sustainability_analyst"
+          ],
+          "framing": "Zoning assigns a high score due to permitted use status, while demographic, pro_forma, and sustainability analysts weigh moderate market fit and environmental benefits against site constraints."
+        }
+      ]
+    },
+    {
+      "typology": "apartment",
+      "scores_by_agent": {
+        "zoning_analyst": 1,
+        "demographic_analyst": 5,
+        "pro_forma_analyst": 7,
+        "equity_analyst": 5,
+        "sustainability_analyst": 9
+      },
+      "factual_disputes": [],
+      "value_disputes": [
+        {
+          "issue": "Regulatory prohibition versus high environmental sustainability.",
+          "agents_involved": [
+            "zoning_analyst",
+            "sustainability_analyst"
+          ],
+          "framing": "Zoning heavily penalizes the typology due to a blank/not permitted use status, whereas the sustainability analyst assigns a high score based on multi-unit density advantages."
+        }
+      ]
+    },
+    {
+      "typology": "townhome",
+      "scores_by_agent": {
+        "zoning_analyst": 9,
+        "demographic_analyst": 3,
+        "pro_forma_analyst": 6,
+        "equity_analyst": 5,
+        "sustainability_analyst": 7
+      },
+      "factual_disputes": [],
+      "value_disputes": [
+        {
+          "issue": "As-of-right zoning permission versus low baseline prevalence in existing housing stock.",
+          "agents_involved": [
+            "zoning_analyst",
+            "demographic_analyst"
+          ],
+          "framing": "Zoning finds a clear permitted path, while the demographic analyst scores lower due to limited regional representation of attached single-family structures."
+        }
+      ]
+    },
+    {
+      "typology": "adu",
+      "scores_by_agent": {
+        "zoning_analyst": 2,
+        "demographic_analyst": 7,
+        "pro_forma_analyst": 5,
+        "equity_analyst": 5,
+        "sustainability_analyst": 5
+      },
+      "factual_disputes": [],
+      "value_disputes": [
+        {
+          "issue": "Regulatory uncertainty regarding overlays versus demographic alignment with smaller household configurations.",
+          "agents_involved": [
+            "zoning_analyst",
+            "demographic_analyst"
+          ],
+          "framing": "Zoning gives a low score due to the absence of the ADU overlay on the site, whereas the demographic analyst gives a higher score based on trends favoring smaller household footprints."
+        }
+      ]
+    },
+    {
+      "typology": "senior_housing",
+      "scores_by_agent": {
+        "zoning_analyst": 4,
+        "demographic_analyst": 8,
+        "pro_forma_analyst": 4,
+        "equity_analyst": 5,
+        "sustainability_analyst": 8
+      },
+      "factual_disputes": [],
+      "value_disputes": [
+        {
+          "issue": "Special exception zoning hurdles and higher construction costs versus demographic need and sustainability benefits.",
+          "agents_involved": [
+            "zoning_analyst",
+            "pro_forma_analyst",
+            "demographic_analyst",
+            "sustainability_analyst"
+          ],
+          "framing": "Zoning and pro_forma highlight regulatory hurdles (special exception) and high R-4 construction costs, while demographic and sustainability analysts favor the typology due to local senior population shares and multi-unit efficiency."
+        }
+      ]
+    },
+    {
+      "typology": "detached_single_family",
+      "scores_by_agent": {
+        "zoning_analyst": 10,
+        "demographic_analyst": 9,
+        "pro_forma_analyst": 6,
+        "equity_analyst": 5,
+        "sustainability_analyst": 2
+      },
+      "factual_disputes": [],
+      "value_disputes": [
+        {
+          "issue": "High regulatory alignment and historical stock prevalence versus poor environmental sustainability performance.",
+          "agents_involved": [
+            "zoning_analyst",
+            "demographic_analyst",
+            "sustainability_analyst"
+          ],
+          "framing": "Zoning and demographic analysts reward the typology for matching historical patterns and permitted use status, while the sustainability analyst penalizes it for higher per-unit carbon and car dependency."
+        }
+      ]
+    }
+  ],
+  "limitations": [
+    {
+      "question": "Whether a variance or special exception would actually be granted.",
+      "raised_by": "zoning_analyst",
+      "next_step": "Not resolved in this tool. Verify with the relevant office before acting."
+    },
+    {
+      "question": "Permitting timelines.",
+      "raised_by": "zoning_analyst",
+      "next_step": "Not resolved in this tool. Verify with the relevant office before acting."
+    },
+    {
+      "question": "Contextual setbacks or height alternatives under \u00a7925.06 / \u00a7925.07.",
+      "raised_by": "zoning_analyst",
+      "next_step": "Not resolved in this tool. Verify with the relevant office before acting."
+    },
+    {
+      "question": "USPS postal vacancy was not retrieved.",
+      "raised_by": "demographic_analyst",
+      "next_step": "Not resolved in this tool. Verify with the relevant office before acting."
+    },
+    {
+      "question": "ACS tables retrieved do not split vacancy rate by units-in-structure; B25024 is inventory mix, not vacancy by typology.",
+      "raised_by": "demographic_analyst",
+      "next_step": "Not resolved in this tool. Verify with the relevant office before acting."
+    },
+    {
+      "question": "County Housing Needs Assessment is subregion-scale and was not used for parcel-level claims.",
+      "raised_by": "demographic_analyst",
+      "next_step": "Not resolved in this tool. Verify with the relevant office before acting."
+    },
+    {
+      "question": "Financing terms, interest rates, and developer profit margins are not in the payload.",
+      "raised_by": "pro_forma_analyst",
+      "next_step": "Not resolved in this tool. Verify with the relevant office before acting."
+    },
+    {
+      "question": "FINISHEDLIVINGAREA on the existing building is a size proxy for a full replacement, not the increment for an ADU or a different multi-unit program.",
+      "raised_by": "pro_forma_analyst",
+      "next_step": "Not resolved in this tool. Verify with the relevant office before acting."
+    },
+    {
+      "question": "CHAS does not measure who would move because of this project (displacement).",
+      "raised_by": "equity_analyst",
+      "next_step": "Not resolved in this tool. Verify with the relevant office before acting."
+    },
+    {
+      "question": "Useful HUD Income Limits and Location Affordability Index were not retrieved.",
+      "raised_by": "equity_analyst",
+      "next_step": "Not resolved in this tool. Verify with the relevant office before acting."
+    },
+    {
+      "question": "price_data: likely sale/rent of a new unit of this typology is not in the Equity payload.",
+      "raised_by": "equity_analyst",
+      "next_step": "Not resolved in this tool. Verify with the relevant office before acting."
+    },
+    {
+      "question": "Typology-specific affordability cannot be determined without sale or rent price data for that housing type.",
+      "raised_by": "equity_analyst",
+      "next_step": "Not resolved in this tool. Verify with the relevant office before acting."
+    },
+    {
+      "question": "On-time reliability of scheduled PRT trips.",
+      "raised_by": "sustainability_analyst",
+      "next_step": "Not resolved in this tool. Verify with the relevant office before acting."
+    },
+    {
+      "question": "Site-specific LCA or measured kg CO2.",
+      "raised_by": "sustainability_analyst",
+      "next_step": "Not resolved in this tool. Verify with the relevant office before acting."
+    },
+    {
+      "question": "PA DEP eMapPA and EPA EJScreen were not retrieved.",
+      "raised_by": "sustainability_analyst",
+      "next_step": "Not resolved in this tool. Verify with the relevant office before acting."
+    }
+  ],
+  "responsible_use_note": "Decision support only \u2014 not legal, financial, or zoning advice. Verify findings with the relevant office before acting."
+}

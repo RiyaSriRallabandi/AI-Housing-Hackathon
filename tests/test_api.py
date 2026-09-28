@@ -28,6 +28,20 @@ def _client(tmp_path: Path, runner=None) -> TestClient:
     return TestClient(create_app(cache_root=tmp_path, runner=runner))
 
 
+def test_get_analysis_imports_committed_demo_without_llm(tmp_path: Path) -> None:
+    def boom(site_id: str):
+        raise AssertionError("LLM pipeline must not run when the demo analysis is present")
+
+    pin = "0139F00077000000"
+    response = _client(tmp_path, runner=boom).get(f"/analysis/{pin}")
+    assert response.status_code == 200
+    body = response.json()
+    assert body["from_cache"] is True
+    assert body["site_id"] == pin
+    assert len(body["round_1"]["assessments"]) == 30
+    assert len(body["chair"]["typology_comparison"]) == 6
+
+
 def test_get_analysis_returns_cache_without_runner(tmp_path: Path) -> None:
     _seed(tmp_path)
     calls = {"n": 0}

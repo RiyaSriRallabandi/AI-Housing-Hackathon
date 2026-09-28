@@ -15,8 +15,9 @@ from housing_review.schemas.chair import ChairSynthesis
 from housing_review.schemas.debate import Round1Transcript
 
 DEFAULT_ANALYSIS_DIR = REPO_ROOT / "data" / "cache" / "analysis"
-LIVE_DEMO_ROUND1 = REPO_ROOT / "data" / "cache" / "round1_live_gemini35lite_equity_guard.json"
-LIVE_DEMO_CHAIR = REPO_ROOT / "data" / "cache" / "chair_live.json"
+DEMO_ANALYSIS_DIR = REPO_ROOT / "data" / "demo" / "analysis"
+LIVE_DEMO_ROUND1 = DEMO_ANALYSIS_DIR / "0139F00077000000" / "round1.json"
+LIVE_DEMO_CHAIR = DEMO_ANALYSIS_DIR / "0139F00077000000" / "chair.json"
 AnalysisRunner = Callable[[str], tuple[Round1Transcript, ChairSynthesis]]
 
 

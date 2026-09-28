@@ -1,0 +1,1084 @@
+{
+  "site_id": "0139F00077000000",
+  "round": "1",
+  "independent": true,
+  "agents_in_order": [
+    "zoning_analyst",
+    "demographic_analyst",
+    "pro_forma_analyst",
+    "equity_analyst",
+    "sustainability_analyst"
+  ],
+  "assessments": [
+    {
+      "agent": "zoning_analyst",
+      "site_id": "0139F00077000000",
+      "typology": "duplex",
+      "score": 9,
+      "basis": "measured",
+      "claims": [
+        {
+          "statement": "Two-Unit Residential means the use of a zoning lot for two dwelling units that are contained within a single building.) in mapped district R2-L (Use Table column R2): P.",
+          "basis": "measured",
+          "source": "\u00a7911.02 Use Table",
+          "confidence_note": null
+        },
+        {
+          "statement": "Off-street parking minimum 1 per unit; maximum 2 per unit.",
+          "basis": "measured",
+          "source": "\u00a7914.02.A Parking Schedule A",
+          "confidence_note": null
+        },
+        {
+          "statement": "R2-L Low-Density: minimum lot 3000 sf; front 30 ft; rear 30 ft; exterior side 30 ft; interior side 5 ft; maximum height 40 ft (not to exceed 3 stories).",
+          "basis": "measured",
+          "source": "Chapter 903 \u00a7903.03 density table; https://ecode360.com/45474194; retrieved 2026-09-26",
+          "confidence_note": "Table values for this mapped density subdistrict. \u00a7925.06 / \u00a7925.07 alternatives are not applied here."
+        }
+      ],
+      "cannot_determine": [
+        "Whether a variance or special exception would actually be granted.",
+        "Permitting timelines.",
+        "Contextual setbacks or height alternatives under \u00a7925.06 / \u00a7925.07."
+      ],
+      "summary": "The use status is permitted (P) under the Use Table, providing a clear as-of-right path. However, development must navigate the steep slopes and floodplain overlay layers present on the site."
+    },
+    {
+      "agent": "zoning_analyst",
+      "site_id": "0139F00077000000",
+      "typology": "apartment",
+      "score": 1,
+      "basis": "measured",
+      "claims": [
+        {
+          "statement": "Multi-Unit Residential means the use of a zoning lot for four or more dwelling units that are contained within a single building. in mapped district R2-L (Use Table column R2): (blank \u2014 not permitted in this column).",
+          "basis": "measured",
+          "source": "\u00a7911.02 Use Table",
+          "confidence_note": null
+        },
+        {
+          "statement": "Off-street parking minimum 1 per unit; maximum 2 per unit.",
+          "basis": "measured",
+          "source": "\u00a7914.02.A Parking Schedule A",
+          "confidence_note": null
+        },
+        {
+          "statement": "R2-L Low-Density: minimum lot 3000 sf; front 30 ft; rear 30 ft; exterior side 30 ft; interior side 5 ft; maximum height 40 ft (not to exceed 3 stories).",
+          "basis": "measured",
+          "source": "Chapter 903 \u00a7903.03 density table; https://ecode360.com/45474194; retrieved 2026-09-26",
+          "confidence_note": "Table values for this mapped density subdistrict. \u00a7925.06 / \u00a7925.07 alternatives are not applied here."
+        }
+      ],
+      "cannot_determine": [
+        "Whether a variance or special exception would actually be granted.",
+        "Permitting timelines.",
+        "Contextual setbacks or height alternatives under \u00a7925.06 / \u00a7925.07."
+      ],
+      "summary": "The use status is blank and not permitted in this zoning district column, presenting a major barrier. Additional complexity arises from the presence of steep slopes and floodplain overlay layers."
+    },
+    {
+      "agent": "zoning_analyst",
+      "site_id": "0139F00077000000",
+      "typology": "townhome",
+      "score": 9,
+      "basis": "measured",
+      "claims": [
+        {
+          "statement": "Single-Unit Attached Residential means the use of a zoning lot for one dwelling unit that is attached to one or more dwelling units by a party wall or separate abutting wall and that is located on its own separate lot. in mapped district R2-L (Use Table column R2): P.",
+          "basis": "measured",
+          "source": "\u00a7911.02 Use Table",
+          "confidence_note": null
+        },
+        {
+          "statement": "Off-street parking minimum 0 per unit; maximum 4 per unit.",
+          "basis": "measured",
+          "source": "\u00a7914.02.A Parking Schedule A",
+          "confidence_note": null
+        },
+        {
+          "statement": "R2-L Low-Density: minimum lot 3000 sf; front 30 ft; rear 30 ft; exterior side 30 ft; interior side 5 ft; maximum height 40 ft (not to exceed 3 stories).",
+          "basis": "measured",
+          "source": "Chapter 903 \u00a7903.03 density table; https://ecode360.com/45474194; retrieved 2026-09-26",
+          "confidence_note": "Table values for this mapped density subdistrict. \u00a7925.06 / \u00a7925.07 alternatives are not applied here."
+        }
+      ],
+      "cannot_determine": [
+        "Whether a variance or special exception would actually be granted.",
+        "Permitting timelines.",
+        "Contextual setbacks or height alternatives under \u00a7925.06 / \u00a7925.07."
+      ],
+      "summary": "This typology holds a permitted (P) use status in the Use Table for an as-of-right approval path. Site development must still account for the mapped steep slopes and floodplain overlay layers."
+    },
+    {
+      "agent": "zoning_analyst",
+      "site_id": "0139F00077000000",
+      "typology": "adu",
+      "score": 2,
+      "basis": "measured",
+      "claims": [
+        {
+          "statement": "Accessory Dwelling Unit in mapped district R2-L (Use Table column R2): not a \u00a7911.02 primary-use row; overlay + Chapter 912.",
+          "basis": "measured",
+          "source": "\u00a7912.08",
+          "confidence_note": null
+        },
+        {
+          "statement": "Off-street parking: exempt from Section 914 on-site parking (if ADU Overlay applies).",
+          "basis": "measured",
+          "source": "\u00a7912.08 (Accessory Dwelling Units shall be exempt from the on-site parking requirements of Section 914)",
+          "confidence_note": null
+        },
+        {
+          "statement": "R2-L Low-Density: minimum lot 3000 sf; front 30 ft; rear 30 ft; exterior side 30 ft; interior side 5 ft; maximum height 40 ft (not to exceed 3 stories).",
+          "basis": "measured",
+          "source": "Chapter 903 \u00a7903.03 density table; https://ecode360.com/45474194; retrieved 2026-09-26",
+          "confidence_note": "Table values for this mapped density subdistrict. \u00a7925.06 / \u00a7925.07 alternatives are not applied here."
+        },
+        {
+          "statement": "Live PGHWebZoningOverlays query for ADU / Accessory Dwelling labels: in_adu_overlay=False.",
+          "basis": "measured",
+          "source": "https://services1.arcgis.com/YZCmUqbcsUpOKfj7/arcgis/rest/services/PGHWebZoningOverlays/FeatureServer/0",
+          "confidence_note": "Last live PGHWebZoningOverlays ADU query (2026-09-27): no ADU-named polygon at this centroid. Fixture Round 1 does not re-query GIS."
+        }
+      ],
+      "cannot_determine": [
+        "Whether a variance or special exception would actually be granted.",
+        "Permitting timelines.",
+        "Contextual setbacks or height alternatives under \u00a7925.06 / \u00a7925.07."
+      ],
+      "summary": "The GIS query confirms the site is not located within the ADU overlay, introducing significant regulatory uncertainty for approval. Furthermore, the property is subject to steep slopes and floodplain overlay requirements."
+    },
+    {
+      "agent": "zoning_analyst",
+      "site_id": "0139F00077000000",
+      "typology": "senior_housing",
+      "score": 4,
+      "basis": "measured",
+      "claims": [
+        {
+          "statement": "Housing for the Elderly (Limited) means a Housing for the Elderly use with less than 30 units., Housing for the Elderly (General) means a Housing for the Elderly use with 30 or more units. in mapped district R2-L (Use Table column R2): S; (blank \u2014 not permitted in this column).",
+          "basis": "measured",
+          "source": "\u00a7911.02 Use Table",
+          "confidence_note": null
+        },
+        {
+          "statement": "Off-street parking minimum Parking Demand Analysis Required, see Section 914.02.B; maximum see Section 914.02.B.",
+          "basis": "measured",
+          "source": "\u00a7914.02.A Parking Schedule A",
+          "confidence_note": null
+        },
+        {
+          "statement": "R2-L Low-Density: minimum lot 3000 sf; front 30 ft; rear 30 ft; exterior side 30 ft; interior side 5 ft; maximum height 40 ft (not to exceed 3 stories).",
+          "basis": "measured",
+          "source": "Chapter 903 \u00a7903.03 density table; https://ecode360.com/45474194; retrieved 2026-09-26",
+          "confidence_note": "Table values for this mapped density subdistrict. \u00a7925.06 / \u00a7925.07 alternatives are not applied here."
+        }
+      ],
+      "cannot_determine": [
+        "Whether a variance or special exception would actually be granted.",
+        "Permitting timelines.",
+        "Contextual setbacks or height alternatives under \u00a7925.06 / \u00a7925.07."
+      ],
+      "summary": "Limited housing for the elderly requires a special exception (S), while general housing for the elderly is blank and not permitted. Review complexity is heightened by the presence of steep slopes and floodplain overlay layers."
+    },
+    {
+      "agent": "zoning_analyst",
+      "site_id": "0139F00077000000",
+      "typology": "detached_single_family",
+      "score": 10,
+      "basis": "measured",
+      "claims": [
+        {
+          "statement": "Single-Unit Detached Residential means the use of a zoning lot for one detached housing unit. in mapped district R2-L (Use Table column R2): P.",
+          "basis": "measured",
+          "source": "\u00a7911.02 Use Table",
+          "confidence_note": null
+        },
+        {
+          "statement": "Off-street parking minimum 1 per unit; maximum 4 per unit.",
+          "basis": "measured",
+          "source": "\u00a7914.02.A Parking Schedule A",
+          "confidence_note": null
+        },
+        {
+          "statement": "R2-L Low-Density: minimum lot 3000 sf; front 30 ft; rear 30 ft; exterior side 30 ft; interior side 5 ft; maximum height 40 ft (not to exceed 3 stories).",
+          "basis": "measured",
+          "source": "Chapter 903 \u00a7903.03 density table; https://ecode360.com/45474194; retrieved 2026-09-26",
+          "confidence_note": "Table values for this mapped density subdistrict. \u00a7925.06 / \u00a7925.07 alternatives are not applied here."
+        }
+      ],
+      "cannot_determine": [
+        "Whether a variance or special exception would actually be granted.",
+        "Permitting timelines.",
+        "Contextual setbacks or height alternatives under \u00a7925.06 / \u00a7925.07."
+      ],
+      "summary": "This typology benefits from a permitted (P) use status providing the most direct as-of-right regulatory path. Site-specific planning must still address the active steep slopes and floodplain overlay layers."
+    },
+    {
+      "agent": "demographic_analyst",
+      "site_id": "0139F00077000000",
+      "typology": "duplex",
+      "score": 6,
+      "basis": "measured",
+      "claims": [
+        {
+          "statement": "ACS 2019-2023 average household size is 2.12 (MOE \u00b10.2); ACS 2014-2018 was 2.3 (MOE \u00b10.13).",
+          "basis": "measured",
+          "source": "ACS 5-Year 2019-2023 table ACSDT5Y2023.B25010 variable B25010_001E",
+          "confidence_note": "Change in average household size (2.3 to 2.12) is smaller than combined MOE (\u00b10.24); treat as not statistically distinguished."
+        },
+        {
+          "statement": "ACS 2019-2023 vacancy rate is 0.0463 (122 vacant of 2637 units). 2020 Census PL vacant units: 154.",
+          "basis": "measured",
+          "source": "ACS 5-Year 2019-2023 table ACSDT5Y2023.B25002 variable B25002_003E/B25002_001E",
+          "confidence_note": "Vacancy is ACS/Decennial housing-unit status, not USPS postal vacancy."
+        },
+        {
+          "statement": "Tract population ACS 2019-2023 5332 (MOE \u00b1663); ACS 2014-2018 5459 (MOE \u00b1381); 2020 Census PL 5252.",
+          "basis": "measured",
+          "source": "ACS 5-Year 2019-2023 table ACSDT5Y2023.B01003 variable B01003_001E",
+          "confidence_note": null
+        },
+        {
+          "statement": "ACS 2019-2023 units 2 count is 255 (MOE \u00b1156) (inventory mix for demand-fit context, not vacancy by typology).",
+          "basis": "measured",
+          "source": "ACS 5-Year 2019-2023 table ACSDT5Y2023.B25024 variable B25024_004E",
+          "confidence_note": null
+        }
+      ],
+      "cannot_determine": [
+        "USPS postal vacancy was not retrieved.",
+        "ACS tables retrieved do not split vacancy rate by units-in-structure; B25024 is inventory mix, not vacancy by typology.",
+        "County Housing Needs Assessment is subregion-scale and was not used for parcel-level claims."
+      ],
+      "summary": "Trends suggest moderate representation of multi-unit structures within the existing inventory. This is consistent with a mixed residential profile supporting smaller configurations."
+    },
+    {
+      "agent": "demographic_analyst",
+      "site_id": "0139F00077000000",
+      "typology": "apartment",
+      "score": 5,
+      "basis": "measured",
+      "claims": [
+        {
+          "statement": "ACS 2019-2023 average household size is 2.12 (MOE \u00b10.2); ACS 2014-2018 was 2.3 (MOE \u00b10.13).",
+          "basis": "measured",
+          "source": "ACS 5-Year 2019-2023 table ACSDT5Y2023.B25010 variable B25010_001E",
+          "confidence_note": "Change in average household size (2.3 to 2.12) is smaller than combined MOE (\u00b10.24); treat as not statistically distinguished."
+        },
+        {
+          "statement": "ACS 2019-2023 vacancy rate is 0.0463 (122 vacant of 2637 units). 2020 Census PL vacant units: 154.",
+          "basis": "measured",
+          "source": "ACS 5-Year 2019-2023 table ACSDT5Y2023.B25002 variable B25002_003E/B25002_001E",
+          "confidence_note": "Vacancy is ACS/Decennial housing-unit status, not USPS postal vacancy."
+        },
+        {
+          "statement": "Tract population ACS 2019-2023 5332 (MOE \u00b1663); ACS 2014-2018 5459 (MOE \u00b1381); 2020 Census PL 5252.",
+          "basis": "measured",
+          "source": "ACS 5-Year 2019-2023 table ACSDT5Y2023.B01003 variable B01003_001E",
+          "confidence_note": null
+        },
+        {
+          "statement": "ACS 2019-2023 units 5 or more count is 283 (inventory mix for demand-fit context, not vacancy by typology).",
+          "basis": "measured",
+          "source": "ACS 5-Year 2019-2023 table ACSDT5Y2023.B25024 variable B25024_006E+B25024_007E+B25024_008E+B25024_009E",
+          "confidence_note": null
+        }
+      ],
+      "cannot_determine": [
+        "USPS postal vacancy was not retrieved.",
+        "ACS tables retrieved do not split vacancy rate by units-in-structure; B25024 is inventory mix, not vacancy by typology.",
+        "County Housing Needs Assessment is subregion-scale and was not used for parcel-level claims."
+      ],
+      "summary": "Trends suggest limited multifamily presence in the current structural inventory. This is consistent with a predominantly single-family landscape."
+    },
+    {
+      "agent": "demographic_analyst",
+      "site_id": "0139F00077000000",
+      "typology": "townhome",
+      "score": 3,
+      "basis": "measured",
+      "claims": [
+        {
+          "statement": "ACS 2019-2023 average household size is 2.12 (MOE \u00b10.2); ACS 2014-2018 was 2.3 (MOE \u00b10.13).",
+          "basis": "measured",
+          "source": "ACS 5-Year 2019-2023 table ACSDT5Y2023.B25010 variable B25010_001E",
+          "confidence_note": "Change in average household size (2.3 to 2.12) is smaller than combined MOE (\u00b10.24); treat as not statistically distinguished."
+        },
+        {
+          "statement": "ACS 2019-2023 vacancy rate is 0.0463 (122 vacant of 2637 units). 2020 Census PL vacant units: 154.",
+          "basis": "measured",
+          "source": "ACS 5-Year 2019-2023 table ACSDT5Y2023.B25002 variable B25002_003E/B25002_001E",
+          "confidence_note": "Vacancy is ACS/Decennial housing-unit status, not USPS postal vacancy."
+        },
+        {
+          "statement": "Tract population ACS 2019-2023 5332 (MOE \u00b1663); ACS 2014-2018 5459 (MOE \u00b1381); 2020 Census PL 5252.",
+          "basis": "measured",
+          "source": "ACS 5-Year 2019-2023 table ACSDT5Y2023.B01003 variable B01003_001E",
+          "confidence_note": null
+        },
+        {
+          "statement": "ACS 2019-2023 units 1 attached count is 29 (MOE \u00b139) (inventory mix for demand-fit context, not vacancy by typology).",
+          "basis": "measured",
+          "source": "ACS 5-Year 2019-2023 table ACSDT5Y2023.B25024 variable B25024_003E",
+          "confidence_note": null
+        }
+      ],
+      "cannot_determine": [
+        "USPS postal vacancy was not retrieved.",
+        "ACS tables retrieved do not split vacancy rate by units-in-structure; B25024 is inventory mix, not vacancy by typology.",
+        "County Housing Needs Assessment is subregion-scale and was not used for parcel-level claims."
+      ],
+      "summary": "Trends suggest very low baseline counts of attached single-family structures in the area. This is consistent with a structural stock heavily weighted toward detached units."
+    },
+    {
+      "agent": "demographic_analyst",
+      "site_id": "0139F00077000000",
+      "typology": "adu",
+      "score": 7,
+      "basis": "trend_inferred",
+      "claims": [
+        {
+          "statement": "ACS 2019-2023 average household size is 2.12 (MOE \u00b10.2); ACS 2014-2018 was 2.3 (MOE \u00b10.13).",
+          "basis": "measured",
+          "source": "ACS 5-Year 2019-2023 table ACSDT5Y2023.B25010 variable B25010_001E",
+          "confidence_note": "Change in average household size (2.3 to 2.12) is smaller than combined MOE (\u00b10.24); treat as not statistically distinguished."
+        },
+        {
+          "statement": "ACS 2019-2023 vacancy rate is 0.0463 (122 vacant of 2637 units). 2020 Census PL vacant units: 154.",
+          "basis": "measured",
+          "source": "ACS 5-Year 2019-2023 table ACSDT5Y2023.B25002 variable B25002_003E/B25002_001E",
+          "confidence_note": "Vacancy is ACS/Decennial housing-unit status, not USPS postal vacancy."
+        },
+        {
+          "statement": "Tract population ACS 2019-2023 5332 (MOE \u00b1663); ACS 2014-2018 5459 (MOE \u00b1381); 2020 Census PL 5252.",
+          "basis": "measured",
+          "source": "ACS 5-Year 2019-2023 table ACSDT5Y2023.B01003 variable B01003_001E",
+          "confidence_note": null
+        },
+        {
+          "statement": "ACS 2019-2023 nonfamily households count is 1244 (MOE \u00b1335) (inventory mix for demand-fit context, not vacancy by typology).",
+          "basis": "measured",
+          "source": "ACS 5-Year 2019-2023 table ACSDT5Y2023.B11001 variable B11001_007E",
+          "confidence_note": null
+        }
+      ],
+      "cannot_determine": [
+        "USPS postal vacancy was not retrieved.",
+        "ACS tables retrieved do not split vacancy rate by units-in-structure; B25024 is inventory mix, not vacancy by typology.",
+        "County Housing Needs Assessment is subregion-scale and was not used for parcel-level claims."
+      ],
+      "summary": "Trends suggest a substantial nonfamily household segment relative to overall totals. This is consistent with potential for accessory or smaller footprint configurations."
+    },
+    {
+      "agent": "demographic_analyst",
+      "site_id": "0139F00077000000",
+      "typology": "senior_housing",
+      "score": 8,
+      "basis": "measured",
+      "claims": [
+        {
+          "statement": "ACS 2019-2023 average household size is 2.12 (MOE \u00b10.2); ACS 2014-2018 was 2.3 (MOE \u00b10.13).",
+          "basis": "measured",
+          "source": "ACS 5-Year 2019-2023 table ACSDT5Y2023.B25010 variable B25010_001E",
+          "confidence_note": "Change in average household size (2.3 to 2.12) is smaller than combined MOE (\u00b10.24); treat as not statistically distinguished."
+        },
+        {
+          "statement": "ACS 2019-2023 vacancy rate is 0.0463 (122 vacant of 2637 units). 2020 Census PL vacant units: 154.",
+          "basis": "measured",
+          "source": "ACS 5-Year 2019-2023 table ACSDT5Y2023.B25002 variable B25002_003E/B25002_001E",
+          "confidence_note": "Vacancy is ACS/Decennial housing-unit status, not USPS postal vacancy."
+        },
+        {
+          "statement": "Tract population ACS 2019-2023 5332 (MOE \u00b1663); ACS 2014-2018 5459 (MOE \u00b1381); 2020 Census PL 5252.",
+          "basis": "measured",
+          "source": "ACS 5-Year 2019-2023 table ACSDT5Y2023.B01003 variable B01003_001E",
+          "confidence_note": null
+        },
+        {
+          "statement": "ACS 2019-2023 population 65 plus count is 1052 (inventory mix for demand-fit context, not vacancy by typology).",
+          "basis": "measured",
+          "source": "ACS 5-Year 2019-2023 table ACSDT5Y2023.B01001 variable B01001_020E-025E+B01001_044E-049E",
+          "confidence_note": null
+        }
+      ],
+      "cannot_determine": [
+        "USPS postal vacancy was not retrieved.",
+        "ACS tables retrieved do not split vacancy rate by units-in-structure; B25024 is inventory mix, not vacancy by typology.",
+        "County Housing Needs Assessment is subregion-scale and was not used for parcel-level claims."
+      ],
+      "summary": "Trends suggest a notable portion of the population aged sixty-five and older. This is consistent with structural considerations tailored toward older demographics."
+    },
+    {
+      "agent": "demographic_analyst",
+      "site_id": "0139F00077000000",
+      "typology": "detached_single_family",
+      "score": 9,
+      "basis": "measured",
+      "claims": [
+        {
+          "statement": "ACS 2019-2023 average household size is 2.12 (MOE \u00b10.2); ACS 2014-2018 was 2.3 (MOE \u00b10.13).",
+          "basis": "measured",
+          "source": "ACS 5-Year 2019-2023 table ACSDT5Y2023.B25010 variable B25010_001E",
+          "confidence_note": "Change in average household size (2.3 to 2.12) is smaller than combined MOE (\u00b10.24); treat as not statistically distinguished."
+        },
+        {
+          "statement": "ACS 2019-2023 vacancy rate is 0.0463 (122 vacant of 2637 units). 2020 Census PL vacant units: 154.",
+          "basis": "measured",
+          "source": "ACS 5-Year 2019-2023 table ACSDT5Y2023.B25002 variable B25002_003E/B25002_001E",
+          "confidence_note": "Vacancy is ACS/Decennial housing-unit status, not USPS postal vacancy."
+        },
+        {
+          "statement": "Tract population ACS 2019-2023 5332 (MOE \u00b1663); ACS 2014-2018 5459 (MOE \u00b1381); 2020 Census PL 5252.",
+          "basis": "measured",
+          "source": "ACS 5-Year 2019-2023 table ACSDT5Y2023.B01003 variable B01003_001E",
+          "confidence_note": null
+        },
+        {
+          "statement": "ACS 2019-2023 units 1 detached count is 2033 (MOE \u00b1314) (inventory mix for demand-fit context, not vacancy by typology).",
+          "basis": "measured",
+          "source": "ACS 5-Year 2019-2023 table ACSDT5Y2023.B25024 variable B25024_002E",
+          "confidence_note": null
+        }
+      ],
+      "cannot_determine": [
+        "USPS postal vacancy was not retrieved.",
+        "ACS tables retrieved do not split vacancy rate by units-in-structure; B25024 is inventory mix, not vacancy by typology.",
+        "County Housing Needs Assessment is subregion-scale and was not used for parcel-level claims."
+      ],
+      "summary": "Trends suggest detached single-family homes comprise the vast majority of the existing housing stock. This is consistent with historical development patterns in the tract."
+    },
+    {
+      "agent": "pro_forma_analyst",
+      "site_id": "0139F00077000000",
+      "typology": "duplex",
+      "score": 6,
+      "basis": "estimated",
+      "claims": [
+        {
+          "statement": "Assessed land value is $30000; building $147300; total $177300; lot 5031 sf; FINISHEDLIVINGAREA=1704 sf.",
+          "basis": "measured",
+          "source": "WPRDC property assessments PARID 0139F00077000000 FAIRMARKETLAND; https://data.wprdc.org/api/3/action/datastore_search?resource_id=65855e14-549e-4992-b5be-d629afc676fa; resource 65855e14-549e-4992-b5be-d629afc676fa; https://data.wprdc.org/dataset/property-assessments",
+          "confidence_note": "Assessed value is not market value \u2014 do not conflate the two. API version resource; last_etl_update 2026-09-07 on WPRDC metadata. USEDESC is an assessment class, not a Title 9 use."
+        },
+        {
+          "statement": "ICC Building Valuation Data \u2013 AUGUST 2026 occupancy R-3 (Residential, one- and two-family), construction type VB: $177.63/sf national average. Implied building cost using existing 1704 sf proxy: $302681.52 (estimated).",
+          "basis": "estimated",
+          "source": "Building Valuation Data \u2013 AUGUST 2026 (https://www.iccsafe.org/wp-content/uploads/BVD-BSJ-AUG2026.pdf); occupancy R-3 (Residential, one- and two-family), construction type VB; $177.63/sf national average. Not Pittsburgh-specific. ICC: not an estimating guide; excludes land.",
+          "confidence_note": "National average, not Pittsburgh-specific. ICC is not an estimating guide and excludes land."
+        },
+        {
+          "statement": "This parcel's recorded transfer is QUIT CLAIM on 2015-07-02 at $215000.0; likely_arms_length=False. 8 zip-filtered VALID SALE comps were retrieved.",
+          "basis": "measured",
+          "source": "WPRDC real-estate sales resource 5bbe6c55-bce6-4edb-9d04-68edeb6bf7b1; https://data.wprdc.org/dataset/real-estate-sales; https://data.wprdc.org/dataset/real-estate-sales; retrieved 2026-09-26",
+          "confidence_note": "Filter using sale-validation codes; many transfers are not arm's-length sales. Only SALECODE=0 (VALID SALE) is treated as a comparable. Quit-claim, sheriff, love-and-affection, and multi-parcel sales are excluded from comps."
+        },
+        {
+          "statement": "Median price of 8 zip-filtered VALID SALE comps is $295500.0 (code-computed sample median, not a market appraisal).",
+          "basis": "measured",
+          "source": "WPRDC real-estate sales resource 5bbe6c55-bce6-4edb-9d04-68edeb6bf7b1; https://data.wprdc.org/dataset/real-estate-sales; https://data.wprdc.org/dataset/real-estate-sales; retrieved 2026-09-26",
+          "confidence_note": "Median of the retrieved VALID SALE sample only. Do not recompute medians or averages from a raw comps list."
+        }
+      ],
+      "cannot_determine": [
+        "Financing terms, interest rates, and developer profit margins are not in the payload."
+      ],
+      "summary": "Implied construction costs relative to valid sales comps suggest moderate capital return potential, though quit-claim parcel transfer limits precise site-value conclusions."
+    },
+    {
+      "agent": "pro_forma_analyst",
+      "site_id": "0139F00077000000",
+      "typology": "apartment",
+      "score": 7,
+      "basis": "estimated",
+      "claims": [
+        {
+          "statement": "Assessed land value is $30000; building $147300; total $177300; lot 5031 sf; FINISHEDLIVINGAREA=1704 sf.",
+          "basis": "measured",
+          "source": "WPRDC property assessments PARID 0139F00077000000 FAIRMARKETLAND; https://data.wprdc.org/api/3/action/datastore_search?resource_id=65855e14-549e-4992-b5be-d629afc676fa; resource 65855e14-549e-4992-b5be-d629afc676fa; https://data.wprdc.org/dataset/property-assessments",
+          "confidence_note": "Assessed value is not market value \u2014 do not conflate the two. API version resource; last_etl_update 2026-09-07 on WPRDC metadata. USEDESC is an assessment class, not a Title 9 use."
+        },
+        {
+          "statement": "ICC Building Valuation Data \u2013 AUGUST 2026 occupancy R-2 (Residential, multiple family), construction type VB: $159.71/sf national average. Implied building cost using existing 1704 sf proxy: $272145.84 (estimated).",
+          "basis": "estimated",
+          "source": "Building Valuation Data \u2013 AUGUST 2026 (https://www.iccsafe.org/wp-content/uploads/BVD-BSJ-AUG2026.pdf); occupancy R-2 (Residential, multiple family), construction type VB; $159.71/sf national average. Not Pittsburgh-specific. ICC: not an estimating guide; excludes land.",
+          "confidence_note": "National average, not Pittsburgh-specific. ICC is not an estimating guide and excludes land."
+        },
+        {
+          "statement": "This parcel's recorded transfer is QUIT CLAIM on 2015-07-02 at $215000.0; likely_arms_length=False. 8 zip-filtered VALID SALE comps were retrieved.",
+          "basis": "measured",
+          "source": "WPRDC real-estate sales resource 5bbe6c55-bce6-4edb-9d04-68edeb6bf7b1; https://data.wprdc.org/dataset/real-estate-sales; https://data.wprdc.org/dataset/real-estate-sales; retrieved 2026-09-26",
+          "confidence_note": "Filter using sale-validation codes; many transfers are not arm's-length sales. Only SALECODE=0 (VALID SALE) is treated as a comparable. Quit-claim, sheriff, love-and-affection, and multi-parcel sales are excluded from comps."
+        },
+        {
+          "statement": "Median price of 8 zip-filtered VALID SALE comps is $295500.0 (code-computed sample median, not a market appraisal).",
+          "basis": "measured",
+          "source": "WPRDC real-estate sales resource 5bbe6c55-bce6-4edb-9d04-68edeb6bf7b1; https://data.wprdc.org/dataset/real-estate-sales; https://data.wprdc.org/dataset/real-estate-sales; retrieved 2026-09-26",
+          "confidence_note": "Median of the retrieved VALID SALE sample only. Do not recompute medians or averages from a raw comps list."
+        }
+      ],
+      "cannot_determine": [
+        "Financing terms, interest rates, and developer profit margins are not in the payload.",
+        "FINISHEDLIVINGAREA on the existing building is a size proxy for a full replacement, not the increment for an ADU or a different multi-unit program."
+      ],
+      "summary": "Lower per-square-foot construction costs improve comparative financial feasibility, using whole-house finished area as a baseline proxy."
+    },
+    {
+      "agent": "pro_forma_analyst",
+      "site_id": "0139F00077000000",
+      "typology": "townhome",
+      "score": 6,
+      "basis": "estimated",
+      "claims": [
+        {
+          "statement": "Assessed land value is $30000; building $147300; total $177300; lot 5031 sf; FINISHEDLIVINGAREA=1704 sf.",
+          "basis": "measured",
+          "source": "WPRDC property assessments PARID 0139F00077000000 FAIRMARKETLAND; https://data.wprdc.org/api/3/action/datastore_search?resource_id=65855e14-549e-4992-b5be-d629afc676fa; resource 65855e14-549e-4992-b5be-d629afc676fa; https://data.wprdc.org/dataset/property-assessments",
+          "confidence_note": "Assessed value is not market value \u2014 do not conflate the two. API version resource; last_etl_update 2026-09-07 on WPRDC metadata. USEDESC is an assessment class, not a Title 9 use."
+        },
+        {
+          "statement": "ICC Building Valuation Data \u2013 AUGUST 2026 occupancy R-3 (Residential, one- and two-family), construction type VB: $177.63/sf national average. Implied building cost using existing 1704 sf proxy: $302681.52 (estimated).",
+          "basis": "estimated",
+          "source": "Building Valuation Data \u2013 AUGUST 2026 (https://www.iccsafe.org/wp-content/uploads/BVD-BSJ-AUG2026.pdf); occupancy R-3 (Residential, one- and two-family), construction type VB; $177.63/sf national average. Not Pittsburgh-specific. ICC: not an estimating guide; excludes land.",
+          "confidence_note": "National average, not Pittsburgh-specific. ICC is not an estimating guide and excludes land."
+        },
+        {
+          "statement": "This parcel's recorded transfer is QUIT CLAIM on 2015-07-02 at $215000.0; likely_arms_length=False. 8 zip-filtered VALID SALE comps were retrieved.",
+          "basis": "measured",
+          "source": "WPRDC real-estate sales resource 5bbe6c55-bce6-4edb-9d04-68edeb6bf7b1; https://data.wprdc.org/dataset/real-estate-sales; https://data.wprdc.org/dataset/real-estate-sales; retrieved 2026-09-26",
+          "confidence_note": "Filter using sale-validation codes; many transfers are not arm's-length sales. Only SALECODE=0 (VALID SALE) is treated as a comparable. Quit-claim, sheriff, love-and-affection, and multi-parcel sales are excluded from comps."
+        },
+        {
+          "statement": "Median price of 8 zip-filtered VALID SALE comps is $295500.0 (code-computed sample median, not a market appraisal).",
+          "basis": "measured",
+          "source": "WPRDC real-estate sales resource 5bbe6c55-bce6-4edb-9d04-68edeb6bf7b1; https://data.wprdc.org/dataset/real-estate-sales; https://data.wprdc.org/dataset/real-estate-sales; retrieved 2026-09-26",
+          "confidence_note": "Median of the retrieved VALID SALE sample only. Do not recompute medians or averages from a raw comps list."
+        }
+      ],
+      "cannot_determine": [
+        "Financing terms, interest rates, and developer profit margins are not in the payload."
+      ],
+      "summary": "Estimated building costs align closely with general residential benchmarks, providing a balanced baseline for financial viability."
+    },
+    {
+      "agent": "pro_forma_analyst",
+      "site_id": "0139F00077000000",
+      "typology": "adu",
+      "score": 5,
+      "basis": "estimated",
+      "claims": [
+        {
+          "statement": "Assessed land value is $30000; building $147300; total $177300; lot 5031 sf; FINISHEDLIVINGAREA=1704 sf.",
+          "basis": "measured",
+          "source": "WPRDC property assessments PARID 0139F00077000000 FAIRMARKETLAND; https://data.wprdc.org/api/3/action/datastore_search?resource_id=65855e14-549e-4992-b5be-d629afc676fa; resource 65855e14-549e-4992-b5be-d629afc676fa; https://data.wprdc.org/dataset/property-assessments",
+          "confidence_note": "Assessed value is not market value \u2014 do not conflate the two. API version resource; last_etl_update 2026-09-07 on WPRDC metadata. USEDESC is an assessment class, not a Title 9 use."
+        },
+        {
+          "statement": "ICC Building Valuation Data \u2013 AUGUST 2026 occupancy R-3 (Residential, one- and two-family), construction type VB: $177.63/sf national average. Implied building cost using existing 1704 sf proxy: $302681.52 (estimated).",
+          "basis": "estimated",
+          "source": "Building Valuation Data \u2013 AUGUST 2026 (https://www.iccsafe.org/wp-content/uploads/BVD-BSJ-AUG2026.pdf); occupancy R-3 (Residential, one- and two-family), construction type VB; $177.63/sf national average. Not Pittsburgh-specific. ICC: not an estimating guide; excludes land.",
+          "confidence_note": "National average, not Pittsburgh-specific. ICC is not an estimating guide and excludes land."
+        },
+        {
+          "statement": "This parcel's recorded transfer is QUIT CLAIM on 2015-07-02 at $215000.0; likely_arms_length=False. 8 zip-filtered VALID SALE comps were retrieved.",
+          "basis": "measured",
+          "source": "WPRDC real-estate sales resource 5bbe6c55-bce6-4edb-9d04-68edeb6bf7b1; https://data.wprdc.org/dataset/real-estate-sales; https://data.wprdc.org/dataset/real-estate-sales; retrieved 2026-09-26",
+          "confidence_note": "Filter using sale-validation codes; many transfers are not arm's-length sales. Only SALECODE=0 (VALID SALE) is treated as a comparable. Quit-claim, sheriff, love-and-affection, and multi-parcel sales are excluded from comps."
+        },
+        {
+          "statement": "Median price of 8 zip-filtered VALID SALE comps is $295500.0 (code-computed sample median, not a market appraisal).",
+          "basis": "measured",
+          "source": "WPRDC real-estate sales resource 5bbe6c55-bce6-4edb-9d04-68edeb6bf7b1; https://data.wprdc.org/dataset/real-estate-sales; https://data.wprdc.org/dataset/real-estate-sales; retrieved 2026-09-26",
+          "confidence_note": "Median of the retrieved VALID SALE sample only. Do not recompute medians or averages from a raw comps list."
+        }
+      ],
+      "cannot_determine": [
+        "Financing terms, interest rates, and developer profit margins are not in the payload.",
+        "FINISHEDLIVINGAREA on the existing building is a size proxy for a full replacement, not the increment for an ADU or a different multi-unit program."
+      ],
+      "summary": "Applying whole-house size proxies to smaller increment typologies introduces uncertainty regarding exact capital outlay relative to market medians."
+    },
+    {
+      "agent": "pro_forma_analyst",
+      "site_id": "0139F00077000000",
+      "typology": "senior_housing",
+      "score": 4,
+      "basis": "estimated",
+      "claims": [
+        {
+          "statement": "Assessed land value is $30000; building $147300; total $177300; lot 5031 sf; FINISHEDLIVINGAREA=1704 sf.",
+          "basis": "measured",
+          "source": "WPRDC property assessments PARID 0139F00077000000 FAIRMARKETLAND; https://data.wprdc.org/api/3/action/datastore_search?resource_id=65855e14-549e-4992-b5be-d629afc676fa; resource 65855e14-549e-4992-b5be-d629afc676fa; https://data.wprdc.org/dataset/property-assessments",
+          "confidence_note": "Assessed value is not market value \u2014 do not conflate the two. API version resource; last_etl_update 2026-09-07 on WPRDC metadata. USEDESC is an assessment class, not a Title 9 use."
+        },
+        {
+          "statement": "ICC Building Valuation Data \u2013 AUGUST 2026 occupancy R-4 (Residential, care/assisted living facilities), construction type VB: $203.38/sf national average. Implied building cost using existing 1704 sf proxy: $346559.52 (estimated).",
+          "basis": "estimated",
+          "source": "Building Valuation Data \u2013 AUGUST 2026 (https://www.iccsafe.org/wp-content/uploads/BVD-BSJ-AUG2026.pdf); occupancy R-4 (Residential, care/assisted living facilities), construction type VB; $203.38/sf national average. Not Pittsburgh-specific. ICC: not an estimating guide; excludes land.",
+          "confidence_note": "National average, not Pittsburgh-specific. ICC is not an estimating guide and excludes land."
+        },
+        {
+          "statement": "This parcel's recorded transfer is QUIT CLAIM on 2015-07-02 at $215000.0; likely_arms_length=False. 8 zip-filtered VALID SALE comps were retrieved.",
+          "basis": "measured",
+          "source": "WPRDC real-estate sales resource 5bbe6c55-bce6-4edb-9d04-68edeb6bf7b1; https://data.wprdc.org/dataset/real-estate-sales; https://data.wprdc.org/dataset/real-estate-sales; retrieved 2026-09-26",
+          "confidence_note": "Filter using sale-validation codes; many transfers are not arm's-length sales. Only SALECODE=0 (VALID SALE) is treated as a comparable. Quit-claim, sheriff, love-and-affection, and multi-parcel sales are excluded from comps."
+        },
+        {
+          "statement": "Median price of 8 zip-filtered VALID SALE comps is $295500.0 (code-computed sample median, not a market appraisal).",
+          "basis": "measured",
+          "source": "WPRDC real-estate sales resource 5bbe6c55-bce6-4edb-9d04-68edeb6bf7b1; https://data.wprdc.org/dataset/real-estate-sales; https://data.wprdc.org/dataset/real-estate-sales; retrieved 2026-09-26",
+          "confidence_note": "Median of the retrieved VALID SALE sample only. Do not recompute medians or averages from a raw comps list."
+        }
+      ],
+      "cannot_determine": [
+        "Financing terms, interest rates, and developer profit margins are not in the payload.",
+        "FINISHEDLIVINGAREA on the existing building is a size proxy for a full replacement, not the increment for an ADU or a different multi-unit program."
+      ],
+      "summary": "Higher per-square-foot construction costs for R-4 occupancy reduce the relative return on capital compared to standard residential typologies."
+    },
+    {
+      "agent": "pro_forma_analyst",
+      "site_id": "0139F00077000000",
+      "typology": "detached_single_family",
+      "score": 6,
+      "basis": "estimated",
+      "claims": [
+        {
+          "statement": "Assessed land value is $30000; building $147300; total $177300; lot 5031 sf; FINISHEDLIVINGAREA=1704 sf.",
+          "basis": "measured",
+          "source": "WPRDC property assessments PARID 0139F00077000000 FAIRMARKETLAND; https://data.wprdc.org/api/3/action/datastore_search?resource_id=65855e14-549e-4992-b5be-d629afc676fa; resource 65855e14-549e-4992-b5be-d629afc676fa; https://data.wprdc.org/dataset/property-assessments",
+          "confidence_note": "Assessed value is not market value \u2014 do not conflate the two. API version resource; last_etl_update 2026-09-07 on WPRDC metadata. USEDESC is an assessment class, not a Title 9 use."
+        },
+        {
+          "statement": "ICC Building Valuation Data \u2013 AUGUST 2026 occupancy R-3 (Residential, one- and two-family), construction type VB: $177.63/sf national average. Implied building cost using existing 1704 sf proxy: $302681.52 (estimated).",
+          "basis": "estimated",
+          "source": "Building Valuation Data \u2013 AUGUST 2026 (https://www.iccsafe.org/wp-content/uploads/BVD-BSJ-AUG2026.pdf); occupancy R-3 (Residential, one- and two-family), construction type VB; $177.63/sf national average. Not Pittsburgh-specific. ICC: not an estimating guide; excludes land.",
+          "confidence_note": "National average, not Pittsburgh-specific. ICC is not an estimating guide and excludes land."
+        },
+        {
+          "statement": "This parcel's recorded transfer is QUIT CLAIM on 2015-07-02 at $215000.0; likely_arms_length=False. 8 zip-filtered VALID SALE comps were retrieved.",
+          "basis": "measured",
+          "source": "WPRDC real-estate sales resource 5bbe6c55-bce6-4edb-9d04-68edeb6bf7b1; https://data.wprdc.org/dataset/real-estate-sales; https://data.wprdc.org/dataset/real-estate-sales; retrieved 2026-09-26",
+          "confidence_note": "Filter using sale-validation codes; many transfers are not arm's-length sales. Only SALECODE=0 (VALID SALE) is treated as a comparable. Quit-claim, sheriff, love-and-affection, and multi-parcel sales are excluded from comps."
+        },
+        {
+          "statement": "Median price of 8 zip-filtered VALID SALE comps is $295500.0 (code-computed sample median, not a market appraisal).",
+          "basis": "measured",
+          "source": "WPRDC real-estate sales resource 5bbe6c55-bce6-4edb-9d04-68edeb6bf7b1; https://data.wprdc.org/dataset/real-estate-sales; https://data.wprdc.org/dataset/real-estate-sales; retrieved 2026-09-26",
+          "confidence_note": "Median of the retrieved VALID SALE sample only. Do not recompute medians or averages from a raw comps list."
+        }
+      ],
+      "cannot_determine": [
+        "Financing terms, interest rates, and developer profit margins are not in the payload."
+      ],
+      "summary": "Standard R-3 construction costs align moderately with valid zip code sales medians, though historical transfer records are non-arm's length."
+    },
+    {
+      "agent": "equity_analyst",
+      "site_id": "0139F00077000000",
+      "typology": "duplex",
+      "score": 5,
+      "basis": "estimated",
+      "claims": [
+        {
+          "statement": "18.45% of occupied households were cost-burdened (>30% of income) in 2013-2017 CHAS (430.0 of 2330.0 households).",
+          "basis": "measured",
+          "source": "CHAS 2013-2017 Table 8 T8_CB_PCT, ArcGIS ACS_5YR_ESTIMATES_CHAS_TRACT GEOID 42003191800; https://services.arcgis.com/VTyQ9soqVukalItT/ArcGIS/rest/services/ACS_5YR_ESTIMATES_CHAS_TRACT/FeatureServer/1; retrieved 2026-09-27",
+          "confidence_note": "Layer date of coverage is 2013-2017 ACS/CHAS. HUD's most recent CHAS release is 2018-2022 (HUD announced 2025-12-23). This tract extract is older than that release."
+        },
+        {
+          "statement": "8.15% of occupied households were severely cost-burdened (>50% of income) in 2013-2017 CHAS.",
+          "basis": "measured",
+          "source": "CHAS 2013-2017 Table 8 T8_CB50_PCT, ArcGIS ACS_5YR_ESTIMATES_CHAS_TRACT GEOID 42003191800; https://services.arcgis.com/VTyQ9soqVukalItT/ArcGIS/rest/services/ACS_5YR_ESTIMATES_CHAS_TRACT/FeatureServer/1; retrieved 2026-09-27",
+          "confidence_note": "Layer date of coverage is 2013-2017 ACS/CHAS. HUD's most recent CHAS release is 2018-2022 (HUD announced 2025-12-23). This tract extract is older than that release."
+        },
+        {
+          "statement": "235.0 occupied households had income \u226430% HAMFI; 74.47% of that band were cost-burdened. 650.0 households \u226450% HAMFI; 1120.0 households \u226480% HAMFI.",
+          "basis": "measured",
+          "source": "CHAS 2013-2017 Table 8 T8_LE30_CB_PCT, ArcGIS ACS_5YR_ESTIMATES_CHAS_TRACT GEOID 42003191800; https://services.arcgis.com/VTyQ9soqVukalItT/ArcGIS/rest/services/ACS_5YR_ESTIMATES_CHAS_TRACT/FeatureServer/1; retrieved 2026-09-27",
+          "confidence_note": "Layer date of coverage is 2013-2017 ACS/CHAS. HUD's most recent CHAS release is 2018-2022 (HUD announced 2025-12-23). This tract extract is older than that release."
+        }
+      ],
+      "cannot_determine": [
+        "CHAS does not measure who would move because of this project (displacement).",
+        "Useful HUD Income Limits and Location Affordability Index were not retrieved.",
+        "price_data: likely sale/rent of a new unit of this typology is not in the Equity payload.",
+        "Typology-specific affordability cannot be determined without sale or rent price data for that housing type."
+      ],
+      "summary": "In Census Tract 1918, 18.45% of households experience cost burden greater than 30% and 8.15% experience severe cost burden greater than 50%. Typology-specific affordability cannot be determined without sale or rent price data."
+    },
+    {
+      "agent": "equity_analyst",
+      "site_id": "0139F00077000000",
+      "typology": "apartment",
+      "score": 5,
+      "basis": "estimated",
+      "claims": [
+        {
+          "statement": "18.45% of occupied households were cost-burdened (>30% of income) in 2013-2017 CHAS (430.0 of 2330.0 households).",
+          "basis": "measured",
+          "source": "CHAS 2013-2017 Table 8 T8_CB_PCT, ArcGIS ACS_5YR_ESTIMATES_CHAS_TRACT GEOID 42003191800; https://services.arcgis.com/VTyQ9soqVukalItT/ArcGIS/rest/services/ACS_5YR_ESTIMATES_CHAS_TRACT/FeatureServer/1; retrieved 2026-09-27",
+          "confidence_note": "Layer date of coverage is 2013-2017 ACS/CHAS. HUD's most recent CHAS release is 2018-2022 (HUD announced 2025-12-23). This tract extract is older than that release."
+        },
+        {
+          "statement": "8.15% of occupied households were severely cost-burdened (>50% of income) in 2013-2017 CHAS.",
+          "basis": "measured",
+          "source": "CHAS 2013-2017 Table 8 T8_CB50_PCT, ArcGIS ACS_5YR_ESTIMATES_CHAS_TRACT GEOID 42003191800; https://services.arcgis.com/VTyQ9soqVukalItT/ArcGIS/rest/services/ACS_5YR_ESTIMATES_CHAS_TRACT/FeatureServer/1; retrieved 2026-09-27",
+          "confidence_note": "Layer date of coverage is 2013-2017 ACS/CHAS. HUD's most recent CHAS release is 2018-2022 (HUD announced 2025-12-23). This tract extract is older than that release."
+        },
+        {
+          "statement": "235.0 occupied households had income \u226430% HAMFI; 74.47% of that band were cost-burdened. 650.0 households \u226450% HAMFI; 1120.0 households \u226480% HAMFI.",
+          "basis": "measured",
+          "source": "CHAS 2013-2017 Table 8 T8_LE30_CB_PCT, ArcGIS ACS_5YR_ESTIMATES_CHAS_TRACT GEOID 42003191800; https://services.arcgis.com/VTyQ9soqVukalItT/ArcGIS/rest/services/ACS_5YR_ESTIMATES_CHAS_TRACT/FeatureServer/1; retrieved 2026-09-27",
+          "confidence_note": "Layer date of coverage is 2013-2017 ACS/CHAS. HUD's most recent CHAS release is 2018-2022 (HUD announced 2025-12-23). This tract extract is older than that release."
+        }
+      ],
+      "cannot_determine": [
+        "CHAS does not measure who would move because of this project (displacement).",
+        "Useful HUD Income Limits and Location Affordability Index were not retrieved.",
+        "price_data: likely sale/rent of a new unit of this typology is not in the Equity payload.",
+        "Typology-specific affordability cannot be determined without sale or rent price data for that housing type."
+      ],
+      "summary": "In Census Tract 1918, 18.45% of households experience cost burden greater than 30% and 8.15% experience severe cost burden greater than 50%. Typology-specific affordability cannot be determined without sale or rent price data."
+    },
+    {
+      "agent": "equity_analyst",
+      "site_id": "0139F00077000000",
+      "typology": "townhome",
+      "score": 5,
+      "basis": "estimated",
+      "claims": [
+        {
+          "statement": "18.45% of occupied households were cost-burdened (>30% of income) in 2013-2017 CHAS (430.0 of 2330.0 households).",
+          "basis": "measured",
+          "source": "CHAS 2013-2017 Table 8 T8_CB_PCT, ArcGIS ACS_5YR_ESTIMATES_CHAS_TRACT GEOID 42003191800; https://services.arcgis.com/VTyQ9soqVukalItT/ArcGIS/rest/services/ACS_5YR_ESTIMATES_CHAS_TRACT/FeatureServer/1; retrieved 2026-09-27",
+          "confidence_note": "Layer date of coverage is 2013-2017 ACS/CHAS. HUD's most recent CHAS release is 2018-2022 (HUD announced 2025-12-23). This tract extract is older than that release."
+        },
+        {
+          "statement": "8.15% of occupied households were severely cost-burdened (>50% of income) in 2013-2017 CHAS.",
+          "basis": "measured",
+          "source": "CHAS 2013-2017 Table 8 T8_CB50_PCT, ArcGIS ACS_5YR_ESTIMATES_CHAS_TRACT GEOID 42003191800; https://services.arcgis.com/VTyQ9soqVukalItT/ArcGIS/rest/services/ACS_5YR_ESTIMATES_CHAS_TRACT/FeatureServer/1; retrieved 2026-09-27",
+          "confidence_note": "Layer date of coverage is 2013-2017 ACS/CHAS. HUD's most recent CHAS release is 2018-2022 (HUD announced 2025-12-23). This tract extract is older than that release."
+        },
+        {
+          "statement": "235.0 occupied households had income \u226430% HAMFI; 74.47% of that band were cost-burdened. 650.0 households \u226450% HAMFI; 1120.0 households \u226480% HAMFI.",
+          "basis": "measured",
+          "source": "CHAS 2013-2017 Table 8 T8_LE30_CB_PCT, ArcGIS ACS_5YR_ESTIMATES_CHAS_TRACT GEOID 42003191800; https://services.arcgis.com/VTyQ9soqVukalItT/ArcGIS/rest/services/ACS_5YR_ESTIMATES_CHAS_TRACT/FeatureServer/1; retrieved 2026-09-27",
+          "confidence_note": "Layer date of coverage is 2013-2017 ACS/CHAS. HUD's most recent CHAS release is 2018-2022 (HUD announced 2025-12-23). This tract extract is older than that release."
+        }
+      ],
+      "cannot_determine": [
+        "CHAS does not measure who would move because of this project (displacement).",
+        "Useful HUD Income Limits and Location Affordability Index were not retrieved.",
+        "price_data: likely sale/rent of a new unit of this typology is not in the Equity payload.",
+        "Typology-specific affordability cannot be determined without sale or rent price data for that housing type."
+      ],
+      "summary": "In Census Tract 1918, 18.45% of households experience cost burden greater than 30% and 8.15% experience severe cost burden greater than 50%. Typology-specific affordability cannot be determined without sale or rent price data."
+    },
+    {
+      "agent": "equity_analyst",
+      "site_id": "0139F00077000000",
+      "typology": "adu",
+      "score": 5,
+      "basis": "estimated",
+      "claims": [
+        {
+          "statement": "18.45% of occupied households were cost-burdened (>30% of income) in 2013-2017 CHAS (430.0 of 2330.0 households).",
+          "basis": "measured",
+          "source": "CHAS 2013-2017 Table 8 T8_CB_PCT, ArcGIS ACS_5YR_ESTIMATES_CHAS_TRACT GEOID 42003191800; https://services.arcgis.com/VTyQ9soqVukalItT/ArcGIS/rest/services/ACS_5YR_ESTIMATES_CHAS_TRACT/FeatureServer/1; retrieved 2026-09-27",
+          "confidence_note": "Layer date of coverage is 2013-2017 ACS/CHAS. HUD's most recent CHAS release is 2018-2022 (HUD announced 2025-12-23). This tract extract is older than that release."
+        },
+        {
+          "statement": "8.15% of occupied households were severely cost-burdened (>50% of income) in 2013-2017 CHAS.",
+          "basis": "measured",
+          "source": "CHAS 2013-2017 Table 8 T8_CB50_PCT, ArcGIS ACS_5YR_ESTIMATES_CHAS_TRACT GEOID 42003191800; https://services.arcgis.com/VTyQ9soqVukalItT/ArcGIS/rest/services/ACS_5YR_ESTIMATES_CHAS_TRACT/FeatureServer/1; retrieved 2026-09-27",
+          "confidence_note": "Layer date of coverage is 2013-2017 ACS/CHAS. HUD's most recent CHAS release is 2018-2022 (HUD announced 2025-12-23). This tract extract is older than that release."
+        },
+        {
+          "statement": "235.0 occupied households had income \u226430% HAMFI; 74.47% of that band were cost-burdened. 650.0 households \u226450% HAMFI; 1120.0 households \u226480% HAMFI.",
+          "basis": "measured",
+          "source": "CHAS 2013-2017 Table 8 T8_LE30_CB_PCT, ArcGIS ACS_5YR_ESTIMATES_CHAS_TRACT GEOID 42003191800; https://services.arcgis.com/VTyQ9soqVukalItT/ArcGIS/rest/services/ACS_5YR_ESTIMATES_CHAS_TRACT/FeatureServer/1; retrieved 2026-09-27",
+          "confidence_note": "Layer date of coverage is 2013-2017 ACS/CHAS. HUD's most recent CHAS release is 2018-2022 (HUD announced 2025-12-23). This tract extract is older than that release."
+        }
+      ],
+      "cannot_determine": [
+        "CHAS does not measure who would move because of this project (displacement).",
+        "Useful HUD Income Limits and Location Affordability Index were not retrieved.",
+        "price_data: likely sale/rent of a new unit of this typology is not in the Equity payload.",
+        "Typology-specific affordability cannot be determined without sale or rent price data for that housing type."
+      ],
+      "summary": "In Census Tract 1918, 18.45% of households experience cost burden greater than 30% and 8.15% experience severe cost burden greater than 50%. Typology-specific affordability cannot be determined without sale or rent price data."
+    },
+    {
+      "agent": "equity_analyst",
+      "site_id": "0139F00077000000",
+      "typology": "senior_housing",
+      "score": 5,
+      "basis": "estimated",
+      "claims": [
+        {
+          "statement": "18.45% of occupied households were cost-burdened (>30% of income) in 2013-2017 CHAS (430.0 of 2330.0 households).",
+          "basis": "measured",
+          "source": "CHAS 2013-2017 Table 8 T8_CB_PCT, ArcGIS ACS_5YR_ESTIMATES_CHAS_TRACT GEOID 42003191800; https://services.arcgis.com/VTyQ9soqVukalItT/ArcGIS/rest/services/ACS_5YR_ESTIMATES_CHAS_TRACT/FeatureServer/1; retrieved 2026-09-27",
+          "confidence_note": "Layer date of coverage is 2013-2017 ACS/CHAS. HUD's most recent CHAS release is 2018-2022 (HUD announced 2025-12-23). This tract extract is older than that release."
+        },
+        {
+          "statement": "8.15% of occupied households were severely cost-burdened (>50% of income) in 2013-2017 CHAS.",
+          "basis": "measured",
+          "source": "CHAS 2013-2017 Table 8 T8_CB50_PCT, ArcGIS ACS_5YR_ESTIMATES_CHAS_TRACT GEOID 42003191800; https://services.arcgis.com/VTyQ9soqVukalItT/ArcGIS/rest/services/ACS_5YR_ESTIMATES_CHAS_TRACT/FeatureServer/1; retrieved 2026-09-27",
+          "confidence_note": "Layer date of coverage is 2013-2017 ACS/CHAS. HUD's most recent CHAS release is 2018-2022 (HUD announced 2025-12-23). This tract extract is older than that release."
+        },
+        {
+          "statement": "235.0 occupied households had income \u226430% HAMFI; 74.47% of that band were cost-burdened. 650.0 households \u226450% HAMFI; 1120.0 households \u226480% HAMFI.",
+          "basis": "measured",
+          "source": "CHAS 2013-2017 Table 8 T8_LE30_CB_PCT, ArcGIS ACS_5YR_ESTIMATES_CHAS_TRACT GEOID 42003191800; https://services.arcgis.com/VTyQ9soqVukalItT/ArcGIS/rest/services/ACS_5YR_ESTIMATES_CHAS_TRACT/FeatureServer/1; retrieved 2026-09-27",
+          "confidence_note": "Layer date of coverage is 2013-2017 ACS/CHAS. HUD's most recent CHAS release is 2018-2022 (HUD announced 2025-12-23). This tract extract is older than that release."
+        }
+      ],
+      "cannot_determine": [
+        "CHAS does not measure who would move because of this project (displacement).",
+        "Useful HUD Income Limits and Location Affordability Index were not retrieved.",
+        "price_data: likely sale/rent of a new unit of this typology is not in the Equity payload.",
+        "Typology-specific affordability cannot be determined without sale or rent price data for that housing type."
+      ],
+      "summary": "In Census Tract 1918, 18.45% of households experience cost burden greater than 30% and 8.15% experience severe cost burden greater than 50%. Typology-specific affordability cannot be determined without sale or rent price data."
+    },
+    {
+      "agent": "equity_analyst",
+      "site_id": "0139F00077000000",
+      "typology": "detached_single_family",
+      "score": 5,
+      "basis": "estimated",
+      "claims": [
+        {
+          "statement": "18.45% of occupied households were cost-burdened (>30% of income) in 2013-2017 CHAS (430.0 of 2330.0 households).",
+          "basis": "measured",
+          "source": "CHAS 2013-2017 Table 8 T8_CB_PCT, ArcGIS ACS_5YR_ESTIMATES_CHAS_TRACT GEOID 42003191800; https://services.arcgis.com/VTyQ9soqVukalItT/ArcGIS/rest/services/ACS_5YR_ESTIMATES_CHAS_TRACT/FeatureServer/1; retrieved 2026-09-27",
+          "confidence_note": "Layer date of coverage is 2013-2017 ACS/CHAS. HUD's most recent CHAS release is 2018-2022 (HUD announced 2025-12-23). This tract extract is older than that release."
+        },
+        {
+          "statement": "8.15% of occupied households were severely cost-burdened (>50% of income) in 2013-2017 CHAS.",
+          "basis": "measured",
+          "source": "CHAS 2013-2017 Table 8 T8_CB50_PCT, ArcGIS ACS_5YR_ESTIMATES_CHAS_TRACT GEOID 42003191800; https://services.arcgis.com/VTyQ9soqVukalItT/ArcGIS/rest/services/ACS_5YR_ESTIMATES_CHAS_TRACT/FeatureServer/1; retrieved 2026-09-27",
+          "confidence_note": "Layer date of coverage is 2013-2017 ACS/CHAS. HUD's most recent CHAS release is 2018-2022 (HUD announced 2025-12-23). This tract extract is older than that release."
+        },
+        {
+          "statement": "235.0 occupied households had income \u226430% HAMFI; 74.47% of that band were cost-burdened. 650.0 households \u226450% HAMFI; 1120.0 households \u226480% HAMFI.",
+          "basis": "measured",
+          "source": "CHAS 2013-2017 Table 8 T8_LE30_CB_PCT, ArcGIS ACS_5YR_ESTIMATES_CHAS_TRACT GEOID 42003191800; https://services.arcgis.com/VTyQ9soqVukalItT/ArcGIS/rest/services/ACS_5YR_ESTIMATES_CHAS_TRACT/FeatureServer/1; retrieved 2026-09-27",
+          "confidence_note": "Layer date of coverage is 2013-2017 ACS/CHAS. HUD's most recent CHAS release is 2018-2022 (HUD announced 2025-12-23). This tract extract is older than that release."
+        }
+      ],
+      "cannot_determine": [
+        "CHAS does not measure who would move because of this project (displacement).",
+        "Useful HUD Income Limits and Location Affordability Index were not retrieved.",
+        "price_data: likely sale/rent of a new unit of this typology is not in the Equity payload.",
+        "Typology-specific affordability cannot be determined without sale or rent price data for that housing type."
+      ],
+      "summary": "In Census Tract 1918, 18.45% of households experience cost burden greater than 30% and 8.15% experience severe cost burden greater than 50%. Typology-specific affordability cannot be determined without sale or rent price data."
+    },
+    {
+      "agent": "sustainability_analyst",
+      "site_id": "0139F00077000000",
+      "typology": "duplex",
+      "score": 6,
+      "basis": "estimated",
+      "claims": [
+        {
+          "statement": "Nearest scheduled PRT stop is MCNEILLY STATION (RAIL), about 637 m from the parcel centroid; 0 unique stops within 400 m, 2 unique stops within 800 m, 0 within 1,500 ft.",
+          "basis": "measured",
+          "source": "WPRDC PRT Transit Stops resource d6e6ed6e-9220-4a0e-9796-e72d83ce8e7a, feed_version 2606; https://data.wprdc.org/dataset/prt-of-allegheny-county-transit-stops; retrieved 2026-09-27",
+          "confidence_note": "Scheduled GTFS-derived service is not on-time reliability. City 1,500 ft major-transit overlay: in_buffer=False. City 1,500 ft major-transit buffer is a zoning overlay, not a walk-distance to the nearest PRT stop. A miss here can still have nearby scheduled service."
+        },
+        {
+          "statement": "FEMA-style flood screen: layer_covers_point=True, FLD_ZONE=X, SFHA_TF=F, in_sfha=False. Steep-slope 25%+ overlay flagged=True.",
+          "basis": "measured",
+          "source": "City FEMA_2026 overlay https://services1.arcgis.com/YZCmUqbcsUpOKfj7/arcgis/rest/services/FEMA_2026/FeatureServer/0; NFHL catalog https://www.fema.gov/flood-maps/national-flood-hazard-layer",
+          "confidence_note": "City FEMA_2026 overlay is the retrieved NFHL-style layer on the official Zoning Map. Not a substitute for a formal flood determination. Zone X coverage is still a map designation; SFHA_TF=F means not in the Special Flood Hazard Area. 25%+ slope overlay is screening-level only (Useful catalog row; also on the official map). Not a geotechnical survey."
+        },
+        {
+          "statement": "Generic direction: two-unit buildings generally have lower per-unit carbon and car-dependency than detached single-family, without a site LCA.",
+          "basis": "estimated",
+          "source": "Generic typology-level direction (not a site LCA or measured kg CO2); higher density generally lower per-unit carbon and car-dependency than detached single-family.",
+          "confidence_note": "Generic typology-level direction only; not calculated for this building."
+        }
+      ],
+      "cannot_determine": [
+        "On-time reliability of scheduled PRT trips.",
+        "Site-specific LCA or measured kg CO2.",
+        "PA DEP eMapPA and EPA EJScreen were not retrieved."
+      ],
+      "summary": "As a duplex, this typology has lower per-unit carbon and car-dependency than detached single-family, sharing the site's proximity to McNeilly Station (rail)."
+    },
+    {
+      "agent": "sustainability_analyst",
+      "site_id": "0139F00077000000",
+      "typology": "apartment",
+      "score": 9,
+      "basis": "estimated",
+      "claims": [
+        {
+          "statement": "Nearest scheduled PRT stop is MCNEILLY STATION (RAIL), about 637 m from the parcel centroid; 0 unique stops within 400 m, 2 unique stops within 800 m, 0 within 1,500 ft.",
+          "basis": "measured",
+          "source": "WPRDC PRT Transit Stops resource d6e6ed6e-9220-4a0e-9796-e72d83ce8e7a, feed_version 2606; https://data.wprdc.org/dataset/prt-of-allegheny-county-transit-stops; retrieved 2026-09-27",
+          "confidence_note": "Scheduled GTFS-derived service is not on-time reliability. City 1,500 ft major-transit overlay: in_buffer=False. City 1,500 ft major-transit buffer is a zoning overlay, not a walk-distance to the nearest PRT stop. A miss here can still have nearby scheduled service."
+        },
+        {
+          "statement": "FEMA-style flood screen: layer_covers_point=True, FLD_ZONE=X, SFHA_TF=F, in_sfha=False. Steep-slope 25%+ overlay flagged=True.",
+          "basis": "measured",
+          "source": "City FEMA_2026 overlay https://services1.arcgis.com/YZCmUqbcsUpOKfj7/arcgis/rest/services/FEMA_2026/FeatureServer/0; NFHL catalog https://www.fema.gov/flood-maps/national-flood-hazard-layer",
+          "confidence_note": "City FEMA_2026 overlay is the retrieved NFHL-style layer on the official Zoning Map. Not a substitute for a formal flood determination. Zone X coverage is still a map designation; SFHA_TF=F means not in the Special Flood Hazard Area. 25%+ slope overlay is screening-level only (Useful catalog row; also on the official map). Not a geotechnical survey."
+        },
+        {
+          "statement": "Generic direction: multi-unit buildings generally have lower per-unit carbon and car-dependency than detached single-family, without a site LCA.",
+          "basis": "estimated",
+          "source": "Generic typology-level direction (not a site LCA or measured kg CO2); higher density generally lower per-unit carbon and car-dependency than detached single-family.",
+          "confidence_note": "Generic typology-level direction only; not calculated for this building."
+        }
+      ],
+      "cannot_determine": [
+        "On-time reliability of scheduled PRT trips.",
+        "Site-specific LCA or measured kg CO2.",
+        "PA DEP eMapPA and EPA EJScreen were not retrieved."
+      ],
+      "summary": "As an apartment building, multi-unit density provides lower per-unit carbon and car-dependency compared to detached single-family, leveraging the site's proximity to McNeilly Station (rail)."
+    },
+    {
+      "agent": "sustainability_analyst",
+      "site_id": "0139F00077000000",
+      "typology": "townhome",
+      "score": 7,
+      "basis": "estimated",
+      "claims": [
+        {
+          "statement": "Nearest scheduled PRT stop is MCNEILLY STATION (RAIL), about 637 m from the parcel centroid; 0 unique stops within 400 m, 2 unique stops within 800 m, 0 within 1,500 ft.",
+          "basis": "measured",
+          "source": "WPRDC PRT Transit Stops resource d6e6ed6e-9220-4a0e-9796-e72d83ce8e7a, feed_version 2606; https://data.wprdc.org/dataset/prt-of-allegheny-county-transit-stops; retrieved 2026-09-27",
+          "confidence_note": "Scheduled GTFS-derived service is not on-time reliability. City 1,500 ft major-transit overlay: in_buffer=False. City 1,500 ft major-transit buffer is a zoning overlay, not a walk-distance to the nearest PRT stop. A miss here can still have nearby scheduled service."
+        },
+        {
+          "statement": "FEMA-style flood screen: layer_covers_point=True, FLD_ZONE=X, SFHA_TF=F, in_sfha=False. Steep-slope 25%+ overlay flagged=True.",
+          "basis": "measured",
+          "source": "City FEMA_2026 overlay https://services1.arcgis.com/YZCmUqbcsUpOKfj7/arcgis/rest/services/FEMA_2026/FeatureServer/0; NFHL catalog https://www.fema.gov/flood-maps/national-flood-hazard-layer",
+          "confidence_note": "City FEMA_2026 overlay is the retrieved NFHL-style layer on the official Zoning Map. Not a substitute for a formal flood determination. Zone X coverage is still a map designation; SFHA_TF=F means not in the Special Flood Hazard Area. 25%+ slope overlay is screening-level only (Useful catalog row; also on the official map). Not a geotechnical survey."
+        },
+        {
+          "statement": "Generic direction: attached single-unit (townhome) generally has lower per-unit carbon than detached single-family, without a site LCA.",
+          "basis": "estimated",
+          "source": "Generic typology-level direction (not a site LCA or measured kg CO2); higher density generally lower per-unit carbon and car-dependency than detached single-family.",
+          "confidence_note": "Generic typology-level direction only; not calculated for this building."
+        }
+      ],
+      "cannot_determine": [
+        "On-time reliability of scheduled PRT trips.",
+        "Site-specific LCA or measured kg CO2.",
+        "PA DEP eMapPA and EPA EJScreen were not retrieved."
+      ],
+      "summary": "As an attached single-unit townhome, this typology generally achieves lower per-unit carbon than detached single-family while utilizing the nearby McNeilly Station (rail)."
+    },
+    {
+      "agent": "sustainability_analyst",
+      "site_id": "0139F00077000000",
+      "typology": "adu",
+      "score": 5,
+      "basis": "estimated",
+      "claims": [
+        {
+          "statement": "Nearest scheduled PRT stop is MCNEILLY STATION (RAIL), about 637 m from the parcel centroid; 0 unique stops within 400 m, 2 unique stops within 800 m, 0 within 1,500 ft.",
+          "basis": "measured",
+          "source": "WPRDC PRT Transit Stops resource d6e6ed6e-9220-4a0e-9796-e72d83ce8e7a, feed_version 2606; https://data.wprdc.org/dataset/prt-of-allegheny-county-transit-stops; retrieved 2026-09-27",
+          "confidence_note": "Scheduled GTFS-derived service is not on-time reliability. City 1,500 ft major-transit overlay: in_buffer=False. City 1,500 ft major-transit buffer is a zoning overlay, not a walk-distance to the nearest PRT stop. A miss here can still have nearby scheduled service."
+        },
+        {
+          "statement": "FEMA-style flood screen: layer_covers_point=True, FLD_ZONE=X, SFHA_TF=F, in_sfha=False. Steep-slope 25%+ overlay flagged=True.",
+          "basis": "measured",
+          "source": "City FEMA_2026 overlay https://services1.arcgis.com/YZCmUqbcsUpOKfj7/arcgis/rest/services/FEMA_2026/FeatureServer/0; NFHL catalog https://www.fema.gov/flood-maps/national-flood-hazard-layer",
+          "confidence_note": "City FEMA_2026 overlay is the retrieved NFHL-style layer on the official Zoning Map. Not a substitute for a formal flood determination. Zone X coverage is still a map designation; SFHA_TF=F means not in the Special Flood Hazard Area. 25%+ slope overlay is screening-level only (Useful catalog row; also on the official map). Not a geotechnical survey."
+        },
+        {
+          "statement": "Generic direction: an ADU increment on an existing lot is generally lower per-unit carbon than a new detached house, without a site LCA.",
+          "basis": "estimated",
+          "source": "Generic typology-level direction (not a site LCA or measured kg CO2); higher density generally lower per-unit carbon and car-dependency than detached single-family.",
+          "confidence_note": "Generic typology-level direction only; not calculated for this building."
+        }
+      ],
+      "cannot_determine": [
+        "On-time reliability of scheduled PRT trips.",
+        "Site-specific LCA or measured kg CO2.",
+        "PA DEP eMapPA and EPA EJScreen were not retrieved."
+      ],
+      "summary": "As an ADU increment on an existing lot, this typology generally yields lower per-unit carbon than a new detached house near McNeilly Station (rail)."
+    },
+    {
+      "agent": "sustainability_analyst",
+      "site_id": "0139F00077000000",
+      "typology": "senior_housing",
+      "score": 8,
+      "basis": "estimated",
+      "claims": [
+        {
+          "statement": "Nearest scheduled PRT stop is MCNEILLY STATION (RAIL), about 637 m from the parcel centroid; 0 unique stops within 400 m, 2 unique stops within 800 m, 0 within 1,500 ft.",
+          "basis": "measured",
+          "source": "WPRDC PRT Transit Stops resource d6e6ed6e-9220-4a0e-9796-e72d83ce8e7a, feed_version 2606; https://data.wprdc.org/dataset/prt-of-allegheny-county-transit-stops; retrieved 2026-09-27",
+          "confidence_note": "Scheduled GTFS-derived service is not on-time reliability. City 1,500 ft major-transit overlay: in_buffer=False. City 1,500 ft major-transit buffer is a zoning overlay, not a walk-distance to the nearest PRT stop. A miss here can still have nearby scheduled service."
+        },
+        {
+          "statement": "FEMA-style flood screen: layer_covers_point=True, FLD_ZONE=X, SFHA_TF=F, in_sfha=False. Steep-slope 25%+ overlay flagged=True.",
+          "basis": "measured",
+          "source": "City FEMA_2026 overlay https://services1.arcgis.com/YZCmUqbcsUpOKfj7/arcgis/rest/services/FEMA_2026/FeatureServer/0; NFHL catalog https://www.fema.gov/flood-maps/national-flood-hazard-layer",
+          "confidence_note": "City FEMA_2026 overlay is the retrieved NFHL-style layer on the official Zoning Map. Not a substitute for a formal flood determination. Zone X coverage is still a map designation; SFHA_TF=F means not in the Special Flood Hazard Area. 25%+ slope overlay is screening-level only (Useful catalog row; also on the official map). Not a geotechnical survey."
+        },
+        {
+          "statement": "Generic direction: senior housing at multi-unit density generally has lower per-unit carbon than detached single-family, without a site LCA.",
+          "basis": "estimated",
+          "source": "Generic typology-level direction (not a site LCA or measured kg CO2); higher density generally lower per-unit carbon and car-dependency than detached single-family.",
+          "confidence_note": "Generic typology-level direction only; not calculated for this building."
+        }
+      ],
+      "cannot_determine": [
+        "On-time reliability of scheduled PRT trips.",
+        "Site-specific LCA or measured kg CO2.",
+        "PA DEP eMapPA and EPA EJScreen were not retrieved."
+      ],
+      "summary": "As senior housing at multi-unit density, this typology generally results in lower per-unit carbon than detached single-family while remaining accessible to McNeilly Station (rail)."
+    },
+    {
+      "agent": "sustainability_analyst",
+      "site_id": "0139F00077000000",
+      "typology": "detached_single_family",
+      "score": 2,
+      "basis": "estimated",
+      "claims": [
+        {
+          "statement": "Nearest scheduled PRT stop is MCNEILLY STATION (RAIL), about 637 m from the parcel centroid; 0 unique stops within 400 m, 2 unique stops within 800 m, 0 within 1,500 ft.",
+          "basis": "measured",
+          "source": "WPRDC PRT Transit Stops resource d6e6ed6e-9220-4a0e-9796-e72d83ce8e7a, feed_version 2606; https://data.wprdc.org/dataset/prt-of-allegheny-county-transit-stops; retrieved 2026-09-27",
+          "confidence_note": "Scheduled GTFS-derived service is not on-time reliability. City 1,500 ft major-transit overlay: in_buffer=False. City 1,500 ft major-transit buffer is a zoning overlay, not a walk-distance to the nearest PRT stop. A miss here can still have nearby scheduled service."
+        },
+        {
+          "statement": "FEMA-style flood screen: layer_covers_point=True, FLD_ZONE=X, SFHA_TF=F, in_sfha=False. Steep-slope 25%+ overlay flagged=True.",
+          "basis": "measured",
+          "source": "City FEMA_2026 overlay https://services1.arcgis.com/YZCmUqbcsUpOKfj7/arcgis/rest/services/FEMA_2026/FeatureServer/0; NFHL catalog https://www.fema.gov/flood-maps/national-flood-hazard-layer",
+          "confidence_note": "City FEMA_2026 overlay is the retrieved NFHL-style layer on the official Zoning Map. Not a substitute for a formal flood determination. Zone X coverage is still a map designation; SFHA_TF=F means not in the Special Flood Hazard Area. 25%+ slope overlay is screening-level only (Useful catalog row; also on the official map). Not a geotechnical survey."
+        },
+        {
+          "statement": "Generic direction: detached single-family typically has higher per-unit embodied/operational carbon and car-dependency than denser typologies on the same site.",
+          "basis": "estimated",
+          "source": "Generic typology-level direction (not a site LCA or measured kg CO2); higher density generally lower per-unit carbon and car-dependency than detached single-family.",
+          "confidence_note": "Generic typology-level direction only; not calculated for this building."
+        }
+      ],
+      "cannot_determine": [
+        "On-time reliability of scheduled PRT trips.",
+        "Site-specific LCA or measured kg CO2.",
+        "PA DEP eMapPA and EPA EJScreen were not retrieved."
+      ],
+      "summary": "As a detached single-family home, this typology typically has higher per-unit carbon and car-dependency than denser typologies, despite being near McNeilly Station (rail)."
+    }
+  ],
+  "notes": [
+    "Decision support only \u2014 not legal, financial, or zoning advice.",
+    "Round 1 is independent: no Analyst receives another Analyst's output.",
+    "Agents are called sequentially so one Groq free-tier TPM budget is not shared in parallel."
+  ]
+}
