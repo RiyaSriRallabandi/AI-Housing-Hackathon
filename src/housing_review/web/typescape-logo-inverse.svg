@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 640" role="img" aria-labelledby="logoTitle">
+  <title id="logoTitle">Typescape</title>
+  <path fill="#FFFFFF" d="M160 28h200l100 92v148H60V120L160 28z"/>
+  <path fill="#232323" d="M210 196c0-44 36-72 50-72s50 28 50 72v52H210z"/>
+  <rect fill="#FFFFFF" x="248" y="214" width="24" height="86"/>
+  <polygon fill="#FCC113" points="260,268 318,430 260,430"/>
+  <polygon fill="#FCC113" points="260,268 202,430 260,430"/>
+  <polygon fill="#FCC113" points="260,268 92,548 140,548"/>
+  <polygon fill="#FCC113" points="260,268 428,548 380,548"/>
+  <text x="260" y="610" text-anchor="middle" font-family="Raleway, Helvetica, Arial, sans-serif" font-size="72" font-weight="800" fill="#FFFFFF" letter-spacing="6">TYPESCAPE</text>
+  <rect fill="#FCC113" x="150" y="622" width="220" height="10"/>
+</svg>

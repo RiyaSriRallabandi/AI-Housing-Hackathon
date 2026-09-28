@@ -109,3 +109,24 @@ def test_demo_site_returns_parcel_outline(tmp_path: Path) -> None:
     assert demo.status_code == 200
     assert "0139F00077000000" in demo.json()["map_description"]
     assert demo.json()["geometry"]["type"] == "Polygon"
+
+
+def test_index_and_static_assets_are_served(tmp_path: Path) -> None:
+    client = _client(tmp_path)
+    page = client.get("/")
+    assert page.status_code == 200
+    assert "Typescape" in page.text
+    assert "Get Started" in page.text
+    assert "TYPESCAPE" in page.text
+    assert "typescape-logo-inverse.svg" in page.text
+    assert "typescape-logo-inverse-icon.svg" in page.text
+    assert "Start typing an address or PIN, for example 170 Aidan Ct" in page.text
+    css = client.get("/static/styles.css")
+    assert css.status_code == 200
+    assert "--site-backdrop-image" in css.text
+    assert "pittsburgh-housing.jpg" in css.text
+    js = client.get("/static/app.js")
+    assert js.status_code == 200
+    assert "Sortable.create" in js.text
+    assert "tile.openstreetmap.org" in js.text
+    assert "Cost and feasibility" in js.text

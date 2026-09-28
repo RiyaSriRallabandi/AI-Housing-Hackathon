@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=1080" />
+    <title>Typescape</title>
+    <link rel="icon" href="/static/typescape-mark.png" type="image/png" />
+    <link rel="icon" href="/static/typescape-mark.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=Raleway:wght@700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      crossorigin=""
+    />
+    <link rel="stylesheet" href="/static/styles.css?v=13" />
+  </head>
+  <body data-view="landing">
+    <div class="site-backdrop" aria-hidden="true">
+      <div class="site-photo"></div>
+      <div class="site-scrim"></div>
+    </div>
+    <a class="skip-link" href="#get-started">Skip to get started</a>
+
+    <section id="view-landing" class="view is-active" aria-labelledby="landing-name">
+      <div class="landing-stage">
+        <img class="landing-logo" src="/static/typescape-logo-inverse.svg" alt="Typescape" />
+        <h1 id="landing-name" class="landing-headline">Discover plausible housing typologies for Pittsburgh</h1>
+        <p class="landing-subline">
+          An AI decision-support tool that matches places with plausible housing types and explains the tradeoffs behind each scenario.
+        </p>
+        <button class="btn-gold" id="get-started" type="button">Get Started</button>
+      </div>
+      <p class="landing-foot" role="note">
+        Decision support only. This is not legal, financial, or zoning advice.
+      </p>
+    </section>
+
+    <div id="shell" class="shell" hidden>
+      <header class="site-header">
+        <button class="brand-lockup" id="home-link" type="button" aria-label="Back to Typescape home">
+          <img src="/static/typescape-logo-inverse-icon.svg" alt="" />
+          <span class="brand-word">TYPESCAPE</span>
+        </button>
+        <p class="disclaimer" role="note">
+          Decision support only. This is not legal, financial, or zoning advice.
+        </p>
+      </header>
+      <div class="gold-rule" aria-hidden="true"></div>
+
+      <main>
+        <section id="view-input" class="view" aria-labelledby="input-heading">
+          <div class="input-layout">
+            <div class="input-copy">
+              <h1 id="input-heading">Find the parcel</h1>
+              <p class="lede">Search the working Brookline example by address or PIN.</p>
+              <form id="site-form" autocomplete="off">
+                <label class="visually-hidden" for="site-input">Site address or parcel ID</label>
+                <div class="search-wrap">
+                  <input
+                    id="site-input"
+                    name="site"
+                    type="text"
+                    role="combobox"
+                    aria-autocomplete="list"
+                    aria-expanded="false"
+                    aria-controls="suggest-list"
+                    autocomplete="off"
+                    placeholder="Start typing an address or PIN, for example 170 Aidan Ct"
+                  />
+                  <ul id="suggest-list" role="listbox" hidden></ul>
+                </div>
+                <p id="site-status" class="status" role="status" aria-live="polite"></p>
+                <p id="coverage-note" class="coverage-note" hidden>
+                  Typescape currently covers 170 Aidan Ct in Brookline. More Pittsburgh lots are planned.
+                  <button type="button" id="coverage-fill" class="coverage-fill">Use 170 Aidan Ct</button>
+                </p>
+                <button class="btn-primary" type="submit">Continue</button>
+              </form>
+            </div>
+            <figure class="map-hero">
+              <div
+                id="site-map"
+                role="img"
+                aria-label="Map of the Brookline demo parcel will load here."
+              ></div>
+              <figcaption id="map-figcaption">170 Aidan Court, Brookline.</figcaption>
+            </figure>
+          </div>
+        </section>
+
+        <section id="view-ranking" class="view" aria-labelledby="ranker-heading">
+          <h1 id="ranker-heading" tabindex="-1">What matters most?</h1>
+          <p class="lede">Drag to reorder, with your highest priority at the top. Adjustments can be made later.</p>
+          <ol id="ranker-list"></ol>
+          <button class="btn-primary" id="ranker-submit" type="button">See ranking</button>
+        </section>
+
+        <section id="view-results" class="view" aria-labelledby="results-heading">
+          <div class="workspace">
+            <div>
+              <h1 id="results-heading" tabindex="-1">Suggested scenarios based on your preferences</h1>
+              <ol id="results-list" class="results"></ol>
+            </div>
+            <aside class="controls" aria-labelledby="slider-heading">
+              <h2 id="slider-heading">Weights</h2>
+              <p class="slider-lead">Adjust the sliders based on how important each lens is to you.</p>
+              <div id="slider-list"></div>
+            </aside>
+          </div>
+        </section>
+
+        <section id="view-detail" class="view" aria-labelledby="detail-heading">
+          <button class="text-back" id="detail-back" type="button">Back to ranking</button>
+          <h1 id="detail-heading" tabindex="-1">Detail</h1>
+          <p id="detail-score" class="detail-score"></p>
+          <p id="detail-finding" class="finding"></p>
+          <h2>Sources</h2>
+          <ul id="detail-sources"></ul>
+          <h2>Uncertainties</h2>
+          <ul id="detail-gaps"></ul>
+        </section>
+      </main>
+
+      <footer class="site-footer">
+        <button type="button" id="help-open" aria-haspopup="dialog" aria-controls="help-panel">Help?</button>
+      </footer>
+    </div>
+
+    <dialog id="help-panel" aria-labelledby="help-title">
+      <form method="dialog">
+        <h2 id="help-title">How this works</h2>
+        <p>You compare six housing types on one lot. Rank Zoning, Demographic, Cost and feasibility, Equity, and Sustainability by what matters most. Nothing here is a permit, appraisal, or legal opinion.</p>
+        <p>Typescape currently covers one Brookline lot. Coverage is limited by the data gathered so far.</p>
+        <h3>Data used for the Brookline example</h3>
+        <ul>
+          <li><a href="https://data.wprdc.org/dataset/zoning" target="_blank" rel="noreferrer">City zoning GIS (WPRDC)</a></li>
+          <li><a href="https://ecode360.com/45474054" target="_blank" rel="noreferrer">Pittsburgh Zoning Code, Title 9 (eCode360)</a></li>
+          <li><a href="https://www.census.gov/data/developers/data-sets/acs-5year.html" target="_blank" rel="noreferrer">Census ACS 5-year and 2020 PL tables</a></li>
+          <li><a href="https://www.huduser.gov/portal/datasets/cp.html" target="_blank" rel="noreferrer">HUD CHAS cost-burden (tract, not unit prices)</a></li>
+          <li>Allegheny County assessments and valid sales; ICC Building Valuation Data for construction cost direction</li>
+          <li>PRT stop locations; City FEMA 2026 flood overlay as a screen, not a determination</li>
+        </ul>
+        <button class="btn-primary" value="close">Close</button>
+      </form>
+    </dialog>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.6/Sortable.min.js"></script>
+    <script src="/static/app.js?v=13"></script>
+  </body>
+</html>

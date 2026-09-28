@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 140" role="img" aria-label="Typescape">
+  <path fill="#FCC113" d="M8 118h184v14H8z"/>
+  <g fill="none" stroke="#232323" stroke-width="6" stroke-linejoin="round">
+    <path fill="#FFFFFF" d="M18 112V62l22-20 22 20v50z"/>
+    <path fill="#232323" d="M70 112V38l24-22 24 22v74z"/>
+    <path fill="#FCC113" d="M122 112V22h28v90z"/>
+    <path fill="#FFFFFF" d="M156 112V72l14-12 14 12v40z"/>
+    <path fill="#232323" d="M186 112V58h14v54z"/>
+  </g>
+</svg>

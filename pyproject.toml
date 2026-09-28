@@ -28,7 +28,7 @@ dev = [
 where = ["src"]
 
 [tool.setuptools.package-data]
-housing_review = ["prompts/*.txt"]
+housing_review = ["prompts/*.txt", "web/*"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
