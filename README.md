@@ -14,14 +14,14 @@ A weighting layer turns the saved scores into a ranked list using only the weigh
 
 ## Current coverage
 
-Typescape currently covers one Brookline lot:
+For this working prototype, the UI is tied to one Brookline lot so judges can search, rank, and see results without extra setup:
 
 - Address: 170 Aidan Ct, Pittsburgh, PA 15226
 - PIN: `0139F00077000000` (map-block-lot 139-F-77)
 - Zoning GIS district: R2-L
 - Census tract GEOID: `42003191800`
 
-Coverage is limited by the data gathered so far.
+The five reviews, Chair, and weighting take a parcel’s facts and scores. They are not written for this PIN alone. Another lot can go through the same pipeline once its facts are loaded. Extending the UI (search, map, and saved runs) to more lots is next work.
 
 ## Run it locally
 
@@ -55,8 +55,8 @@ To force a live run, remove the copied files under `data/cache/analysis/0139F000
 
 ## What we would build next
 
+- More lots in the UI: load facts for additional parcels, save their Round 1 and Chair runs, and let search and the map include them
 - HUD Fair Market Rents plus HUD Income Limits for Equity, so scores can differ by housing type
-- More lots than this one Brookline parcel
 - A fresher CHAS vintage than 2013 to 2017 (HUD’s later 2018 to 2022 release)
 
 ## Data sources and citations
@@ -116,7 +116,7 @@ More field-level notes: `data/SOURCE_LOG.md`.
 
 ## Limitations
 
-- One covered lot.
+- The prototype UI exposes one lot. The scoring pipeline is not limited to that lot.
 - Equity scores are flat because CHAS is tract-level and not typology-specific.
 - Construction cost is a national estimate, not a Pittsburgh figure.
 - The ADU overlay is a map screen.
