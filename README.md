@@ -1,101 +1,156 @@
-# AI Housing Hackathon
+# Typescape
 
-Decision-support tool for comparing housing typologies on a real Pittsburgh site.
+Typescape is a Track 3 (Housing Typology, Equity & Climate Matchmaker) decision-support tool. It helps a human compare six housing types on a real Pittsburgh lot and see the tradeoffs. It is built for planners, reviewers, and hackathon judges who need cited, comparable scores rather than a single recommended product.
 
-**This is not legal, financial, or zoning advice.** Outputs are scenario comparisons with visible trade-offs, citations, confidence tiers, and explicit gaps. A human decision-maker still has to weigh the result and verify it with the relevant office before acting.
+**This is not legal, financial, or zoning advice.** Outputs are scenario comparisons. A person sets which topics matter and still has to verify the result with the relevant office before acting. The tool never picks a winner.
 
-## What this system does
+## How it works
 
-Five independent Analyst agents (zoning, demographics, financial feasibility, equity, sustainability) assess candidate typologies for a site. A Chair agent synthesizes their structured outputs: it does not invent new evidence, and it does not declare a single “correct” product type.
+Five independent reviews score the same six housing types for one parcel: Zoning, Demographic, Cost and feasibility, Equity, and Sustainability. Each review uses its own facts and citations. They do not negotiate with each other.
 
-## Current status
+A Chair pass then sits beside those scores. It flags factual conflicts (claims that cannot both be true about the site) versus value tradeoffs (legitimate goals that pull in different directions). It does not fuse scores or name a winner.
 
-Component 1 (shared contract), Component 2–3 for all five Analysts, Component 4 **Round 1** (independent, sequential), Component 5 **Chair** (side-by-side scores, factual vs value disputes, compiled limitations; no winner), and Component 6 **weighted view** (deterministic re-rank of cached scores; default equal-weight view, not “the answer”) are in place. Shared LLM is Groq `openai/gpt-oss-120b` with Gemini 3.5 Flash-Lite as env fallback. Working example site: **170 Aidan Ct, Brookline**, Census tract **42003191800**. Round 2 cross-examination was live-tested and removed. UI sliders are not wired yet.
+A weighting layer turns the saved scores into a ranked list using only the weights the user sets. Equal weights are labeled as an equal-weight view. Changing the sliders updates the list from the saved scores. That step never calls a language model.
 
-## Shared output contract
+## Current coverage
 
-Every Analyst assessment must validate against `housing_review.schemas.AnalystAssessment`:
+Typescape currently covers one Brookline lot:
 
-| Field | Rule |
-|---|---|
-| `agent` | One of the five Analysts |
-| `site_id` | Non-empty |
-| `typology` | `duplex` \| `apartment` \| `townhome` \| `adu` \| `senior_housing` \| `detached_single_family` |
-| `score` | Integer 0–10 |
-| `basis` | `measured` \| `trend_inferred` \| `estimated` |
-| `claims[]` | Each claim has `statement`, `basis`, `source`, optional `confidence_note` |
-| `cannot_determine` | Required list; use `[]` if nothing is unanswerable |
-| `summary` | Short plain-language synthesis |
+- Address: 170 Aidan Ct, Pittsburgh, PA 15226
+- PIN: `0139F00077000000` (map-block-lot 139-F-77)
+- Zoning GIS district: R2-L
+- Census tract GEOID: `42003191800`
 
-Round 2 uses `AnalystAssessmentRound2`, which additionally requires `round_2_notes`. Extra fields are rejected.
+Coverage is limited by the data gathered so far.
 
-The Chair uses `ChairSynthesis` (per-typology scores, factual vs value disputes, compiled limitations, mandatory responsible-use note).
+## Run it locally
 
-Human weighting uses `apply_weighted_view` / `WeightedView`. A 1st–5th analyst ranking becomes rank-order centroid weights; sliders edit those shares. Both go through `apply_agent_weights`. Default with no ranking is the equal-weight view.
-
-Malformed agent JSON should be rejected and retried, not silently accepted.
-
-## Setup
-
-Python 3.11+.
+Python 3.11+. No API keys are required to open the page and rank the Brookline example. The saved Round 1 and Chair files under `data/demo/analysis/0139F00077000000/` are copied into the local cache on first `GET /analysis/0139F00077000000`.
 
 ```bash
 python3 -m venv .venv
 source .venv/bin/activate
 pip install -e ".[dev]"
 pytest
+uvicorn housing_review.api:app --reload --port 8000
 ```
 
-Copy `.env.example` to `.env` and set `GROQ_API_KEY` (console.groq.com, no card). All agents read `LLM_MODEL` from `housing_review.config` (default `openai/gpt-oss-120b`). Do not put model names in agent modules.
+Open http://127.0.0.1:8000 and search `170 Aidan Ct` or PIN `0139F00077000000`.
 
-## Libraries so far
+`POST /weighted-view/{site_id}` never calls a language model. It only reads the saved analysis and applies weights.
 
-- Python 3.11+
-- Pydantic v2
-- Shapely 2 (point-in-polygon on zoning GIS)
-- google-genai (Gemini API client, optional fallback)
-- groq (default runtime: `openai/gpt-oss-120b`)
-- python-dotenv
+### Live rerun (optional)
 
-## Data sources (Zoning slice)
+A live Round 1 plus Chair run needs keys. Copy `.env.example` to `.env` and set names only:
 
-See `data/SOURCE_LOG.md` for URLs, retrieval date (2026-09-26), and per-source gaps. Summary:
+- `LLM_PROVIDER` (default `groq`)
+- `LLM_MODEL` (default `openai/gpt-oss-120b`)
+- `GROQ_API_KEY` for Groq
+- `GEMINI_API_KEY` (or `LLM_API_KEY`) if you switch the provider to `google_gemini`
+- optional: `LLM_MAX_RETRIES`, `LLM_RETRY_BACKOFF_SECONDS`
 
-- Zoning map: WPRDC City of Pittsburgh zoning GeoJSON (catalog slug `pittsburgh-zoning` now 404s; dataset id is `zoning`).
-- Parcels: Allegheny County Open Data Feature Service (WPRDC full file is huge; PASDA REST was down).
-- Zoning code: Title 9 on eCode360 (https://ecode360.com/45474054). Residential-relevant Chapters 903, 911 (full §911.02 Use Table), 912, 913, and 914 retrieved 2026-09-26 via browser (Cloudflare blocks naive curl). Files in `data/zoning_corpus/`.
-- Official map: Instant App overlays joined by point (steep slope, historic, IZ, ADU overlay query, etc.).
+Do not put model names inside agent modules. Do not commit `.env`.
 
-## Data sources (Demographic slice)
+To force a live run, remove the copied files under `data/cache/analysis/0139F00077000000/` (that directory is gitignored). The committed copies in `data/demo/analysis/` stay in the repo.
 
-- Tract join: Census Geocoder (TIGER Current) at the parcel centroid → GEOID `42003191800`.
-- ACS 5-Year and 2020 Decennial via data.census.gov (api.census.gov requires a key). Details in `data/SOURCE_LOG.md`.
+## What we would build next
 
-## Data sources (Pro Forma slice)
+- HUD Fair Market Rents plus HUD Income Limits for Equity, so scores can differ by housing type
+- More lots than this one Brookline parcel
+- A fresher CHAS vintage than 2013 to 2017 (HUD’s later 2018 to 2022 release)
 
-- Assessments and sales: WPRDC (assessed value ≠ market; only SALECODE 0 VALID SALE as comps).
-- Construction $/sf: ICC Building Valuation Data – AUGUST 2026, Type VB, national average. Pittsburgh PLI/BBI published no local ICC modifier (2026-09-26 search). Dependent scores are `estimated`.
+## Data sources and citations
 
-## Data sources (Equity slice)
+Retrieval dates below are when this project pulled each source. Geography: parcel PIN and lot polygon for zoning, assessments, and the map; Census tract `42003191800` for ACS, 2020 PL, and CHAS; ZIP 15226 for sale comparables. Years are not aligned across sources. We did not treat a tract figure as a unit rent or a 2013 to 2017 CHAS cell as a 2026 condition.
 
-- HUD CHAS via ArcGIS `ACS_5YR_ESTIMATES_CHAS_TRACT` for GEOID `42003191800`. Vintage **2013–2017** (older than HUD’s 2018–2022 release). Cost burden, not displacement.
+### Pittsburgh Zoning Code, Title 9 (eCode360)
 
-## Data sources (Sustainability slice)
+- URL: https://ecode360.com/45474054
+- Retrieved: 2026-09-26 (browser; naive curl is Cloudflare-blocked)
+- Chapters used: 903, 911 (including the §911.02 Use Table), 912, 913, 914
+- City Zoning page: https://www.pittsburghpa.gov/Business-Development/City-Planning/Zoning
 
-- Transit: WPRDC PRT Transit Stops (catalog GTFS slug 404s; current GTFS-derived stops, feed 2606). Scheduled ≠ reliability. Demo centroid: McNeilly Station ~637 m; outside the City 1,500 ft major-transit overlay.
-- Flood: City `FEMA_2026` overlay (NFHL catalog). Demo point is Zone X / not SFHA — layer coverage, not a flood determination.
-- Carbon: generic typology-level direction only (`estimated`). No site LCA.
+### Zoning district GIS
 
-## Limitations (will grow as sources are wired)
+- Catalog slug `pittsburgh-zoning` 404s; dataset used: https://data.wprdc.org/dataset/zoning
+- GeoJSON resource `6127f35e-f36b-4a53-80b3-f4409609e9df` (last_modified 2026-09-23)
+- Official map overlays: https://pittsburghpa.maps.arcgis.com/apps/instant/sidebar/index.html?appid=4bb79ea64bf848b3a0560e3856efeccb
 
-- Not legal, financial, or zoning advice.
-- Corpus is a deliberate residential subset (Ch. 903, 911, 912, 913, 914), not the full Title 9.
-- Overlay slope flag at the demo parcel is screening-level only, not a geotechnical determination.
-- ACS tract estimates have margins of error; vacancy by units-in-structure and USPS postal vacancy are not retrieved.
-- Construction $/sf is ICC BVD August 2026 (national average, Type VB), not a Pittsburgh bid.
-- Equity CHAS for this tract is 2013–2017, older than HUD’s 2018–2022 release.
-- Sustainability flood hit is Zone X (minimal flood hazard), not SFHA; slope flag is screening only; PRT trips are scheduled, not on-time.
+### Census ACS 5-year and 2020 PL
 
-## License / event
+- ACS docs: https://www.census.gov/data/developers/data-sets/acs-5year.html
+- Retrieved 2026-09-26 for tract `42003191800` via data.census.gov (api.census.gov required a key)
+- ACS 5-year tables include 2019-2023 and selected 2014-2018 series
+- 2020 PL: DECENNIALPL2020.P1 and .H1 for the same tract
+- Tract join: Census Geocoder at the parcel centroid, 2026-09-26, https://geocoding.geo.census.gov/geocoder/geographies/coordinates
 
-Built during the hackathon window. Challenge track: Track 3.
+### HUD CHAS (Equity)
+
+- Portal: https://www.huduser.gov/portal/datasets/cp.html
+- Layer: https://services.arcgis.com/VTyQ9soqVukalItT/ArcGIS/rest/services/ACS_5YR_ESTIMATES_CHAS_TRACT/FeatureServer/1
+- Retrieved: 2026-09-27 for tract `42003191800`
+- Vintage: 2013 to 2017, older than HUD’s 2018 to 2022 release
+
+### Allegheny County assessments and sales (WPRDC)
+
+- Assessments: https://data.wprdc.org/dataset/property-assessments (resource `65855e14-549e-4992-b5be-d629afc676fa`), retrieved 2026-09-26 for this PIN. Assessed value is not market value. Owner name and mailing fields were not stored.
+- Sales: https://data.wprdc.org/dataset/real-estate-sales (resource `5bbe6c55-bce6-4edb-9d04-68edeb6bf7b1`). Comparables use ZIP 15226 and SALECODE 0 (VALID SALE).
+- Parcel geometry: County Open Data Feature Service `https://gisdata.alleghenycounty.us/arcgis/rest/services/OPENDATA/Parcels/MapServer/0`
+
+### ICC Building Valuation Data (August 2026)
+
+- URL: https://www.iccsafe.org/wp-content/uploads/BVD-BSJ-AUG2026.pdf
+- Retrieved: 2026-09-26. National average, occupancy groups from 2024 IBC, construction type VB. No Pittsburgh local ICC modifier was found.
+
+### PRT stops
+
+- https://data.wprdc.org/dataset/prt-of-allegheny-county-transit-stops
+- Retrieved: 2026-09-27, feed version 2606. Scheduled service is not on-time reliability.
+
+### FEMA flood data
+
+- Catalog: https://www.fema.gov/flood-maps/national-flood-hazard-layer
+- Official map layer `FEMA_2026`: FeatureServer used on 2026-09-27. Demo point is Zone X / not SFHA. This is a screen, not a flood determination.
+
+More field-level notes: `data/SOURCE_LOG.md`.
+
+## Limitations
+
+- One covered lot.
+- Equity scores are flat because CHAS is tract-level and not typology-specific.
+- Construction cost is a national estimate, not a Pittsburgh figure.
+- The ADU overlay is a map screen.
+- Flood data is a screen, not a determination.
+- Senior housing is only partly mapped.
+- No permitting timelines.
+- Scores are comparative, not predictions.
+
+Also: Title 9 corpus is a residential subset (Ch. 903, 911, 912, 913, 914), not the full code. ACS figures have margins of error. Overlay slope at this parcel is screening-level, not a geotechnical determination.
+
+## Libraries, frameworks, and services
+
+Python: Pydantic v2, Shapely 2, FastAPI, Uvicorn, python-dotenv, groq, google-genai. Tests: pytest, httpx.
+
+Front end: Leaflet 1.9.4, SortableJS 1.15.6, OpenStreetMap raster tiles (`{s}.tile.openstreetmap.org`), Google Fonts **Raleway** and **DM Sans**.
+
+## AI tool disclosure
+
+- **Cursor** was the coding assistant in the editor (models selected within Cursor; the exact model list for every session was not recorded).
+- **Claude** was used for planning, design decisions, prompt drafting, logo artwork drafts, and interface copy drafts, which were then edited.
+- Runtime models for the five analysts and the Chair: Groq `openai/gpt-oss-120b` as the configured default, and Gemini 3.5 Flash-Lite as the fallback used for the saved Brookline run (see `data/demo/analysis/0139F00077000000/README.md`).
+
+## Privacy and integrity
+
+No PII is collected. The demo uses tract-level public statistics and parcel-level public GIS and assessment value fields. County owner name and mailing address were not copied. Every model-facing claim is cited. Code-owned facts (Use Table rows, CHAS figures, ICC $/sf, PRT distance, flood zone) are attached in Python and kept separate from model judgments.
+
+## Build window
+
+All code was written during the hackathon window (Sept 26 to 27, 2026).
+
+## Asset credits (documentation only)
+
+These credits are not shown on the website, except the map’s built-in Leaflet and OpenStreetMap attribution, which stays visible on the map.
+
+- Backdrop photograph: Andrew Rush / Pittsburgh Post-Gazette, from https://www.post-gazette.com/business/money/2022/05/09/pittsburgh-housing-market-interest-rates-prices-bidding-wars-affordability-first-time-home-buyers-investors/stories/202205080048. Used as a backdrop for a non-commercial hackathon prototype. All rights remain with the owner. It will be removed or replaced on request. We do not claim a license we have not confirmed. Swap file: `src/housing_review/web/pittsburgh-housing.jpg` (CSS variable `--site-backdrop-image`).
+- Map tiles: OpenStreetMap contributors, https://www.openstreetmap.org/copyright
+- Fonts: Raleway and DM Sans, served from Google Fonts
